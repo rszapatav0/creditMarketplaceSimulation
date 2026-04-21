@@ -72,7 +72,7 @@ const ESG=[
   {id:'e8',label:'Índice de biodiversidad',cost:80,val:'Shannon 2.8 — diversidad media-alta',bar:65,detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.',src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024',interp:'Sistema agroforestal con diversidad funcional adecuada para resiliencia climática y calidad del café.'},
 ];
 
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={};
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3;
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return U.role==='banco'?LOANS_BANCO:LOANS_COOP;}
@@ -117,6 +117,7 @@ function renderLoans(){
       <div class="larr">›</div>
     </div>`;
   });
+  initPagination();
 }
 
 function openLoan(id){L=getLoans().find(l=>l.id===id);tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
@@ -416,7 +417,7 @@ function submitOffer(){
   show('s-offer-sent');
 }
 
-function goMkt(){tierOn=false;esgSel={};renderLoans();show('s-market');}
+function goMkt(){tierOn=false;esgAllOn=false;esgSel={};currentPage=1;renderLoans();show('s-market');}
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
@@ -424,6 +425,50 @@ function show(id){
   const flex=['s-login','s-success'];
   el.style.display=flex.includes(id)?'flex':'block';
   el.classList.add('active');
+}
+
+function initPagination(){
+  const cards=document.querySelectorAll('.loan-list .lcard');
+  const totalCards=cards.length;
+  const totalPages=Math.ceil(totalCards/cardsPerPage);
+  currentPage=1;
+  if(totalPages>1){
+    document.getElementById('loan-pagination').style.display='flex';
+    showPage(currentPage);
+  }else{
+    document.getElementById('loan-pagination').style.display='none';
+  }
+}
+
+function showPage(page){
+  const cards=document.querySelectorAll('.loan-list .lcard');
+  const totalCards=cards.length;
+  const totalPages=Math.ceil(totalCards/cardsPerPage);
+  const start=(page-1)*cardsPerPage;
+  const end=start+cardsPerPage;
+  cards.forEach((card,idx)=>{
+    card.style.display=idx>=start&&idx<end?'grid':'none';
+  });
+  document.getElementById('loan-page-info').textContent=`Página ${page} de ${totalPages}`;
+  document.getElementById('loan-prev').disabled=page===1;
+  document.getElementById('loan-next').disabled=page===totalPages;
+}
+
+function nextPage(){
+  const cards=document.querySelectorAll('.loan-list .lcard');
+  const totalCards=cards.length;
+  const totalPages=Math.ceil(totalCards/cardsPerPage);
+  if(currentPage<totalPages){
+    currentPage++;
+    showPage(currentPage);
+  }
+}
+
+function prevPage(){
+  if(currentPage>1){
+    currentPage--;
+    showPage(currentPage);
+  }
 }
 
 document.getElementById('inp-p').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
