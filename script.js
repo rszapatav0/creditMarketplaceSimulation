@@ -72,7 +72,7 @@ const ESG=[
   {id:'e8',label:'Índice de biodiversidad',cost:80,val:'Shannon 2.8 — diversidad media-alta',bar:65,detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.',src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024',interp:'Sistema agroforestal con diversidad funcional adecuada para resiliencia climática y calidad del café.'},
 ];
 
-let U=null,L=null,tierOn=false,esgSel={},confirmed={};
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={};
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return U.role==='banco'?LOANS_BANCO:LOANS_COOP;}
@@ -119,7 +119,7 @@ function renderLoans(){
   });
 }
 
-function openLoan(id){L=getLoans().find(l=>l.id===id);tierOn=false;esgSel={};renderDetail();show('s-detail');}
+function openLoan(id){L=getLoans().find(l=>l.id===id);tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
 
 function renderDetail(){
   const iB=U.role==='banco';
@@ -129,13 +129,14 @@ function renderDetail(){
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
   const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="esg-cost">+L.${e.cost}</span></div>`).join('');
-  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Métricas ESG</span><span class="tier-price">L. 80 por métrica</span></div><span class="tier-count">${nEsg} seleccionadas</span></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
+  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Métricas ESG</span><span class="tier-price">L. 80 por métrica</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
   document.getElementById('dmain').innerHTML=h;
   renderCart();
 }
 
 function toggleTier(){tierOn=!tierOn;renderDetail();}
 function toggleEsg(id){esgSel[id]=!esgSel[id];renderDetail();}
+function toggleEsgAll(){esgAllOn=!esgAllOn;if(esgAllOn){ESG.forEach(e=>esgSel[e.id]=true);}else{ESG.forEach(e=>esgSel[e.id]=false);}renderDetail();}
 
 function calcTotal(){
   let t=0;

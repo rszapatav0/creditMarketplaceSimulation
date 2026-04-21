@@ -91,13 +91,13 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 
 /* TIERS */
 .tier{border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
-.tier-hdr{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;background:var(--white);user-select:none}
+.tier-hdr{display:flex;align-items:center;justify-content:flex-start;padding:.85rem 1rem;background:var(--white);user-select:none;gap:10px;flex-wrap:wrap}
 .tier-hdr-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1}
 .tier-num{font-size:10px;font-family:var(--mono);color:var(--text3);width:18px;flex-shrink:0}
 .tier-name{font-size:13px;font-weight:500}
 .tier-price{font-size:11px;color:var(--text2);font-family:var(--mono)}
 .tier-count{font-size:11px;color:var(--text3);font-family:var(--mono)}
-.toggle{width:38px;height:21px;border-radius:11px;border:1px solid var(--border2);background:var(--surface);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;outline:none;appearance:none}
+.toggle{width:38px;height:21px;border-radius:11px;border:1px solid var(--border2);background:var(--surface);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;outline:none;appearance:none;margin-left:auto}
 .toggle.on{background:var(--accent);border-color:var(--accent)}
 .toggle::after{content:'';position:absolute;width:15px;height:15px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.15)}
 .toggle.on::after{left:19px}
