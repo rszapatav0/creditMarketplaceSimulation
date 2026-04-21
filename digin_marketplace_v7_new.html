@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIG-IN · Mercado de Crédito Agrícola · Honduras</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- S1: LOGIN -->
+<div id="s-login" class="screen active">
+  <div class="brand-tag">DIG-IN · Honduras</div>
+  <div class="brand-h1">Mercado de <b>Crédito Agrícola</b></div>
+  <div class="brand-sub">Infraestructura Digital de Inclusión Financiera · Sector Café</div>
+  <div class="subs-banner">
+    <div class="subs-icon">ℹ</div>
+    <div class="subs-text">
+      <strong>Suscripción base incluida — L. 500/mes</strong>
+      Su membresía activa le da acceso al listado completo de créditos. El detalle de cada crédito y las métricas ESG se adquieren por separado según lo que necesite consultar.
+    </div>
+  </div>
+  <div class="login-card">
+    <div><label class="flabel">Usuario</label><input class="finput" id="inp-u" type="text" placeholder="usuario@institucion.hn" autocomplete="off"></div>
+    <div><label class="flabel">Contraseña</label><input class="finput" id="inp-p" type="password" placeholder="••••••••"></div>
+    <div class="login-err" id="lerr">Credenciales incorrectas. Intente de nuevo.</div>
+    <button class="btn-p" style="width:100%" onclick="doLogin()">Ingresar →</button>
+  </div>
+  <div class="cred-box">
+    <div class="cred-title">Credenciales de demostración</div>
+    <div class="cred-row"><span class="cred-role">Banco Comercial</span><span class="cred-vals">usuario: <span>banco@bancafe.hn</span><br>contraseña: <span>banco2024</span></span></div>
+    <div class="cred-row"><span class="cred-role">Cooperativa</span><span class="cred-vals">usuario: <span>gestor@cofemarcala.hn</span><br>contraseña: <span>coop2024</span></span></div>
+    <div class="cred-row"><span class="cred-role">Microfinanciera</span><span class="cred-vals">usuario: <span>analista@fise.hn</span><br>contraseña: <span>imf2024</span></span></div>
+  </div>
+</div>
+
+<!-- S2: MARKETPLACE -->
+<div id="s-market" class="screen">
+  <div class="topbar"><div class="tb-logo">DIG-IN · Honduras</div><div class="tb-right"><div class="tb-user" id="tb-u"></div><div class="rpill" id="tb-r"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
+  <div class="pi"><div class="pg-label">Oportunidades disponibles</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div></div>
+</div>
+
+<!-- S3: CHECKOUT -->
+<div id="s-detail" class="screen">
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u2"></div><div class="rpill" id="tb-r2"></div></div></div>
+  <div style="max-width:1020px;margin:0 auto">
+    <div class="dlayout">
+      <div class="dmain" id="dmain"></div>
+      <div class="dside">
+        <div class="cart-lbl">Resumen del pedido</div>
+        <div id="cart-lines"></div>
+        <hr class="cdiv">
+        <div class="ctotal"><div class="ct-l">Total</div><div class="ct-v"><small>L. </small><span id="cart-num">0</span></div></div>
+        <button class="btn-p" style="width:100%" id="cart-cta" onclick="confirmAccess()">Confirmar acceso →</button>
+        <div class="cart-note">La suscripción base (L. 500/mes) ya está activa en su cuenta.<br>Este cobro es por el acceso específico a este crédito.</div>
+        <div class="cart-info" id="cart-info" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S4: SUCCESS -->
+<div id="s-success" class="screen">
+  <div class="sicon green">✓</div>
+  <div class="stitle">Acceso confirmado</div>
+  <div class="ssub">Su plan ha sido activado. Puede navegar ahora toda la información desbloqueada para este crédito.</div>
+  <div class="scard" id="scard"></div>
+  <div class="btn-row">
+    <button class="btn-p" onclick="goAccess()">Ver información del crédito →</button>
+    <button class="btn-s" onclick="goMkt()">Explorar más créditos</button>
+  </div>
+</div>
+
+<!-- S5: ACCESS -->
+<div id="s-access" class="screen">
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u3"></div><div class="rpill" id="tb-r3"></div></div></div>
+  <div class="ai" id="access-inner"></div>
+</div>
+
+<!-- S6: OFFER -->
+<div id="s-offer" class="screen">
+  <div class="topbar"><button class="tb-back" onclick="show('s-access')">← Volver a la información</button><div class="tb-right"><div class="tb-user" id="tb-u4"></div><div class="rpill" id="tb-r4"></div></div></div>
+  <div class="oi">
+    <div class="o-hdr"><div class="o-title">Estructurar oferta de crédito</div><div class="o-sub" id="o-sub"></div></div>
+    <div class="o-form">
+      <div>
+        <div class="fs-title">Condiciones financieras principales</div>
+        <div class="frow">
+          <div class="fg"><label class="flabel">Monto ofertado (L.)</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
+          <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1" placeholder="ej. 14.5"></div>
+          <div class="fg"><label class="flabel">Plazo (meses)</label>
+            <select class="fsel" id="of-plazo"><option value="">Seleccionar...</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
+          <div class="fg"><label class="flabel">Periodicidad de pago</label>
+            <select class="fsel" id="of-periodo"><option value="">Seleccionar...</option><option>Mensual</option><option>Bimestral</option><option>Trimestral</option><option>Al vencimiento</option></select></div>
+          <div class="fg"><label class="flabel">Tipo de amortización</label>
+            <select class="fsel" id="of-cuota"><option value="">Seleccionar...</option><option>Capital + interés (nivelada)</option><option>Capital + interés (decreciente)</option><option>Solo interés + capital al vencimiento</option></select></div>
+          <div class="fg"><label class="flabel">Moneda</label>
+            <select class="fsel" id="of-moneda"><option>Lempiras (HNL)</option><option>Dólares (USD)</option></select></div>
+        </div>
+      </div>
+      <div>
+        <div class="fs-title">Garantías y condiciones de elegibilidad</div>
+        <div class="frow">
+          <div class="fg"><label class="flabel">Garantía requerida</label>
+            <select class="fsel" id="of-garantia"><option value="">Seleccionar...</option><option>Prendaria sobre cosecha</option><option>Prendaria sobre equipos</option><option>Hipotecaria</option><option>Aval solidario</option><option>Smart contract (contrato de exportación)</option><option>Carta de compromiso de compra</option></select></div>
+          <div class="fg"><label class="flabel">Período de gracia (meses)</label>
+            <select class="fsel" id="of-gracia"><option value="0">Sin período de gracia</option><option>1</option><option>2</option><option>3</option></select></div>
+          <div class="fg"><label class="flabel">Comisión de apertura (%)</label><input class="finp-s" id="of-comision" type="number" step="0.1" placeholder="ej. 1.5"></div>
+          <div class="fg"><label class="flabel">Seguro requerido</label>
+            <select class="fsel" id="of-seguro"><option>No requerido</option><option>Seguro de cosecha</option><option>Seguro de vida</option><option>Seguro de cosecha + vida</option></select></div>
+          <div class="fg"><label class="flabel">Requiere aval de Confianza SA-FGR</label>
+            <select class="fsel" id="of-aval-conf"><option>Sí, requerido</option><option>No requerido</option><option>Opcional / a negociar</option></select></div>
+          <div class="fg"><label class="flabel">Destino del crédito</label>
+            <select class="fsel" id="of-destino"><option value="">Seleccionar...</option><option>Capital de trabajo para acopio</option><option>Insumos agrícolas</option><option>Infraestructura de beneficiado</option><option>Cosecha y post-cosecha</option><option>Múltiple (acopio + productores)</option></select></div>
+        </div>
+      </div>
+      <div>
+        <div class="fs-title">Información adicional para el intermediario</div>
+        <div class="frow">
+          <div class="fg"><label class="flabel">Vigencia de la oferta</label>
+            <select class="fsel" id="of-vigencia"><option>15 días hábiles</option><option>30 días hábiles</option><option>45 días hábiles</option></select></div>
+          <div class="fg"><label class="flabel">Etapa de evaluación</label>
+            <select class="fsel" id="of-etapa"><option>Oferta preliminar — sujeta a análisis de crédito</option><option>Oferta en firme — condiciones definitivas</option><option>Carta de intención — condiciones a negociar</option></select></div>
+          <div class="fg full"><label class="flabel">Condiciones especiales / notas al intermediario</label>
+            <textarea class="fta" id="of-notas" placeholder="ej. El desembolso estará condicionado a la presentación del contrato de compra-venta con la importadora..."></textarea></div>
+        </div>
+      </div>
+      <div class="o-prev">
+        <div class="op-title">Vista previa de la oferta</div>
+        <div class="op-grid" id="op-grid"></div>
+      </div>
+      <div class="o-actions">
+        <button class="btn-s" onclick="show('s-access')">Cancelar</button>
+        <button class="btn-p" onclick="submitOffer()">Enviar oferta al intermediario →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S7: OFFER SENT -->
+<div id="s-offer-sent" class="screen">
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u5"></div><div class="rpill" id="tb-r5"></div></div></div>
+  <div class="offer-sent-wrap">
+    <div class="sicon blue">✉</div>
+    <div class="stitle">Oferta enviada al intermediario</div>
+    <div class="ssub">La propuesta ha sido transmitida a través del sistema DIG-IN. El intermediario recibirá una notificación y podrá evaluar y responder la oferta desde su portal.</div>
+    <div class="scard" id="offer-sent-card"></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="goMkt()">Explorar más créditos</button>
+      <button class="btn-s" onclick="goAccess()">Ver información del crédito</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
