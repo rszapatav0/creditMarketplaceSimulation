@@ -141,6 +141,24 @@ function confirmAccess(){
 
 function goAccess(){renderAccess();show('s-access');}
 
+function renderProducersSection(l){
+  const sec=document.getElementById('producers-section');
+  const tbody=document.getElementById('producers-tbody');
+  if(!l.paqueteFlexible){
+    sec.style.display='none';
+    return;
+  }
+  sec.style.display='block';
+  tbody.innerHTML='';
+  if(l.prod&&l.prod.length>0){
+    l.prod.forEach(p=>{
+      const row=document.createElement('tr');
+      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td><input class="finp-s" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="ej. 14.5"></td>`;
+      tbody.appendChild(row);
+    });
+  }
+}
+
 // ── Per-producer ESG (varies by esgSeed) ─────────────────────────────────
 function prodEsgMetrics(p){
   const s=p.esgSeed;
@@ -333,6 +351,7 @@ function goOffer(){
     const ev=el.tagName==='INPUT'?'input':'change';
     el.removeEventListener(ev,updatePreview);el.addEventListener(ev,updatePreview);
   });
+  renderProducersSection(l);
   updatePreview();show('s-offer');
 }
 
