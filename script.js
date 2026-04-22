@@ -5,7 +5,7 @@ const USERS=[
 ];
 
 const LOANS_BANCO=[
-  {id:'b1',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',tipo:'banco',
+  {id:'b1',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',tipo:'banco',paqueteFlexible: true,
    acopio:'L. 2,400,000',productores:'L. 680,000',nProd:38,plazo:'6 meses',precio:320,
    anios:12,volExport:'1,840 qq',mercados:'Alemania, Países Bajos',
    garantias:'Garantía prendaria sobre café en bodega · Aval solidario · Carta de compromiso Supremo Hamburg GmbH',
@@ -15,7 +15,7 @@ const LOANS_BANCO=[
     {cod:'HN-0063',nombre:'Reyes Sorto, M.',monto:'L. 15,000',plazo:'5 meses',destino:'Infraestructura',hist:'28 qq / 2 ciclos',geo:'14.31°N 86.74°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0063',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',esgSeed:63},
     {cod:'HN-0071',nombre:'Perdomo Núñez, A.',monto:'L. 19,500',plazo:'6 meses',destino:'Insumos',hist:'37 qq / 3 ciclos',geo:'14.24°N 86.80°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0071',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:71},
    ]},
-  {id:'b2',name:'Comercializadora Marcala Export',region:'Marcala, La Paz, Honduras',tipo:'banco',
+  {id:'b2',name:'Comercializadora Marcala Export',region:'Marcala, La Paz, Honduras',tipo:'banco',paqueteFlexible: true,
    acopio:'L. 3,100,000',productores:'L. 940,000',nProd:52,plazo:'8 meses',precio:320,
    anios:14,volExport:'2,310 qq',mercados:'Italia, Bélgica',
    garantias:'Hipoteca sobre instalaciones de beneficiado · Aval solidario · DO Marcala certificación vigente',
@@ -24,7 +24,7 @@ const LOANS_BANCO=[
     {cod:'MR-0019',nombre:'Amaya Velásquez, F.',monto:'L. 16,500',plazo:'6 meses',destino:'Insumos',hist:'44 qq / 3 ciclos',geo:'14.08°N 88.13°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2021-0019',variedad:'Bourbon',riesgo:'Historial con mora antigua saldada',confianza:'Aval otorgado con condición',esgSeed:19},
     {cod:'MR-0024',nombre:'Hernández Cruz, L.',monto:'L. 24,000',plazo:'8 meses',destino:'Infraestructura',hist:'72 qq / 6 ciclos',geo:'14.22°N 87.92°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2018-0024',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:24},
    ]},
-  {id:'b3',name:'Acopiadora Copán Ruinas Ltda.',region:'Copán, Honduras',tipo:'banco',
+  {id:'b3',name:'Acopiadora Copán Ruinas Ltda.',region:'Copán, Honduras',tipo:'banco',paqueteFlexible: true,
    acopio:'L. 1,750,000',productores:'L. 420,000',nProd:24,plazo:'5 meses',precio:320,
    anios:8,volExport:'1,120 qq',mercados:'Francia, España',
    garantias:'Garantía prendaria sobre café pergamino · Carta de crédito irrevocable Banque de Paris',
@@ -32,7 +32,7 @@ const LOANS_BANCO=[
     {cod:'CP-0007',nombre:'Moya Castellanos, B.',monto:'L. 17,000',plazo:'4 meses',destino:'Cosecha',hist:'33 qq / 2 ciclos',geo:'14.84°N 89.14°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0007',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',esgSeed:7},
     {cod:'CP-0011',nombre:'Flores Portillo, J.',monto:'L. 21,000',plazo:'5 meses',destino:'Insumos',hist:'49 qq / 4 ciclos',geo:'14.91°N 89.06°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0011',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:11},
    ]},
-  {id:'b4',name:'Cooperativa Cafetalera San Juan Intibucá',region:'Intibucá, Honduras',tipo:'cooperativa',
+  {id:'b4',name:'Cooperativa Cafetalera San Juan Intibucá',region:'Intibucá, Honduras',tipo:'cooperativa',paqueteFlexible: true,
    acopio:'L. 1,980,000',productores:'L. 510,000',nProd:41,plazo:'6 meses',precio:318,
    anios:10,volExport:'1,420 qq',mercados:'Alemania, Suecia',
    garantias:'Aval solidario cooperativo · Fondo de garantía interno · Certificación orgánica parcial',
@@ -41,7 +41,7 @@ const LOANS_BANCO=[
     {cod:'IN-0108',nombre:'Castillo Ramos, E.',monto:'L. 19,000',plazo:'6 meses',destino:'Cosecha',hist:'47 qq / 4 ciclos',geo:'14.28°N 88.21°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2020-0108',variedad:'Catuaí rojo',riesgo:'Historial con mora leve',confianza:'Aval condicionado',esgSeed:108},
     {cod:'IN-0113',nombre:'Vásquez López, M.',monto:'L. 14,500',plazo:'5 meses',destino:'Infraestructura',hist:'26 qq / 2 ciclos',geo:'14.35°N 88.12°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0113',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',esgSeed:113},
   ]},
-  {id:'b5',name:'Cooperativa Agroforestal Santa Bárbara',region:'Santa Bárbara, Honduras',tipo:'cooperativa',
+  {id:'b5',name:'Cooperativa Agroforestal Santa Bárbara',region:'Santa Bárbara, Honduras',tipo:'cooperativa',paqueteFlexible: false,
    acopio:'L. 2,600,000',productores:'L. 780,000',nProd:56,plazo:'7 meses',precio:322,
    anios:15,volExport:'2,050 qq',mercados:'Estados Unidos, Canadá',
    garantias:'Contrato de venta anticipada · Aval solidario · Certificación Rainforest Alliance',
@@ -50,7 +50,7 @@ const LOANS_BANCO=[
     {cod:'SB-0029',nombre:'López Martínez, J.',monto:'L. 18,000',plazo:'6 meses',destino:'Insumos',hist:'46 qq / 3 ciclos',geo:'15.12°N 88.28°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2021-0029',variedad:'Catuaí amarillo',riesgo:'Deuda vigente sin mora',confianza:'Aval otorgado',esgSeed:29},
     {cod:'SB-0035',nombre:'Mejía Torres, R.',monto:'L. 23,500',plazo:'7 meses',destino:'Infraestructura',hist:'63 qq / 5 ciclos',geo:'15.05°N 88.40°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2018-0035',variedad:'Bourbon',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:35},
   ]},
-  {id:'b6',name:'Cooperativa Productores de Café El Paraíso',region:'Danlí, El Paraíso, Honduras',tipo:'cooperativa',
+  {id:'b6',name:'Cooperativa Productores de Café El Paraíso',region:'Danlí, El Paraíso, Honduras',tipo:'cooperativa',paqueteFlexible: false,
    acopio:'L. 1,450,000',productores:'L. 390,000',nProd:29,plazo:'5 meses',precio:317,
    anios:7,volExport:'980 qq',mercados:'España, Bélgica',
    garantias:'Garantía prendaria sobre café · Aval solidario · Acuerdo de compra con tostador europeo',
@@ -58,7 +58,7 @@ const LOANS_BANCO=[
     {cod:'EP-0005',nombre:'Rodríguez Díaz, F.',monto:'L. 15,000',plazo:'5 meses',destino:'Cosecha',hist:'31 qq / 2 ciclos',geo:'14.05°N 86.57°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0005',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',esgSeed:5},
     {cod:'EP-0014',nombre:'Gómez Herrera, L.',monto:'L. 17,500',plazo:'5 meses',destino:'Insumos',hist:'42 qq / 3 ciclos',geo:'14.09°N 86.62°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0014',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:14},
    ]},
-  {id:'b7',name:'Cooperativa Cafetalera Lempira Sur',region:'Lempira, Honduras',tipo:'cooperativa',
+  {id:'b7',name:'Cooperativa Cafetalera Lempira Sur',region:'Lempira, Honduras',tipo:'cooperativa',paqueteFlexible: false,
    acopio:'L. 2,200,000',productores:'L. 640,000',nProd:47,plazo:'6 meses',precio:319,
    anios:11,volExport:'1,670 qq',mercados:'Italia, Francia',
    garantias:'Aval solidario · Fondo rotatorio · Certificación comercio justo',
@@ -70,55 +70,55 @@ const LOANS_BANCO=[
 ];
 
 const LOANS_COOP=[
-  {id:'c1',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',tipo:'coop',
+  {id:'c1',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 45,000',nProd:1,plazo:'5 meses',precio:270,
    parcela:'2.4 ha · Finca El Aguacate',contrato:'Supremo Hamburg GmbH',volContrato:'38 qq',
    geo:'14.41°N 89.22°W',eu:'Sí',aval:'A',hist:'3 ciclos · 34 qq promedio',
    carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
    prod:[{cod:'OC-0033',nombre:'Rosales Aguilar, R.',monto:'L. 45,000',plazo:'5 meses',destino:'Cosecha + insumos',hist:'38 qq / 3 ciclos',geo:'14.41°N 89.22°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:33}]},
-  {id:'c2',name:'Darío Enamorado López',region:'El Paraíso, Honduras',tipo:'coop',
+  {id:'c2',name:'Darío Enamorado López',region:'El Paraíso, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 38,000',nProd:1,plazo:'6 meses',precio:270,
    parcela:'1.8 ha · Finca La Esperanza',contrato:'Kaffee Partner GmbH',volContrato:'31 qq',
    geo:'14.18°N 86.84°W',eu:'Sí',aval:'A',hist:'4 ciclos · 29 qq promedio',
    carnet:'IHCAFE-2019-0047',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
    prod:[{cod:'EP-0047',nombre:'Enamorado López, D.',monto:'L. 38,000',plazo:'6 meses',destino:'Cosecha',hist:'31 qq / 4 ciclos',geo:'14.18°N 86.84°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2019-0047',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:47}]},
-  {id:'c3',name:'María Concepción Zelaya',region:'Santa Bárbara, Honduras',tipo:'coop',
+  {id:'c3',name:'María Concepción Zelaya',region:'Santa Bárbara, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 29,500',nProd:1,plazo:'4 meses',precio:270,
    parcela:'1.2 ha · Finca El Bosque',contrato:'Supremo Hamburg GmbH',volContrato:'22 qq',
    geo:'15.10°N 88.23°W',eu:'Pendiente',aval:'B',hist:'2 ciclos · 20 qq promedio',
    carnet:'IHCAFE-2022-0018',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
    prod:[{cod:'SB-0018',nombre:'Zelaya, M.C.',monto:'L. 29,500',plazo:'4 meses',destino:'Insumos',hist:'22 qq / 2 ciclos',geo:'15.10°N 88.23°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0018',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',esgSeed:18}]},
-  {id:'c4',name:'Carlos Meza Ordóñez',region:'Intibucá, Honduras',tipo:'coop',
+  {id:'c4',name:'Carlos Meza Ordóñez',region:'Intibucá, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 52,000',nProd:1,plazo:'7 meses',precio:270,
    parcela:'3.1 ha · Finca Los Pinos',contrato:'Nordic Roasters AS',volContrato:'48 qq',
    geo:'14.32°N 88.54°W',eu:'Sí',aval:'A',hist:'5 ciclos · 45 qq promedio',
    carnet:'IHCAFE-2018-0029',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
    prod:[{cod:'IN-0029',nombre:'Meza Ordóñez, C.',monto:'L. 52,000',plazo:'7 meses',destino:'Cosecha + infraestructura',hist:'48 qq / 5 ciclos',geo:'14.32°N 88.54°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2018-0029',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:29}]},
- {id:'c5',name:'José Armando Figueroa',region:'Copán, Honduras',tipo:'coop',
+ {id:'c5',name:'José Armando Figueroa',region:'Copán, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 34,000',nProd:1,plazo:'5 meses',precio:270,
    parcela:'1.6 ha · Finca La Montaña',contrato:'Café Direct Berlin',volContrato:'27 qq',
    geo:'14.85°N 89.12°W',eu:'Sí',aval:'B',hist:'3 ciclos · 25 qq promedio',
    carnet:'IHCAFE-2021-0062',variedad:'Bourbon',riesgo:'Historial con mora leve',confianza:'Aval condicionado',
    prod:[{cod:'CP-0062',nombre:'Figueroa, J.A.',monto:'L. 34,000',plazo:'5 meses',destino:'Cosecha',hist:'27 qq / 3 ciclos',geo:'14.85°N 89.12°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2021-0062',variedad:'Bourbon',riesgo:'Historial con mora leve',confianza:'Aval condicionado',esgSeed:62}]},
-  {id:'c6',name:'Ana Lucía Paredes',region:'La Paz, Honduras',tipo:'coop',
+  {id:'c6',name:'Ana Lucía Paredes',region:'La Paz, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 41,500',nProd:1,plazo:'6 meses',precio:270,
    parcela:'2.0 ha · Finca El Mirador',contrato:'Torrefazione Italia SRL',volContrato:'35 qq',
    geo:'14.12°N 88.05°W',eu:'Sí',aval:'A',hist:'4 ciclos · 33 qq promedio',
    carnet:'IHCAFE-2020-0084',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
    prod:[{cod:'LP-0084',nombre:'Paredes, A.L.',monto:'L. 41,500',plazo:'6 meses',destino:'Insumos',hist:'35 qq / 4 ciclos',geo:'14.12°N 88.05°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0084',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:84}]},
-  {id:'c7',name:'Miguel Ángel Cáceres',region:'Lempira, Honduras',tipo:'coop',
+  {id:'c7',name:'Miguel Ángel Cáceres',region:'Lempira, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 28,000',nProd:1,plazo:'4 meses',precio:270,
    parcela:'1.3 ha · Finca El Rosario',contrato:'Cafe España SL',volContrato:'21 qq',
    geo:'14.56°N 88.58°W',eu:'Pendiente',aval:'B',hist:'2 ciclos · 19 qq promedio',
    carnet:'IHCAFE-2022-0056',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',
    prod:[{cod:'LE-0056',nombre:'Cáceres, M.A.',monto:'L. 28,000',plazo:'4 meses',destino:'Cosecha',hist:'21 qq / 2 ciclos',geo:'14.56°N 88.58°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0056',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',esgSeed:56}]},
-  {id:'c8',name:'Rosa Elvira Mendoza',region:'El Paraíso, Honduras',tipo:'coop',
+  {id:'c8',name:'Rosa Elvira Mendoza',region:'El Paraíso, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 36,500',nProd:1,plazo:'5 meses',precio:270,
    parcela:'1.7 ha · Finca Las Flores',contrato:'Hamburg Coffee Traders',volContrato:'30 qq',
    geo:'14.20°N 86.78°W',eu:'Sí',aval:'A',hist:'3 ciclos · 28 qq promedio',
    carnet:'IHCAFE-2021-0091',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
    prod:[{cod:'EP-0091',nombre:'Mendoza, R.E.',monto:'L. 36,500',plazo:'5 meses',destino:'Insumos',hist:'30 qq / 3 ciclos',geo:'14.20°N 86.78°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0091',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',esgSeed:91}]},
-  {id:'c9',name:'Luis Fernando Ordóñez',region:'Santa Bárbara, Honduras',tipo:'coop',
+  {id:'c9',name:'Luis Fernando Ordóñez',region:'Santa Bárbara, Honduras',tipo:'coop',paqueteFlexible: false,
    acopio:null,productores:'L. 47,000',nProd:1,plazo:'6 meses',precio:270,
    parcela:'2.6 ha · Finca El Cedral',contrato:'Nordic Roasters AS',volContrato:'41 qq',
    geo:'15.07°N 88.30°W',eu:'Sí',aval:'A',hist:'5 ciclos · 39 qq promedio',
@@ -200,12 +200,13 @@ function renderLoans(){
     const mA=iB?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
     const mP=iB?`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`:`<div class="mi"><div class="mi-lbl">Monto crédito</div><div class="mi-val mv-o">${l.productores}</div></div>`;
     const mX=iB?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`:`<div class="mi"><div class="mi-lbl">Importadora</div><div class="mi-val mv-o">${l.contrato}</div></div>`;
+    const mF=iB?`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
     const smartB=!iB?`<span class="badge smart">Smart Contract</span>`:'';
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
       <div>
         <div class="loan-top"><span class="badge ${U.role}">${iB?'Acopio':'Productor'}</span>${smartB}<span class="loan-name">${l.name}</span></div>
         <div class="loan-region">${l.region} · Plazo: ${l.plazo}</div>
-        <div class="loan-meta">${mA}${mP}${mX}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
+        <div class="loan-meta">${mA}${mP}${mX}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
       </div>
       <div class="larr">›</div>
     </div>`;
@@ -391,7 +392,8 @@ function renderAccess(){
   const mA=isBanco?`<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`:'';
   const mP=isBanco?`<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`:`<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
   const mX=isBanco?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`:`<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}</div></div>`;
+  const mF=isBanco?`<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   h+=`<div class="access-actions"><button class="btn-ol" onclick="window.print()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">✉ Estructurar oferta de crédito →</button></div>`;
 
   if(tierOn){
