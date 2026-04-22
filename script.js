@@ -164,15 +164,47 @@ function prodEsgMetrics(p){
   const s=p.esgSeed;
   const v=(base,range)=>Math.min(98,Math.max(4,base+(s%range)-Math.floor(range/2)));
   return [
-    {n:'Riesgo climático',    val:(3.2+(s%30)/10-1.5).toFixed(1)+'/10', bar:v(32,28), src:'ACLIMATE / ClimateServant 2025',     interp:'Índice: temperatura, eventos extremos, sequías. Menor = mejor.'},
-    {n:'Fertilidad de suelos',val:v(74,20)+'/100',                       bar:v(74,20), src:'Lab. Suelos FHIA · oct 2024',         interp:'M.O., pH, N-P-K y CIC. >70 indica suelos productivos.'},
-    {n:'Disponibilidad hídrica',val:s>50?'Cuenca estable':'Estrés leve', bar:v(80,24), src:'SERNA Honduras / AQUASTAT 2022–2024',interp:'Caudal en época seca. Metodología FAO-AQUASTAT.'},
-    {n:'Cobertura forestal',   val:v(38,20)+'% del predio',               bar:v(38,20), src:'ICF Honduras · 2024',                interp:'Área bajo plan de manejo activo registrado ante ICF.'},
-    {n:'Huella de carbono',   val:(1.4+(s%10)/10).toFixed(1)+' kg CO₂e/kg', bar:v(53,20), src:'CIAT CCSaS / Cool Farm Alliance 2024',interp:'Emisiones en producción primaria. Promedio regional: 1.8.'},
-    {n:'Índice biodiversidad',val:'Shannon '+(2.8+(s%8)/10-0.4).toFixed(1), bar:v(65,20), src:'CIAT Biodiversidad · sep 2024',    interp:'>2.5 = sistema agroforestal resiliente.'},
-    {n:'Adaptación climática',val:s>40?'3 prácticas verificadas':'2 prácticas verificadas', bar:v(70,24), src:'Fichas IHCAFE / TraceFoodChain',interp:'Sombra diversificada, barreras vivas, cosecha escalonada.'},
-    {n:'Verificación EUDR',   val:p.eu==='Sí'?'Verificado':'En revisión', bar:p.eu==='Sí'?100:40, src:'EU Deforestation Regulation Portal',interp:'Acceso verificado a mercado europeo libre de deforestación.'},
-  ];
+    {id:'e1', n:'Riesgo climático',    
+      val:(3.2+(s%30)/10-1.5).toFixed(1)+'/10', 
+      bar:v(32,28), 
+      src:'ACLIMATE / ClimateServant 2025',     
+      interp:'Índice: temperatura, eventos extremos, sequías. Menor = mejor.'},
+    {id:'e3', n:'Fertilidad de suelos',
+      val:v(74,20)+'/100',                       
+      bar:v(74,20), 
+      src:'Lab. Suelos FHIA · oct 2024',         
+      interp:'M.O., pH, N-P-K y CIC. >70 indica suelos productivos.'},
+    {id:'e4', n:'Disponibilidad hídrica',
+      val:s>50?'Cuenca estable':'Estrés leve', 
+      bar:v(80,24), 
+      src:'SERNA Honduras / AQUASTAT 2022–2024',
+      interp:'Caudal en época seca. Metodología FAO-AQUASTAT.'},
+    {id:'e5', n:'Cobertura forestal',
+      val:v(38,20)+'% del predio',               
+      bar:v(38,20), 
+      src:'ICF Honduras · 2024',                
+      interp:'Área bajo plan de manejo activo registrado ante ICF.'},
+    {id:'e7', n:'Huella de carbono',
+      val:(1.4+(s%10)/10).toFixed(1)+' kg CO₂e/kg', 
+      bar:v(53,20), 
+      src:'CIAT CCSaS / Cool Farm Alliance 2024',
+      interp:'Emisiones en producción primaria. Promedio regional: 1.8.'},
+    {id:'e8', n:'Índice biodiversidad',
+      val:'Shannon '+(2.8+(s%8)/10-0.4).toFixed(1), 
+      bar:v(65,20), 
+      src:'CIAT Biodiversidad · sep 2024',    
+      interp:'>2.5 = sistema agroforestal resiliente.'},
+    {id:'e2', n:'Adaptación climática',
+      val:s>40?'3 prácticas verificadas':'2 prácticas verificadas', 
+      bar:v(70,24), 
+      src:'Fichas IHCAFE / TraceFoodChain',
+      interp:'Sombra diversificada, barreras vivas, cosecha escalonada.'},
+    {id:'e6', n:'Certificaciones ambientales',
+      val:'Rainforest Alliance', 
+      bar:100, 
+      src:'Rainforest Alliance',    
+      interp:'Certificación activa.'},
+];
 }
 
 // ── SVG farm map (derived from esgSeed + geo) ─────────────────────────────
@@ -242,8 +274,19 @@ function fillProd(cod){
   const cell=document.getElementById('pxc-'+cod);
   if(!cell)return;
   const p=findProd(cod);
-  if(!p)return;
-  const metrics=prodEsgMetrics(p);
+  if (!p) return;
+  if (!confirmed.esgKeys || confirmed.esgKeys.length === 0) {
+    cell.innerHTML = '';
+    return;
+  }
+  const allMetrics = prodEsgMetrics(p);
+  const metrics = allMetrics.filter(m => 
+  confirmed.esgKeys.includes(m.id)
+  );
+  if (metrics.length === 0) {
+    cell.innerHTML = '';
+    return;
+  }
   const rTag=p.riesgo.includes('negativo')?`<span class="tag eu">✓ Sin reportes</span>`:p.riesgo.includes('mora antigua')?`<span class="tag ok">${p.riesgo}</span>`:`<span class="tag pend">${p.riesgo}</span>`;
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
   const cards=metrics.map(m=>`<div class="px-card">
