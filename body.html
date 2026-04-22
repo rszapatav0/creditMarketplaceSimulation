@@ -37,13 +37,13 @@
 
 <!-- S2: MARKETPLACE -->
 <div id="s-market" class="screen">
-  <div class="topbar"><div class="tb-logo">DIG-IN · Honduras</div><div class="tb-right"><div class="tb-user" id="tb-u"></div><div class="rpill" id="tb-r"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
+  <div class="topbar"><div class="tb-logo">DIG-IN · Honduras</div><div class="tb-right"><div class="tb-user" id="tb-u"></div><div class="rpill" id="tb-r"></div><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
   <div class="pi"><div class="pg-label">Oportunidades disponibles</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
 </div>
 
 <!-- S3: CHECKOUT -->
 <div id="s-detail" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u2"></div><div class="rpill" id="tb-r2"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u2"></div><div class="rpill" id="tb-r2"></div><div class="wallet-display"></div></div></div>
   <div style="max-width:1020px;margin:0 auto">
     <div class="dlayout">
       <div class="dmain" id="dmain"></div>

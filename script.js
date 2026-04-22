@@ -150,6 +150,34 @@ function syncPills(){
   });
 }
 
+// WALLET / BALANCE FUNCTIONS
+function initBalance(){
+  if(!sessionStorage.getItem('wallet_balance')){
+    sessionStorage.setItem('wallet_balance','5000');
+  }
+}
+
+function getBalance(){
+  return parseInt(sessionStorage.getItem('wallet_balance')||'0',10);
+}
+
+function setBalance(amount){
+  sessionStorage.setItem('wallet_balance', Math.floor(amount).toString());
+}
+
+function updateBalance(amount){
+  const current=getBalance();
+  setBalance(current-amount);
+  renderBalanceDisplay();
+}
+
+function renderBalanceDisplay(){
+  const wds=document.querySelectorAll('.wallet-display');
+  if(!wds.length)return;
+  const balance=getBalance();
+  wds.forEach(wd=>wd.textContent=`Saldo disponible: ${balance.toLocaleString('es-HN')} HNL`);
+}
+
 function doLogin(){
   const u=document.getElementById('inp-u').value.trim().toLowerCase();
   const p=document.getElementById('inp-p').value;
@@ -157,13 +185,13 @@ function doLogin(){
   const found=USERS.find(x=>x.email===u&&x.pass===p);
   if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
   err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
-  U=found;syncPills();
+  U=found;syncPills();initBalance();renderBalanceDisplay();
   document.getElementById('mkt-title').textContent=U.role==='banco'
     ?'Créditos de acopio disponibles — intermediarios comerciales'
     :'Créditos a productores individuales — contratos inteligentes con importadoras';
   renderLoans();show('s-market');
 }
-function doLogout(){U=null;document.getElementById('inp-p').value='';show('s-login');}
+function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');document.getElementById('inp-p').value='';show('s-login');}
 
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
@@ -239,6 +267,7 @@ function confirmAccess(){
   const total=calcTotal();
   const plan=tierOn&&esgKeys.length>0?'Premium':tierOn?'Estándar':esgKeys.length>0?'Solo ESG':'—';
   confirmed={loan:L,total,esgKeys,plan,tierOn,isBanco:U.role==='banco'};
+  updateBalance(total);
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Institución</span><span class="sr-v">${U.name}</span></div>
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
@@ -482,7 +511,7 @@ function submitOffer(){
   show('s-offer-sent');
 }
 
-function goMkt(){tierOn=false;esgAllOn=false;esgSel={};currentPage=1;renderLoans();show('s-market');}
+function goMkt(){tierOn=false;esgAllOn=false;esgSel={};currentPage=1;renderLoans();renderBalanceDisplay();show('s-market');}
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
