@@ -159,52 +159,81 @@ function renderProducersSection(l){
   }
 }
 
-// ── Per-producer ESG (varies by esgSeed) ─────────────────────────────────
-function prodEsgMetrics(p){
-  const s=p.esgSeed;
-  const v=(base,range)=>Math.min(98,Math.max(4,base+(s%range)-Math.floor(range/2)));
+
+function computeLoanEsg(loan){
+  const prods = loan.prod;
+  if(!prods || prods.length === 0) return [];
+  // Helper: average bar across producers for a given metric id
+  function avgBar(id){
+    const vals = prods.map(p => (p.esg.find(m => m.id === id) || {bar:0}).bar);
+    return Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
+  }
+  // Helper: mode of val strings for categorical metrics;
+  // on tie, pick the entry with the lowest bar (most conservative).
+  function modeVal(id){
+    const entries = prods.map(p => p.esg.find(m => m.id === id)).filter(Boolean);
+    const freq = {};
+    entries.forEach(m => { freq[m.val] = (freq[m.val] || 0) + 1; });
+    const maxFreq = Math.max(...Object.values(freq));
+    const tied = entries.filter(m => freq[m.val] === maxFreq);
+    // among tied entries, pick the one with the lowest bar (most conservative)
+    tied.sort((a, b) => a.bar - b.bar);
+    return tied[0];
+  }
+  // Helper: find the producer metric whose bar is closest to a given avg bar
+  function reprInterp(id, avgBarVal){
+    const entries = prods.map(p => p.esg.find(m => m.id === id)).filter(Boolean);
+    entries.sort((a, b) => Math.abs(a.bar - avgBarVal) - Math.abs(b.bar - avgBarVal));
+    return entries[0].interp;
+  }
+  // e1 — Riesgo climático (numeric: bar maps to a 0–10 scale, lower = better)
+  // bar = risk * 10, so val = (bar / 10).toFixed(1) + "/10"
+  const e1bar = avgBar('e1');
+  const e1val = (e1bar / 10).toFixed(1) + '/10';
+  const e1level = e1bar < 30 ? 'Bajo' : e1bar < 45 ? 'Medio-bajo' : e1bar < 60 ? 'Medio' : 'Alto';
+  // e2 — Adaptación climática (categorical: "N prácticas verificadas")
+  const e2mode = modeVal('e2');
+  const e2bar  = avgBar('e2');
+  // e3 — Fertilidad de suelos (numeric: bar = score/100)
+  const e3bar = avgBar('e3');
+  const e3level = e3bar >= 75 ? 'Alto' : e3bar >= 60 ? 'Medio' : 'Bajo';
+  const e3val = `${e3level} (${e3bar}/100)`;
+  // e4 — Disponibilidad hídrica (categorical: "Cuenca estable" or "Estrés leve")
+  const e4mode = modeVal('e4');
+  const e4bar  = avgBar('e4');
+  // e5 — Cobertura forestal (numeric: bar = percentage)
+  const e5bar = avgBar('e5');
+  const e5val = `${e5bar}% cobertura forestal activa`;
+  // e6 — Certificaciones (categorical: Rainforest Alliance, Comercio Justo, Orgánico, Sin certificación)
+  const e6mode = modeVal('e6');
+  const e6bar  = avgBar('e6');
+  // e7 — Huella de carbono (numeric, inverted: bar 100→0.8 kg, bar 0→2.8 kg)
+  // formula: kg = 2.8 - (bar * 0.02)  →  bar = (2.8 - kg) * 50
+  const e7bar = avgBar('e7');
+  const e7kg  = (2.8 - e7bar * 0.02).toFixed(1);
+  const e7val = `${e7kg} kg CO₂e / kg café`;
+  // e8 — Índice biodiversidad (numeric: bar maps to Shannon 0–4 scale)
+  // Shannon ≈ 0.8 + bar * 0.032  (bar 0 → 0.8, bar 100 → 4.0)
+  const e8bar = avgBar('e8');
+  const e8sh  = (0.8 + e8bar * 0.032).toFixed(1);
+  const e8level = e8bar >= 65 ? 'diversidad alta' : e8bar >= 50 ? 'diversidad media-alta' : e8bar >= 35 ? 'diversidad media' : 'diversidad baja';
+  const e8val = `Shannon ${e8sh} — ${e8level}`;
   return [
-    {id:'e1', n:'Riesgo climático',    
-      val:(3.2+(s%30)/10-1.5).toFixed(1)+'/10', 
-      bar:v(32,28), 
-      src:'ACLIMATE / ClimateServant 2025',     
-      interp:'Índice: temperatura, eventos extremos, sequías. Menor = mejor.'},
-    {id:'e3', n:'Fertilidad de suelos',
-      val:v(74,20)+'/100',                       
-      bar:v(74,20), 
-      src:'Lab. Suelos FHIA · oct 2024',         
-      interp:'M.O., pH, N-P-K y CIC. >70 indica suelos productivos.'},
-    {id:'e4', n:'Disponibilidad hídrica',
-      val:s>50?'Cuenca estable':'Estrés leve', 
-      bar:v(80,24), 
-      src:'SERNA Honduras / AQUASTAT 2022–2024',
-      interp:'Caudal en época seca. Metodología FAO-AQUASTAT.'},
-    {id:'e5', n:'Cobertura forestal',
-      val:v(38,20)+'% del predio',               
-      bar:v(38,20), 
-      src:'ICF Honduras · 2024',                
-      interp:'Área bajo plan de manejo activo registrado ante ICF.'},
-    {id:'e7', n:'Huella de carbono',
-      val:(1.4+(s%10)/10).toFixed(1)+' kg CO₂e/kg', 
-      bar:v(53,20), 
-      src:'CIAT CCSaS / Cool Farm Alliance 2024',
-      interp:'Emisiones en producción primaria. Promedio regional: 1.8.'},
-    {id:'e8', n:'Índice biodiversidad',
-      val:'Shannon '+(2.8+(s%8)/10-0.4).toFixed(1), 
-      bar:v(65,20), 
-      src:'CIAT Biodiversidad · sep 2024',    
-      interp:'>2.5 = sistema agroforestal resiliente.'},
-    {id:'e2', n:'Adaptación climática',
-      val:s>40?'3 prácticas verificadas':'2 prácticas verificadas', 
-      bar:v(70,24), 
-      src:'Fichas IHCAFE / TraceFoodChain',
-      interp:'Sombra diversificada, barreras vivas, cosecha escalonada.'},
-    {id:'e6', n:'Certificaciones ambientales',
-      val:'Rainforest Alliance', 
-      bar:100, 
-      src:'Rainforest Alliance',    
-      interp:'Certificación activa.'},
-];
+    {id:'e1', label:'Riesgo climático',          val:e1val,         bar:e1bar, detail:ESG_META.find(m=>m.id==='e1').detail, src:ESG_META.find(m=>m.id==='e1').src, interp:`${e1level}. ${reprInterp('e1', e1bar)}`},
+    {id:'e2', label:'Medidas de adaptación',      val:e2mode.val,    bar:e2bar, detail:ESG_META.find(m=>m.id==='e2').detail, src:ESG_META.find(m=>m.id==='e2').src, interp:reprInterp('e2', e2bar)},
+    {id:'e3', label:'Fertilidad de suelos',       val:e3val,         bar:e3bar, detail:ESG_META.find(m=>m.id==='e3').detail, src:ESG_META.find(m=>m.id==='e3').src, interp:reprInterp('e3', e3bar)},
+    {id:'e4', label:'Disponibilidad hídrica',     val:e4mode.val,    bar:e4bar, detail:ESG_META.find(m=>m.id==='e4').detail, src:ESG_META.find(m=>m.id==='e4').src, interp:reprInterp('e4', e4bar)},
+    {id:'e5', label:'Planes de manejo forestal',  val:e5val,         bar:e5bar, detail:ESG_META.find(m=>m.id==='e5').detail, src:ESG_META.find(m=>m.id==='e5').src, interp:reprInterp('e5', e5bar)},
+    {id:'e6', label:'Certificaciones ambientales',val:e6mode.val,    bar:e6bar, detail:ESG_META.find(m=>m.id==='e6').detail, src:ESG_META.find(m=>m.id==='e6').src, interp:reprInterp('e6', e6bar)},
+    {id:'e7', label:'Huella de carbono',          val:e7val,         bar:e7bar, detail:ESG_META.find(m=>m.id==='e7').detail, src:ESG_META.find(m=>m.id==='e7').src, interp:reprInterp('e7', e7bar)},
+    {id:'e8', label:'Índice de biodiversidad',    val:e8val,         bar:e8bar, detail:ESG_META.find(m=>m.id==='e8').detail, src:ESG_META.find(m=>m.id==='e8').src, interp:reprInterp('e8', e8bar)},
+  ];
+}
+
+
+// ── Per-producer ESG (uses embedded data) ──────────────────────────────────
+function prodEsgMetrics(p){
+  return p.esg||[];
 }
 
 // ── SVG farm map (derived from esgSeed + geo) ─────────────────────────────
@@ -375,8 +404,9 @@ function renderAccess(){
   }
 
   if(esgKeys.length>0){
+    const loanEsg=computeLoanEsg(confirmed.loan);
     const cards=esgKeys.map(k=>{
-      const e=ESG.find(x=>x.id===k);
+      const e=loanEsg.find(x=>x.id===k);
       return `<div class="esg-card"><div class="ec-name">${e.label}</div><div class="ec-val">${e.val}</div><div class="ec-detail">${e.detail}</div><div class="ec-src">${e.src}</div><div class="ebar"><div class="efill" style="width:${e.bar}%"></div></div><div class="ec-interp">${e.interp}</div></div>`;
     }).join('');
     h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">✦</div><div><div class="sc-title">Métricas ESG del crédito</div><div class="sc-sub">${esgKeys.length} de 8 métricas · fuentes y metodología</div></div></div><div class="sc-body"><div class="esg-ag">${cards}</div></div></div>`;
