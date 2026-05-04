@@ -299,40 +299,68 @@ function findProd(cod){
   return null;
 }
 
-function fillProd(cod){
+function fillProd(cod, includeEsg=true){
   const cell=document.getElementById('pxc-'+cod);
   if(!cell)return;
   const p=findProd(cod);
   if (!p) return;
-  if (!confirmed.esgKeys || confirmed.esgKeys.length === 0) {
-    cell.innerHTML = '';
-    return;
+  
+  let metrics = [];
+  if (includeEsg) {
+    if (!confirmed.esgKeys || confirmed.esgKeys.length === 0) {
+      cell.innerHTML = '';
+      return;
+    }
+    const allMetrics = prodEsgMetrics(p);
+    metrics = allMetrics.filter(m => confirmed.esgKeys.includes(m.id));
+    if (metrics.length === 0) {
+      cell.innerHTML = '';
+      return;
+    }
   }
-  const allMetrics = prodEsgMetrics(p);
-  const metrics = allMetrics.filter(m => 
-  confirmed.esgKeys.includes(m.id)
-  );
-  if (metrics.length === 0) {
-    cell.innerHTML = '';
-    return;
-  }
+  
   const rTag=p.riesgo.includes('negativo')?`<span class="tag eu">✓ Sin reportes</span>`:p.riesgo.includes('mora antigua')?`<span class="tag ok">${p.riesgo}</span>`:`<span class="tag pend">${p.riesgo}</span>`;
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
-  const cards=metrics.map(m=>`<div class="px-card">
+  
+  let esgHtml = '';
+  if (includeEsg && metrics.length > 0) {
+    const cards=metrics.map(m=>`<div class="px-card">
     <div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
     <div class="px-card-src">${m.src}</div>
     <div class="px-bar"><div class="px-fill" style="width:${m.bar}%"></div></div>
     <div class="px-card-interp">${m.interp}</div>
   </div>`).join('');
+    esgHtml = `<div class="px-esg">
+      <div class="px-esg-hdr">Métricas ESG individuales — ${p.nombre}</div>
+      ${cards}
+    </div>`;
+  }
+  
+  const euTag = p.eu === 'Sí'
+    ? `<span class="tag eu">✓ Verificado</span>`
+    : `<span class="tag pend">⏳ Pendiente</span>`;
+
+  const profileHtml = `<div class="px-profile">
+    <div class="px-profile-hdr">Perfil productivo</div>
+    <div class="px-profile-grid">
+      <div class="px-pf"><span class="px-pf-l">Variedad</span><span class="px-pf-v">${p.variedad || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Historial de acopio</span><span class="px-pf-v">${p.hist || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Destino del crédito</span><span class="px-pf-v">${p.destino || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Carnet IHCAFE</span><span class="px-pf-v" style="font-family:var(--mono);font-size:11px">${p.carnet || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Geolocalización</span><span class="px-pf-v" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Verificación EUDR</span><span class="px-pf-v">${euTag}</span></div>
+    </div>
+  </div>`;
+  
   cell.innerHTML=`<div class="px-wrap">
     <div class="px-map-box">
       <div class="px-map-hdr"><span>${p.nombre}</span><span style="color:var(--accent)">${p.variedad}</span></div>
       ${buildMap(p)}
       <div class="px-map-foot">Carnet: ${p.carnet}<br>Central riesgos: ${rTag}<br>Confianza FGR: ${cTag}</div>
     </div>
-    <div class="px-esg">
-      <div class="px-esg-hdr">Métricas ESG individuales — ${p.nombre}</div>
-      ${cards}
+    <div class="px-right">
+      ${profileHtml}
+      ${esgHtml}
     </div>
   </div>`;
 }
