@@ -79,6 +79,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .badge.banco{color:var(--blue);border-color:var(--blue-bd);background:var(--blue-lt)}
 .badge.coop{color:var(--purple);border-color:var(--purple-bd);background:var(--purple-lt)}
 .badge.imf{color:#c2410c;border-color:#fed7aa;background:#fff7ed}
+.badge.grupo{color:#047857;border-color:#6ee7b7;background:#f0fdf4}
 .badge.smart{color:var(--gold);border-color:var(--gold-bd);background:var(--gold-lt)}
 .loan-name{font-size:14px;font-weight:500}
 .loan-region{font-size:12px;color:var(--text2);margin-bottom:.75rem}
@@ -217,6 +218,14 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 
 /* PRODUCER ROW EXPAND — NEW */
 .px-wrap{display:grid;grid-template-columns:260px 1fr;gap:1rem;padding:1.25rem;background:#fafbfc}
+.px-right{display:flex;flex-direction:column;gap:1rem}
+.px-profile{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1rem}
+.px-profile-hdr{font-size:11px;color:var(--text2);font-weight:500;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.5px;font-family:var(--mono)}
+.px-profile-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.px-pf{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
+.px-pf:last-child{border-bottom:none}
+.px-pf-l{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px}
+.px-pf-v{font-size:11px;font-weight:500;color:var(--text)}
 .px-map-box{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .px-map-hdr{padding:.4rem .75rem;background:var(--surface);border-bottom:1px solid var(--border);font-size:10px;font-family:var(--mono);color:var(--text2);display:flex;justify-content:space-between;align-items:center}
 .px-map-foot{padding:.4rem .75rem;font-size:9px;font-family:var(--mono);color:var(--text3);background:var(--surface);border-top:1px solid var(--border);line-height:1.7}
@@ -418,10 +427,32 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 </div>
 
 <script>
-  const USERS=[
+const USERS=[
   {email:'banco@bancafe.hn',pass:'banco2024',role:'banco',name:'BanCafé — Analista de Crédito'},
   {email:'gestor@cofemarcala.hn',pass:'coop2024',role:'coop',name:'Coop. Cafetalera Marcala'},
   {email:'analista@fise.hn',pass:'imf2024',role:'imf',name:'FISE — Oficial de Cartera'},
+];
+
+const ESG=[
+  {id:'e1',label:'Riesgo climático',cost:80,val:'Medio-bajo (3.2/10)',bar:32,detail:'Índice compuesto de temperatura media, frecuencia de eventos extremos y exposición a sequías. Escala 0–10 donde valores menores indican menor riesgo.',src:'Fuente: ACLIMATE Colombia / ClimateServant API · Ciclo 2024–2025',interp:'Exposición moderada-baja. La zona mantiene régimen hídrico estable con lluvias bien distribuidas.'},
+  {id:'e2',label:'Medidas de adaptación',cost:80,val:'Sombra diversificada, barreras vivas',bar:70,detail:'Prácticas verificadas en campo por técnico IHCAFE. Incluye inventario de especies de sombra, cobertura de suelo y prácticas de conservación hídrica.',src:'Fuente: Fichas técnicas IHCAFE / TraceFoodChain · Verificación noviembre 2024',interp:'3 de 5 prácticas recomendadas implementadas. Nivel de adopción: Medio-alto.'},
+  {id:'e3',label:'Fertilidad de suelos',cost:80,val:'Alto (74/100)',bar:74,detail:'Índice basado en materia orgánica, pH, N-P-K disponible y capacidad de intercambio catiónico (CIC). Análisis en laboratorio certificado FHIA.',src:'Fuente: Laboratorio de Suelos FHIA · Muestra octubre 2024',interp:'Suelos con buena capacidad productiva. pH 5.8–6.2, M.O. >3.5%. Sin enmiendas urgentes.'},
+  {id:'e4',label:'Disponibilidad hídrica',cost:80,val:'Bajo estrés — cuenca estable',bar:82,detail:'Evaluación de cuenca, caudal en época seca e infraestructura de riego. Índice de estrés hídrico según metodología FAO-AQUASTAT.',src:'Fuente: SERNA Honduras / AQUASTAT · Período 2022–2024',interp:'Microcuenca con caudal sostenido en últimos 3 años. Riesgo de estrés hídrico: bajo.'},
+  {id:'e5',label:'Planes de manejo forestal',cost:80,val:'38% cobertura forestal activa',bar:38,detail:'Porcentaje del predio bajo plan de manejo registrado ante ICF. Incluye áreas de reserva, cortinas rompevientos y sistemas agroforestales.',src:'Fuente: ICF Honduras · Registro 2024',interp:'Cobertura dentro del rango aceptable para EUDR (>30%). Plan de manejo vigente.'},
+  {id:'e6',label:'Certificaciones ambientales',cost:80,val:'Rainforest Alliance 2024',bar:100,detail:'Estado de certificaciones vigentes: Rainforest Alliance, Organic, UTZ, Fair Trade, Bird Friendly. Vigencia y alcance verificados.',src:'Fuente: Rainforest Alliance / SAN · Vigente hasta diciembre 2025',interp:'Certificación activa verificable. Aumenta elegibilidad para créditos verdes y premiums de mercado.'},
+  {id:'e7',label:'Huella de carbono',cost:80,val:'1.4 kg CO₂e / kg café',bar:53,detail:'Emisiones GEI en producción primaria (cultivo, cosecha y beneficiado húmedo). Metodología Cool Farm Tool adaptada para café hondureño.',src:'Fuente: CIAT CCSaS / Cool Farm Alliance · Ciclo 2023–2024',interp:'Por debajo del promedio regional (1.8 kg CO₂e/kg). Predio con potencial de certificación de carbono.'},
+  {id:'e8',label:'Índice de biodiversidad',cost:80,val:'Shannon 2.8 — diversidad media-alta',bar:65,detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.',src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024',interp:'Sistema agroforestal con diversidad funcional adecuada para resiliencia climática y calidad del café.'},
+];
+
+const ESG_META=[
+  {id:'e1', label:'Riesgo climático', cost:80, detail:'Índice compuesto de temperatura media, frecuencia de eventos extremos y exposición a sequías. Escala 0–10 donde valores menores indican menor riesgo.', src:'Fuente: ACLIMATE Colombia / ClimateServant API · Ciclo 2024–2025'},
+  {id:'e2', label:'Medidas de adaptación', cost:80, detail:'Prácticas verificadas en campo por técnico IHCAFE. Incluye inventario de especies de sombra, cobertura de suelo y prácticas de conservación hídrica.', src:'Fuente: Fichas técnicas IHCAFE / TraceFoodChain · Verificación noviembre 2024'},
+  {id:'e3', label:'Fertilidad de suelos', cost:80, detail:'Índice basado en materia orgánica, pH, N-P-K disponible y capacidad de intercambio catiónico (CIC). Análisis en laboratorio certificado FHIA.', src:'Fuente: Laboratorio de Suelos FHIA · Muestra octubre 2024'},
+  {id:'e4', label:'Disponibilidad hídrica', cost:80, detail:'Evaluación de cuenca, caudal en época seca e infraestructura de riego. Índice de estrés hídrico según metodología FAO-AQUASTAT.', src:'Fuente: SERNA Honduras / AQUASTAT · Período 2022–2024'},
+  {id:'e5', label:'Planes de manejo forestal', cost:80, detail:'Porcentaje del predio bajo plan de manejo registrado ante ICF. Incluye áreas de reserva, cortinas rompevientos y sistemas agroforestales.', src:'Fuente: ICF Honduras · Registro 2024'},
+  {id:'e6', label:'Certificaciones ambientales', cost:80, detail:'Estado de certificaciones vigentes: Rainforest Alliance, Organic, UTZ, Fair Trade, Bird Friendly. Vigencia y alcance verificados.', src:'Fuente: Rainforest Alliance / SAN · Vigente hasta diciembre 2025'},
+  {id:'e7', label:'Huella de carbono', cost:80, detail:'Emisiones GEI en producción primaria (cultivo, cosecha y beneficiado húmedo). Metodología Cool Farm Tool adaptada para café hondureño.', src:'Fuente: CIAT CCSaS / Cool Farm Alliance · Ciclo 2023–2024'},
+  {id:'e8', label:'Índice de biodiversidad', cost:80, detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.', src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024'},
 ];
 
 const LOANS_BANCO=[
@@ -836,32 +867,217 @@ const LOANS_COOP=[
     ]}]},
 ];
 
-const ESG=[
-  {id:'e1',label:'Riesgo climático',cost:80,val:'Medio-bajo (3.2/10)',bar:32,detail:'Índice compuesto de temperatura media, frecuencia de eventos extremos y exposición a sequías. Escala 0–10 donde valores menores indican menor riesgo.',src:'Fuente: ACLIMATE Colombia / ClimateServant API · Ciclo 2024–2025',interp:'Exposición moderada-baja. La zona mantiene régimen hídrico estable con lluvias bien distribuidas.'},
-  {id:'e2',label:'Medidas de adaptación',cost:80,val:'Sombra diversificada, barreras vivas',bar:70,detail:'Prácticas verificadas en campo por técnico IHCAFE. Incluye inventario de especies de sombra, cobertura de suelo y prácticas de conservación hídrica.',src:'Fuente: Fichas técnicas IHCAFE / TraceFoodChain · Verificación noviembre 2024',interp:'3 de 5 prácticas recomendadas implementadas. Nivel de adopción: Medio-alto.'},
-  {id:'e3',label:'Fertilidad de suelos',cost:80,val:'Alto (74/100)',bar:74,detail:'Índice basado en materia orgánica, pH, N-P-K disponible y capacidad de intercambio catiónico (CIC). Análisis en laboratorio certificado FHIA.',src:'Fuente: Laboratorio de Suelos FHIA · Muestra octubre 2024',interp:'Suelos con buena capacidad productiva. pH 5.8–6.2, M.O. >3.5%. Sin enmiendas urgentes.'},
-  {id:'e4',label:'Disponibilidad hídrica',cost:80,val:'Bajo estrés — cuenca estable',bar:82,detail:'Evaluación de cuenca, caudal en época seca e infraestructura de riego. Índice de estrés hídrico según metodología FAO-AQUASTAT.',src:'Fuente: SERNA Honduras / AQUASTAT · Período 2022–2024',interp:'Microcuenca con caudal sostenido en últimos 3 años. Riesgo de estrés hídrico: bajo.'},
-  {id:'e5',label:'Planes de manejo forestal',cost:80,val:'38% cobertura forestal activa',bar:38,detail:'Porcentaje del predio bajo plan de manejo registrado ante ICF. Incluye áreas de reserva, cortinas rompevientos y sistemas agroforestales.',src:'Fuente: ICF Honduras · Registro 2024',interp:'Cobertura dentro del rango aceptable para EUDR (>30%). Plan de manejo vigente.'},
-  {id:'e6',label:'Certificaciones ambientales',cost:80,val:'Rainforest Alliance 2024',bar:100,detail:'Estado de certificaciones vigentes: Rainforest Alliance, Organic, UTZ, Fair Trade, Bird Friendly. Vigencia y alcance verificados.',src:'Fuente: Rainforest Alliance / SAN · Vigente hasta diciembre 2025',interp:'Certificación activa verificable. Aumenta elegibilidad para créditos verdes y premiums de mercado.'},
-  {id:'e7',label:'Huella de carbono',cost:80,val:'1.4 kg CO₂e / kg café',bar:53,detail:'Emisiones GEI en producción primaria (cultivo, cosecha y beneficiado húmedo). Metodología Cool Farm Tool adaptada para café hondureño.',src:'Fuente: CIAT CCSaS / Cool Farm Alliance · Ciclo 2023–2024',interp:'Por debajo del promedio regional (1.8 kg CO₂e/kg). Predio con potencial de certificación de carbono.'},
-  {id:'e8',label:'Índice de biodiversidad',cost:80,val:'Shannon 2.8 — diversidad media-alta',bar:65,detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.',src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024',interp:'Sistema agroforestal con diversidad funcional adecuada para resiliencia climática y calidad del café.'},
-];
-
-const ESG_META=[
-  {id:'e1', label:'Riesgo climático', cost:80, detail:'Índice compuesto de temperatura media, frecuencia de eventos extremos y exposición a sequías. Escala 0–10 donde valores menores indican menor riesgo.', src:'Fuente: ACLIMATE Colombia / ClimateServant API · Ciclo 2024–2025'},
-  {id:'e2', label:'Medidas de adaptación', cost:80, detail:'Prácticas verificadas en campo por técnico IHCAFE. Incluye inventario de especies de sombra, cobertura de suelo y prácticas de conservación hídrica.', src:'Fuente: Fichas técnicas IHCAFE / TraceFoodChain · Verificación noviembre 2024'},
-  {id:'e3', label:'Fertilidad de suelos', cost:80, detail:'Índice basado en materia orgánica, pH, N-P-K disponible y capacidad de intercambio catiónico (CIC). Análisis en laboratorio certificado FHIA.', src:'Fuente: Laboratorio de Suelos FHIA · Muestra octubre 2024'},
-  {id:'e4', label:'Disponibilidad hídrica', cost:80, detail:'Evaluación de cuenca, caudal en época seca e infraestructura de riego. Índice de estrés hídrico según metodología FAO-AQUASTAT.', src:'Fuente: SERNA Honduras / AQUASTAT · Período 2022–2024'},
-  {id:'e5', label:'Planes de manejo forestal', cost:80, detail:'Porcentaje del predio bajo plan de manejo registrado ante ICF. Incluye áreas de reserva, cortinas rompevientos y sistemas agroforestales.', src:'Fuente: ICF Honduras · Registro 2024'},
-  {id:'e6', label:'Certificaciones ambientales', cost:80, detail:'Estado de certificaciones vigentes: Rainforest Alliance, Organic, UTZ, Fair Trade, Bird Friendly. Vigencia y alcance verificados.', src:'Fuente: Rainforest Alliance / SAN · Vigente hasta diciembre 2025'},
-  {id:'e7', label:'Huella de carbono', cost:80, detail:'Emisiones GEI en producción primaria (cultivo, cosecha y beneficiado húmedo). Metodología Cool Farm Tool adaptada para café hondureño.', src:'Fuente: CIAT CCSaS / Cool Farm Alliance · Ciclo 2023–2024'},
-  {id:'e8', label:'Índice de biodiversidad', cost:80, detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.', src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024'},
+const LOANS_GRUPO=[
+  {id:'g1',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',tipo:'grupo',paqueteFlexible:true,
+   acopio:null,productores:'L. 105,000',nProd:3,plazo:'5.3 meses',precio:285,
+   destinos:'Cosecha, insumos, infraestructura',variedades:'Catuaí rojo, Lempira, IHCAFE-90',
+   volumenTotal:'111 qq',promedioHist:'37 qq / 3 ciclos',
+   organizacion:'Asociación local no formalizada',asistenciaTecnica:'IHCAFE regional',accesoMercado:'Intermediario local + exportadora',
+   prod:[
+    {cod:'EP-0101',nombre:'García Méndez, L.',monto:'L. 35,000',plazo:'5 meses',destino:'Cosecha',hist:'40 qq / 3 ciclos',geo:'14.20°N 86.85°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0101',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     parcela:'2.1 ha · Finca El Roble',volContrato:'40 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.0/10',bar:30,src:'ACLIMATE 2025',interp:'Exposición baja.'},
+      {id:'e2',n:'Adaptación climática',val:'3 prácticas verificadas',bar:72,src:'IHCAFE 2024',interp:'Nivel medio-alto.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'76/100',bar:76,src:'FHIA 2024',interp:'Condiciones productivas buenas.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Cuenca estable',bar:82,src:'SERNA 2024',interp:'Sin estrés hídrico relevante.'},
+      {id:'e5',n:'Cobertura forestal',val:'40% del predio',bar:40,src:'ICF 2024',interp:'Sobre umbral EUDR.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'Rainforest Alliance',bar:100,src:'RA 2025',interp:'Certificación activa.'},
+      {id:'e7',n:'Huella de carbono',val:'1.3 kg CO₂e/kg',bar:60,src:'CIAT 2024',interp:'Por debajo del promedio regional.'},
+      {id:'e8',n:'Índice biodiversidad',val:'Shannon 2.9',bar:68,src:'CIAT 2024',interp:'Diversidad funcional adecuada.'}
+     ]},
+    {cod:'EP-0102',nombre:'Pineda López, M.',monto:'L. 30,000',plazo:'6 meses',destino:'Insumos',hist:'36 qq / 4 ciclos',geo:'14.18°N 86.88°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0102',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.2/10',bar:32,src:'ACLIMATE 2025',interp:'Riesgo moderado-bajo.'},
+      {id:'e2',n:'Adaptación climática',val:'3 prácticas verificadas',bar:70,src:'IHCAFE 2024',interp:'Buenas prácticas.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'74/100',bar:74,src:'FHIA 2024',interp:'Condiciones adecuadas.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Cuenca estable',bar:80,src:'SERNA 2024',interp:'Acceso hídrico estable.'},
+      {id:'e5',n:'Cobertura forestal',val:'36% del predio',bar:36,src:'ICF 2024',interp:'Cumple umbral EUDR.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'Rainforest Alliance',bar:100,src:'RA 2025',interp:'Certificación vigente.'},
+      {id:'e7',n:'Huella de carbono',val:'1.4 kg CO₂e/kg',bar:55,src:'CIAT 2024',interp:'Levemente bajo promedio.'},
+      {id:'e8',n:'Índice biodiversidad',val:'Shannon 2.7',bar:63,src:'CIAT 2024',interp:'Diversidad media-alta.'}
+     ]},
+    {cod:'EP-0103',nombre:'Castro Hernández, R.',monto:'L. 40,000',plazo:'5 meses',destino:'Infraestructura',hist:'35 qq / 2 ciclos',geo:'14.22°N 86.82°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0103',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
+     parcela:'2.5 ha · Finca El Mirador',volContrato:'35 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'4.0/10',bar:40,src:'ACLIMATE 2025',interp:'Exposición media.'},
+      {id:'e2',n:'Adaptación climática',val:'2 prácticas verificadas',bar:50,src:'IHCAFE 2024',interp:'En proceso.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'62/100',bar:62,src:'FHIA 2024',interp:'Requiere mejoras.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estrés leve',bar:58,src:'SERNA 2024',interp:'Riesgo hídrico moderado.'},
+      {id:'e5',n:'Cobertura forestal',val:'28% del predio',bar:28,src:'ICF 2024',interp:'Bajo umbral EUDR.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'Sin certificación',bar:20,src:'RA 2024',interp:'No certificaciones activas.'},
+      {id:'e7',n:'Huella de carbono',val:'1.9 kg CO₂e/kg',bar:38,src:'CIAT 2024',interp:'Sobre promedio regional.'},
+      {id:'e8',n:'Índice biodiversidad',val:'Shannon 2.1',bar:45,src:'CIAT 2024',interp:'Diversidad baja-media.'}
+     ]}
+   ]},
+   {id:'g2',name:'Grupo Cafetalero Los Pinares',region:'Ocotepeque, Honduras',tipo:'grupo',paqueteFlexible:false,
+   acopio:null,productores:'L. 162,000',nProd:4,plazo:'5.5 meses',precio:280,
+   destinos:'Cosecha, insumos',variedades:'Catuaí rojo, Bourbon, Lempira',
+   volumenTotal:'152 qq',promedioHist:'38 qq / 3 ciclos',
+   organizacion:'Grupo familiar ampliado',asistenciaTecnica:'IHCAFE local',accesoMercado:'Cooperativa regional',
+   prod:[
+    {cod:'OC-0201',nombre:'Ramos Díaz, P.',monto:'L. 40,000',plazo:'6 meses',destino:'Cosecha',hist:'42 qq / 3 ciclos',geo:'14.43°N 89.19°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0201',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     parcela:'2.3 ha · Finca Los Pinares',volContrato:'42 qq',contrato:'Coop. Cafetalera Occidente',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.1/10',bar:31,src:'ACLIMATE 2025',interp:'Riesgo bajo.'},
+      {id:'e2',n:'Adaptación climática',val:'3 prácticas verificadas',bar:70,src:'IHCAFE 2024',interp:'Nivel adecuado.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'75/100',bar:75,src:'FHIA 2024',interp:'Buen estado.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Cuenca estable',bar:80,src:'SERNA 2024',interp:'Estable.'},
+      {id:'e5',n:'Cobertura forestal',val:'39% del predio',bar:39,src:'ICF 2024',interp:'Cumple EUDR.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'RA',bar:100,src:'RA 2025',interp:'Activa.'},
+      {id:'e7',n:'Huella de carbono',val:'1.3 kg CO₂e/kg',bar:60,src:'CIAT 2024',interp:'Bajo promedio.'},
+      {id:'e8',n:'Índice biodiversidad',val:'Shannon 2.8',bar:65,src:'CIAT 2024',interp:'Adecuada.'}
+     ]},
+    {cod:'OC-0202',nombre:'Mendoza Ruiz, A.',monto:'L. 38,000',plazo:'5 meses',destino:'Insumos',hist:'36 qq / 3 ciclos',geo:'14.42°N 89.18°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0202',variedad:'Bourbon',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     parcela:'2.0 ha · Finca El Cedro',volContrato:'36 qq',contrato:'Coop. Cafetalera Occidente',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.0/10',bar:30,src:'ACLIMATE 2025',interp:'Bajo.'},
+      {id:'e2',n:'Adaptación climática',val:'3 prácticas',bar:68,src:'IHCAFE 2024',interp:'Buenas prácticas.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'73/100',bar:73,src:'FHIA 2024',interp:'Adecuado.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Cuenca estable',bar:78,src:'SERNA 2024',interp:'Estable.'},
+      {id:'e5',n:'Cobertura forestal',val:'35%',bar:35,src:'ICF 2024',interp:'Dentro umbral.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'RA',bar:100,src:'RA 2025',interp:'Activa.'},
+      {id:'e7',n:'Huella de carbono',val:'1.4',bar:55,src:'CIAT 2024',interp:'Controlada.'},
+      {id:'e8',n:'Índice biodiversidad',val:'2.7',bar:62,src:'CIAT 2024',interp:'Media.'}
+     ]},
+    {cod:'OC-0203',nombre:'Cruz López, D.',monto:'L. 42,000',plazo:'6 meses',destino:'Cosecha',hist:'39 qq / 4 ciclos',geo:'14.44°N 89.20°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2019-0203',variedad:'Lempira',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
+     parcela:'2.6 ha · Finca El Pinar',volContrato:'39 qq',contrato:'Coop. Cafetalera Occidente',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.5/10',bar:35,src:'ACLIMATE 2025',interp:'Medio.'},
+      {id:'e2',n:'Adaptación climática',val:'2 prácticas',bar:55,src:'IHCAFE 2024',interp:'En proceso.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'68/100',bar:68,src:'FHIA 2024',interp:'Mejorable.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estrés leve',bar:60,src:'SERNA 2024',interp:'Moderado.'},
+      {id:'e5',n:'Cobertura forestal',val:'30%',bar:30,src:'ICF 2024',interp:'Límite.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'No',bar:20,src:'RA 2024',interp:'Sin certificación.'},
+      {id:'e7',n:'Huella de carbono',val:'1.7',bar:45,src:'CIAT 2024',interp:'Media.'},
+      {id:'e8',n:'Índice biodiversidad',val:'2.3',bar:50,src:'CIAT 2024',interp:'Media-baja.'}
+     ]},
+    {cod:'OC-0204',nombre:'Flores Castillo, J.',monto:'L. 42,000',plazo:'5 meses',destino:'Infraestructura',hist:'35 qq / 2 ciclos',geo:'14.41°N 89.17°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2022-0204',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     parcela:'2.2 ha · Finca El Mango',volContrato:'35 qq',contrato:'Coop. Cafetalera Occidente',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.2',bar:32,src:'ACLIMATE 2025',interp:'Bajo.'},
+      {id:'e2',n:'Adaptación climática',val:'3 prácticas',bar:70,src:'IHCAFE 2024',interp:'Adecuado.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'72',bar:72,src:'FHIA 2024',interp:'Bueno.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estable',bar:78,src:'SERNA 2024',interp:'Sin estrés.'},
+      {id:'e5',n:'Cobertura forestal',val:'37%',bar:37,src:'ICF 2024',interp:'Cumple.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'RA',bar:100,src:'RA 2025',interp:'Activa.'},
+      {id:'e7',n:'Huella de carbono',val:'1.3',bar:60,src:'CIAT 2024',interp:'Bajo.'},
+      {id:'e8',n:'Índice biodiversidad',val:'2.8',bar:66,src:'CIAT 2024',interp:'Adecuada.'}
+     ]}
+   ]},
+   {id:'g3',name:'Red Productiva El Paraíso',region:'El Paraíso, Honduras',tipo:'grupo',paqueteFlexible:true,
+   acopio:null,productores:'L. 210,000',nProd:5,plazo:'5.8 meses',precio:290,
+   destinos:'Cosecha, insumos, infraestructura',variedades:'Lempira, IHCAFE-90, Catuaí amarillo',
+   volumenTotal:'198 qq',promedioHist:'40 qq / 3 ciclos',
+   organizacion:'Red de productores asociados',asistenciaTecnica:'IHCAFE + ONG local',accesoMercado:'Exportadora privada',
+   prod:[
+    {cod:'OC-0301',nombre:'Pineda López, M.',monto:'L. 30,000',plazo:'6 meses',destino:'Insumos',hist:'36 qq / 4 ciclos',geo:'14.18°N 86.88°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0102',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.2/10',bar:32,src:'ACLIMATE 2025',interp:'Riesgo moderado-bajo.'},
+      {id:'e2',n:'Adaptación climática',val:'3 prácticas verificadas',bar:70,src:'IHCAFE 2024',interp:'Buenas prácticas.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'74/100',bar:74,src:'FHIA 2024',interp:'Condiciones adecuadas.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Cuenca estable',bar:80,src:'SERNA 2024',interp:'Acceso hídrico estable.'},
+      {id:'e5',n:'Cobertura forestal',val:'36% del predio',bar:36,src:'ICF 2024',interp:'Cumple umbral EUDR.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'Rainforest Alliance',bar:100,src:'RA 2025',interp:'Certificación vigente.'},
+      {id:'e7',n:'Huella de carbono',val:'1.4 kg CO₂e/kg',bar:55,src:'CIAT 2024',interp:'Levemente bajo promedio.'},
+      {id:'e8',n:'Índice biodiversidad',val:'Shannon 2.7',bar:63,src:'CIAT 2024',interp:'Diversidad media-alta.'}
+     ]},
+    {cod:'OC-0302',nombre:'Castro Hernández, R.',monto:'L. 40,000',plazo:'5 meses',destino:'Infraestructura',hist:'35 qq / 2 ciclos',geo:'14.22°N 86.82°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0103',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
+     parcela:'2.5 ha · Finca El Mirador',volContrato:'35 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'4.0/10',bar:40,src:'ACLIMATE 2025',interp:'Exposición media.'},
+      {id:'e2',n:'Adaptación climática',val:'2 prácticas verificadas',bar:50,src:'IHCAFE 2024',interp:'En proceso.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'62/100',bar:62,src:'FHIA 2024',interp:'Requiere mejoras.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estrés leve',bar:58,src:'SERNA 2024',interp:'Riesgo hídrico moderado.'},
+      {id:'e5',n:'Cobertura forestal',val:'28% del predio',bar:28,src:'ICF 2024',interp:'Bajo umbral EUDR.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'Sin certificación',bar:20,src:'RA 2024',interp:'No certificaciones activas.'},
+      {id:'e7',n:'Huella de carbono',val:'1.9 kg CO₂e/kg',bar:38,src:'CIAT 2024',interp:'Sobre promedio regional.'},
+      {id:'e8',n:'Índice biodiversidad',val:'Shannon 2.1',bar:45,src:'CIAT 2024',interp:'Diversidad baja-media.'}
+     ]},
+     {cod:'OC-0303',nombre:'Cruz López, D.',monto:'L. 42,000',plazo:'6 meses',destino:'Cosecha',hist:'39 qq / 4 ciclos',geo:'14.44°N 89.20°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2019-0203',variedad:'Lempira',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
+     parcela:'2.6 ha · Finca El Pinar',volContrato:'39 qq',contrato:'Coop. Cafetalera Occidente',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.5/10',bar:35,src:'ACLIMATE 2025',interp:'Medio.'},
+      {id:'e2',n:'Adaptación climática',val:'2 prácticas',bar:55,src:'IHCAFE 2024',interp:'En proceso.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'68/100',bar:68,src:'FHIA 2024',interp:'Mejorable.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estrés leve',bar:60,src:'SERNA 2024',interp:'Moderado.'},
+      {id:'e5',n:'Cobertura forestal',val:'30%',bar:30,src:'ICF 2024',interp:'Límite.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'No',bar:20,src:'RA 2024',interp:'Sin certificación.'},
+      {id:'e7',n:'Huella de carbono',val:'1.7',bar:45,src:'CIAT 2024',interp:'Media.'},
+      {id:'e8',n:'Índice biodiversidad',val:'2.3',bar:50,src:'CIAT 2024',interp:'Media-baja.'}
+     ]},
+    {cod:'OC-0304',nombre:'Flores Castillo, J.',monto:'L. 42,000',plazo:'5 meses',destino:'Infraestructura',hist:'35 qq / 2 ciclos',geo:'14.41°N 89.17°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2022-0204',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     parcela:'2.2 ha · Finca El Mango',volContrato:'35 qq',contrato:'Coop. Cafetalera Occidente',
+     esg:[
+      {id:'e1',n:'Riesgo climático',val:'3.2',bar:32,src:'ACLIMATE 2025',interp:'Bajo.'},
+      {id:'e2',n:'Adaptación climática',val:'3 prácticas',bar:70,src:'IHCAFE 2024',interp:'Adecuado.'},
+      {id:'e3',n:'Fertilidad de suelos',val:'72',bar:72,src:'FHIA 2024',interp:'Bueno.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estable',bar:78,src:'SERNA 2024',interp:'Sin estrés.'},
+      {id:'e5',n:'Cobertura forestal',val:'37%',bar:37,src:'ICF 2024',interp:'Cumple.'},
+      {id:'e6',n:'Certificaciones ambientales',val:'RA',bar:100,src:'RA 2025',interp:'Activa.'},
+      {id:'e7',n:'Huella de carbono',val:'1.3',bar:60,src:'CIAT 2024',interp:'Bajo.'},
+      {id:'e8',n:'Índice biodiversidad',val:'2.8',bar:66,src:'CIAT 2024',interp:'Adecuada.'}
+     ]},
+     {cod:'OC-0305',nombre:'Rodríguez Díaz, F.',monto:'L. 15,000',plazo:'5 meses',destino:'Cosecha',hist:'31 qq / 2 ciclos',geo:'14.05°N 86.57°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0005',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',
+     esg:[
+      {id:'e1',n:'Riesgo climático',      val:'4.2/10',                    bar:42, src:'ACLIMATE / ClimateServant 2025',        interp:'Riesgo medio. Zona de Danlí con mayor exposición a sequías y temperaturas elevadas en verano.'},
+      {id:'e2',n:'Adaptación climática',  val:'1 práctica verificada',     bar:28, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'Solo cobertura de suelo básica verificada. Productor nuevo en proceso de adopción de prácticas.'},
+      {id:'e3',n:'Fertilidad de suelos',  val:'57/100',                    bar:57, src:'Lab. Suelos FHIA · oct 2024',           interp:'pH 5.3, M.O. 2.3%. Fertilidad limitante. Encalado y materia orgánica prioritarios.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estrés leve',               bar:52, src:'SERNA Honduras / AQUASTAT 2022–2024',   interp:'Zona con déficit hídrico documentado en meses de enero–marzo. Requiere infraestructura de captación.'},
+      {id:'e5',n:'Cobertura forestal',    val:'20% del predio',            bar:20, src:'ICF Honduras · 2024',                  interp:'Por debajo del umbral EUDR. Sin plan de manejo ICF activo. Acción urgente requerida.'},
+      {id:'e6',n:'Certificaciones ambientales', val:'Sin certificación activa', bar:10, src:'Rainforest Alliance / SAN · 2024',interp:'Sin certificación. Proceso de elegibilidad aún no iniciado formalmente con la cooperativa.'},
+      {id:'e7',n:'Huella de carbono',     val:'2.2 kg CO₂e/kg',           bar:28, src:'CIAT CCSaS / Cool Farm Alliance 2024', interp:'Huella alta. Baja cobertura y uso convencional de insumos. Mayor en el grupo.'},
+      {id:'e8',n:'Índice biodiversidad',  val:'Shannon 1.8',               bar:35, src:'CIAT Biodiversidad · sep 2024',        interp:'Diversidad muy baja. Sistema casi monocultivo con sombra mínima. Alta vulnerabilidad climática.'},
+     ]}
+   ]},
+   {id:'g4',name:'Grupo Agroforestal La Montaña',region:'Copán, Honduras',tipo:'grupo',paqueteFlexible:false,
+   acopio:null,productores:'L. 95,000',nProd:3,plazo:'5.0 meses',precio:275,
+   destinos:'Cosecha',variedades:'Bourbon, Catuaí rojo',
+   volumenTotal:'92 qq',promedioHist:'31 qq / 2 ciclos',
+   organizacion:'Grupo familiar',asistenciaTecnica:'IHCAFE regional',accesoMercado:'Intermediario local',
+   prod:[
+    {cod:'OC-0401',nombre:'Gómez Herrera, L.',monto:'L. 17,500',plazo:'5 meses',destino:'Insumos',hist:'42 qq / 3 ciclos',geo:'14.09°N 86.62°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0014',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     esg:[
+      {id:'e1',n:'Riesgo climático',      val:'3.4/10',                    bar:34, src:'ACLIMATE / ClimateServant 2025',        interp:'Riesgo moderado-bajo. Parcela en altitud media con mayor estabilidad climática que el valle.'},
+      {id:'e2',n:'Adaptación climática',  val:'3 prácticas verificadas',   bar:68, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'Sombra diversificada, barreras vivas y conservación hídrica verificadas. Nivel medio-alto.'},
+      {id:'e3',n:'Fertilidad de suelos',  val:'70/100',                    bar:70, src:'Lab. Suelos FHIA · oct 2024',           interp:'pH 5.8, M.O. 3.3%. Fertilidad aceptable. Plan de nutrición activo con la cooperativa.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Cuenca estable',            bar:72, src:'SERNA Honduras / AQUASTAT 2022–2024',   interp:'Acceso a fuente superficial secundaria. Caudal adecuado en estación lluviosa; monitoreo en seca.'},
+      {id:'e5',n:'Cobertura forestal',    val:'33% del predio',            bar:33, src:'ICF Honduras · 2024',                  interp:'En el umbral mínimo EUDR. Plan de manejo ICF vigente aunque con cobertura ajustada.'},
+      {id:'e6',n:'Certificaciones ambientales', val:'Rainforest Alliance', bar:100,src:'Rainforest Alliance / SAN · dic 2025', interp:'Certificación activa. Cumple requisitos de trazabilidad para exportación a España y Bélgica.'},
+      {id:'e7',n:'Huella de carbono',     val:'1.5 kg CO₂e/kg',           bar:53, src:'CIAT CCSaS / Cool Farm Alliance 2024', interp:'Dentro del rango promedio. Mejora posible con compostaje de pulpa y manejo de aguas residuales.'},
+      {id:'e8',n:'Índice biodiversidad',  val:'Shannon 2.5',               bar:57, src:'CIAT Biodiversidad · sep 2024',        interp:'Diversidad media. Sistema con estratos arbóreos en desarrollo. Potencial de certificación futura.'},
+     ]},
+     {cod:'OC-0402',nombre:'Reyes Sorto, M.',monto:'L. 15,000',plazo:'5 meses',destino:'Infraestructura',hist:'28 qq / 2 ciclos',geo:'14.31°N 86.74°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0063',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
+     esg:[
+      {id:'e1',n:'Riesgo climático',      val:'4.1/10',                    bar:41, src:'ACLIMATE / ClimateServant 2025',        interp:'Exposición media. Microclima con mayor variabilidad térmica y precipitación irregular en ciclo seco.'},
+      {id:'e2',n:'Adaptación climática',  val:'2 prácticas verificadas',   bar:48, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'Solo sombra básica y cobertura de suelo. Productor en proceso de adopción de prácticas adicionales.'},
+      {id:'e3',n:'Fertilidad de suelos',  val:'61/100',                    bar:61, src:'Lab. Suelos FHIA · oct 2024',           interp:'pH 5.5, M.O. 2.8%. Requiere encalado y enriquecimiento orgánico en próximo ciclo.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Estrés leve',               bar:58, src:'SERNA Honduras / AQUASTAT 2022–2024',   interp:'Subcuenca con reducción de caudal en época seca. Se recomienda cosecha de agua.'},
+      {id:'e5',n:'Cobertura forestal',    val:'27% del predio',            bar:27, src:'ICF Honduras · 2024',                  interp:'Cobertura por debajo del umbral EUDR. Se requiere ampliación de áreas bajo manejo forestal.'},
+      {id:'e6',n:'Certificaciones ambientales', val:'Sin certificación activa', bar:20, src:'Rainforest Alliance / SAN · 2024',interp:'Sin certificación ambiental vigente. Elegibilidad para créditos verdes condicionada a avance de prácticas.'},
+      {id:'e7',n:'Huella de carbono',     val:'1.9 kg CO₂e/kg',           bar:38, src:'CIAT CCSaS / Cool Farm Alliance 2024', interp:'Por encima del promedio regional. Margen de mejora con incorporación de materia orgánica y sombra.'},
+      {id:'e8',n:'Índice biodiversidad',  val:'Shannon 2.1',               bar:45, src:'CIAT Biodiversidad · sep 2024',        interp:'Diversidad funcional baja-media. Sistema con pocos estratos arbóreos diferenciados.'},
+     ]},
+    {cod:'OC-0403',nombre:'Perdomo Núñez, A.',monto:'L. 19,500',plazo:'6 meses',destino:'Insumos',hist:'37 qq / 3 ciclos',geo:'14.24°N 86.80°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0071',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     esg:[
+      {id:'e1',n:'Riesgo climático',      val:'3.0/10',                    bar:30, src:'ACLIMATE / ClimateServant 2025',        interp:'Exposición baja. Altitud y cobertura forestal reducen impacto de eventos extremos.'},
+      {id:'e2',n:'Adaptación climática',  val:'3 prácticas verificadas',   bar:74, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'Sombra diversificada, barreras vivas y manejo de tejido verificados. Nivel medio-alto.'},
+      {id:'e3',n:'Fertilidad de suelos',  val:'72/100',                    bar:72, src:'Lab. Suelos FHIA · oct 2024',           interp:'pH 5.8, M.O. 3.3%. Suelos en buen estado productivo. Fertilización balanceada recomendada.'},
+      {id:'e4',n:'Disponibilidad hídrica',val:'Cuenca estable',            bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',   interp:'Caudal estable en los últimos 3 ciclos. Infraestructura de captación básica en predio.'},
+      {id:'e5',n:'Cobertura forestal',    val:'35% del predio',            bar:35, src:'ICF Honduras · 2024',                  interp:'Dentro del umbral EUDR. Área bajo plan de manejo registrado y activo.'},
+      {id:'e6',n:'Certificaciones ambientales', val:'Rainforest Alliance', bar:100,src:'Rainforest Alliance / SAN · dic 2025', interp:'Certificación Rainforest Alliance vigente. Trazabilidad verificada para exportación a UE.'},
+      {id:'e7',n:'Huella de carbono',     val:'1.3 kg CO₂e/kg',           bar:60, src:'CIAT CCSaS / Cool Farm Alliance 2024', interp:'Por debajo del promedio regional. Manejo orgánico parcial contribuye a reducción de emisiones.'},
+      {id:'e8',n:'Índice biodiversidad',  val:'Shannon 2.7',               bar:63, src:'CIAT Biodiversidad · sep 2024',        interp:'Sistema agroforestal con diversidad funcional media-alta. Buena cobertura de estrato arbustivo.'},
+     ]}
+   ]}
 ];
 
 let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3;
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
-function getLoans(){return U.role==='banco'?LOANS_BANCO:LOANS_COOP;}
+function getLoans(){return [...(U.role==='banco'?LOANS_BANCO:LOANS_COOP),...LOANS_GRUPO];}
 
 function syncPills(){
   [['tb-u','tb-r'],['tb-u2','tb-r2'],['tb-u3','tb-r3'],['tb-u4','tb-r4'],['tb-u5','tb-r5']].forEach(([uid,rid])=>{
@@ -918,14 +1134,21 @@ function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
   getLoans().forEach(l=>{
     const iB=U.role==='banco';
-    const mA=iB?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
-    const mP=iB?`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`:`<div class="mi"><div class="mi-lbl">Monto crédito</div><div class="mi-val mv-o">${l.productores}</div></div>`;
-    const mX=iB?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`:`<div class="mi"><div class="mi-lbl">Importadora</div><div class="mi-val mv-o">${l.contrato}</div></div>`;
-    const mF=iB?`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
-    const smartB=!iB?`<span class="badge smart">Smart Contract</span>`:'';
+    const isG=l.tipo==='grupo';
+    const mA=iB&&!isG?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
+    const mP=isG
+      ?`<div class="mi"><div class="mi-lbl">Monto total</div><div class="mi-val mv-g">${l.productores}</div></div>`
+      :iB?`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`:`<div class="mi"><div class="mi-lbl">Monto crédito</div><div class="mi-val mv-o">${l.productores}</div></div>`;
+    const mX=isG
+      ?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
+      :iB?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`:`<div class="mi"><div class="mi-lbl">Importadora</div><div class="mi-val mv-o">${l.contrato}</div></div>`;
+    const mF=(iB||isG)&&l.paqueteFlexible!==undefined?`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
+    const smartB=!iB&&!isG?`<span class="badge smart">Smart Contract</span>`:'';
+    const badgeClass=isG?'grupo':U.role;
+    const badgeLabel=isG?'Grupo de productores':iB?'Acopio':'Productor';
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
       <div>
-        <div class="loan-top"><span class="badge ${U.role}">${iB?'Acopio':'Productor'}</span>${smartB}<span class="loan-name">${l.name}</span></div>
+        <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span>${smartB}<span class="loan-name">${l.name}</span></div>
         <div class="loan-region">${l.region} · Plazo: ${l.plazo}</div>
         <div class="loan-meta">${mA}${mP}${mX}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
       </div>
@@ -935,12 +1158,13 @@ function renderLoans(){
   initPagination();
 }
 
-function openLoan(id){L=getLoans().find(l=>l.id===id);tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
+function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.id===id);tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
 
 function renderDetail(){
   const iB=U.role==='banco';
+  const isG=L.tipo==='grupo';
   let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region} · Plazo: ${L.plazo}`;
-  if(!iB)h+=` &nbsp;·&nbsp; <span style="color:var(--gold);font-size:11px">Smart Contract: ${L.contrato}</span>`;
+  if(!iB&&!isG)h+=` &nbsp;·&nbsp; <span style="color:var(--gold);font-size:11px">Smart Contract: ${L.contrato}</span>`;
   h+=`</div></div>`;
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
@@ -1152,63 +1376,106 @@ function toggleProd(cod){
 }
 
 function findProd(cod){
-  for(const l of LOANS_BANCO.concat(LOANS_COOP)){
+  for(const l of LOANS_BANCO.concat(LOANS_COOP).concat(LOANS_GRUPO)){
     const p=l.prod.find(x=>x.cod===cod);
     if(p)return p;
   }
   return null;
 }
 
-function fillProd(cod){
+function fillProd(cod, includeEsg=true){
   const cell=document.getElementById('pxc-'+cod);
   if(!cell)return;
   const p=findProd(cod);
   if (!p) return;
-  if (!confirmed.esgKeys || confirmed.esgKeys.length === 0) {
-    cell.innerHTML = '';
-    return;
+  
+  let metrics = [];
+  if (includeEsg) {
+    if (!confirmed.esgKeys || confirmed.esgKeys.length === 0) {
+      cell.innerHTML = '';
+      return;
+    }
+    const allMetrics = prodEsgMetrics(p);
+    metrics = allMetrics.filter(m => confirmed.esgKeys.includes(m.id));
+    if (metrics.length === 0) {
+      cell.innerHTML = '';
+      return;
+    }
   }
-  const allMetrics = prodEsgMetrics(p);
-  const metrics = allMetrics.filter(m => 
-  confirmed.esgKeys.includes(m.id)
-  );
-  if (metrics.length === 0) {
-    cell.innerHTML = '';
-    return;
-  }
+  
   const rTag=p.riesgo.includes('negativo')?`<span class="tag eu">✓ Sin reportes</span>`:p.riesgo.includes('mora antigua')?`<span class="tag ok">${p.riesgo}</span>`:`<span class="tag pend">${p.riesgo}</span>`;
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
-  const cards=metrics.map(m=>`<div class="px-card">
+  
+  let esgHtml = '';
+  if (includeEsg && metrics.length > 0) {
+    const cards=metrics.map(m=>`<div class="px-card">
     <div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
     <div class="px-card-src">${m.src}</div>
     <div class="px-bar"><div class="px-fill" style="width:${m.bar}%"></div></div>
     <div class="px-card-interp">${m.interp}</div>
   </div>`).join('');
+    esgHtml = `<div class="px-esg">
+      <div class="px-esg-hdr">Métricas ESG individuales — ${p.nombre}</div>
+      ${cards}
+    </div>`;
+  }
+  
+  const euTag = p.eu === 'Sí'
+    ? `<span class="tag eu">✓ Verificado</span>`
+    : `<span class="tag pend">⏳ Pendiente</span>`;
+
+  const profileHtml = `<div class="px-profile">
+    <div class="px-profile-hdr">Perfil productivo</div>
+    <div class="px-profile-grid">
+      <div class="px-pf"><span class="px-pf-l">Variedad</span><span class="px-pf-v">${p.variedad || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Historial de acopio</span><span class="px-pf-v">${p.hist || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Destino del crédito</span><span class="px-pf-v">${p.destino || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Carnet IHCAFE</span><span class="px-pf-v" style="font-family:var(--mono);font-size:11px">${p.carnet || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Geolocalización</span><span class="px-pf-v" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</span></div>
+      <div class="px-pf"><span class="px-pf-l">Verificación EUDR</span><span class="px-pf-v">${euTag}</span></div>
+    </div>
+  </div>`;
+  
   cell.innerHTML=`<div class="px-wrap">
     <div class="px-map-box">
       <div class="px-map-hdr"><span>${p.nombre}</span><span style="color:var(--accent)">${p.variedad}</span></div>
       ${buildMap(p)}
       <div class="px-map-foot">Carnet: ${p.carnet}<br>Central riesgos: ${rTag}<br>Confianza FGR: ${cTag}</div>
     </div>
-    <div class="px-esg">
-      <div class="px-esg-hdr">Métricas ESG individuales — ${p.nombre}</div>
-      ${cards}
+    <div class="px-right">
+      ${profileHtml}
+      ${esgHtml}
     </div>
   </div>`;
 }
 
 function renderAccess(){
   const {loan:l,esgKeys,plan,tierOn,isBanco}=confirmed;
+  const isG=l.tipo==='grupo';
   let h='';
-  const mA=isBanco?`<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`:'';
-  const mP=isBanco?`<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`:`<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
-  const mX=isBanco?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`:`<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
-  const mF=isBanco?`<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
+  const mA=isBanco&&!isG?`<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`:'';
+  const mP=isG
+    ?`<div><div class="am-l">Monto total</div><div class="am-v mv-g">${l.productores}</div></div>`
+    :isBanco?`<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`:`<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
+  const mX=isG
+    ?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
+    :isBanco?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`:`<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
+  const mF=(isBanco||isG)&&l.paqueteFlexible!==undefined?`<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   h+=`<div class="access-actions"><button class="btn-ol" onclick="window.print()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">✉ Estructurar oferta de crédito →</button></div>`;
 
   if(tierOn){
-    if(isBanco){
+    if(isG){
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div><div class="sc-sub">Perfil colectivo · ${l.nProd} productores vinculados</div></div></div>
+      <div class="sc-body"><div class="ig">
+        <div class="ic"><div class="ic-l">Monto total solicitado</div><div class="ic-v mv-g">${l.productores}</div><div class="ic-src">Solicitud agregada DIG-IN</div></div>
+        <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v">${l.nProd}</div><div class="ic-src">Registro del grupo</div></div>
+        <div class="ic"><div class="ic-l">Plazo referencia</div><div class="ic-v">${l.plazo}</div><div class="ic-src">Promedio ponderado del grupo</div></div>
+        ${l.volumenTotal?`<div class="ic"><div class="ic-l">Volumen total estimado</div><div class="ic-v">${l.volumenTotal}</div><div class="ic-src">Declaración del grupo / IHCAFE</div></div>`:''}
+        ${l.variedades?`<div class="ic"><div class="ic-l">Variedades cultivadas</div><div class="ic-v" style="font-size:12px">${l.variedades}</div><div class="ic-src">Fichas técnicas IHCAFE</div></div>`:''}
+        ${l.destinos?`<div class="ic"><div class="ic-l">Destinos del crédito</div><div class="ic-v" style="font-size:12px">${l.destinos}</div><div class="ic-src">Solicitud del grupo</div></div>`:''}
+      </div></div></div>`;
+    } else if(isBanco){
       h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador</div><div class="sc-sub">Perfil operativo y garantías del crédito de acopio</div></div></div>
       <div class="sc-body"><div class="ig">
         <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div><div class="ic-src">Registro Mercantil Honduras</div></div>
