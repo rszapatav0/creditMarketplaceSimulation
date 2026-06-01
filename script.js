@@ -504,6 +504,9 @@ function goOffer(){
   const inputs=['of-monto','of-tasa','of-plazo','of-periodo','of-cuota','of-garantia','of-gracia','of-comision','of-seguro','of-aval-conf','of-destino','of-vigencia','of-etapa','of-notas'];
   inputs.forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
+    if(el.tagName==='TEXTAREA'){el.value='';}
+    else if(el.tagName==='SELECT'){el.selectedIndex=0;}
+    else{el.value='';}
     const ev=el.tagName==='INPUT'?'input':'change';
     el.removeEventListener(ev,updatePreview);el.addEventListener(ev,updatePreview);
   });
