@@ -198,6 +198,7 @@ function prodEsgMetrics(p){
   return p.esg||[];
 }
 
+<<<<<<< HEAD
  // ── SVG farm map (seed derived from p.cod) ────────
  function buildMap(p){
    const s=p.cod.split('').reduce((a,c)=>a+c.charCodeAt(0),0), W=240, H=188, cx=120, cy=90;
