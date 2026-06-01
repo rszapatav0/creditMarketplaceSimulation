@@ -161,7 +161,7 @@ function renderProducersSection(l){
   if(l.prod&&l.prod.length>0){
     l.prod.forEach(p=>{
       const row=document.createElement('tr');
-      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td><input class="finp-s" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="ej. 14.5"></td>`;
+      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td><input class="finp-s" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="ej. 14.5"></td><td><input class="finp-s" type="number" placeholder="ej. 6"></td>`;
       tbody.appendChild(row);
     });
   }
