@@ -15,17 +15,6 @@ const ESG=[
   {id:'e8',label:'Índice de biodiversidad',cost:80,val:'Shannon 2.8 — diversidad media-alta',bar:65,detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.',src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024',interp:'Sistema agroforestal con diversidad funcional adecuada para resiliencia climática y calidad del café.'},
 ];
 
-const ESG_META=[
-  {id:'e1', label:'Riesgo climático', cost:80, detail:'Índice compuesto de temperatura media, frecuencia de eventos extremos y exposición a sequías. Escala 0–10 donde valores menores indican menor riesgo.', src:'Fuente: ACLIMATE Colombia / ClimateServant API · Ciclo 2024–2025'},
-  {id:'e2', label:'Medidas de adaptación', cost:80, detail:'Prácticas verificadas en campo por técnico IHCAFE. Incluye inventario de especies de sombra, cobertura de suelo y prácticas de conservación hídrica.', src:'Fuente: Fichas técnicas IHCAFE / TraceFoodChain · Verificación noviembre 2024'},
-  {id:'e3', label:'Fertilidad de suelos', cost:80, detail:'Índice basado en materia orgánica, pH, N-P-K disponible y capacidad de intercambio catiónico (CIC). Análisis en laboratorio certificado FHIA.', src:'Fuente: Laboratorio de Suelos FHIA · Muestra octubre 2024'},
-  {id:'e4', label:'Disponibilidad hídrica', cost:80, detail:'Evaluación de cuenca, caudal en época seca e infraestructura de riego. Índice de estrés hídrico según metodología FAO-AQUASTAT.', src:'Fuente: SERNA Honduras / AQUASTAT · Período 2022–2024'},
-  {id:'e5', label:'Planes de manejo forestal', cost:80, detail:'Porcentaje del predio bajo plan de manejo registrado ante ICF. Incluye áreas de reserva, cortinas rompevientos y sistemas agroforestales.', src:'Fuente: ICF Honduras · Registro 2024'},
-  {id:'e6', label:'Certificaciones ambientales', cost:80, detail:'Estado de certificaciones vigentes: Rainforest Alliance, Organic, UTZ, Fair Trade, Bird Friendly. Vigencia y alcance verificados.', src:'Fuente: Rainforest Alliance / SAN · Vigente hasta diciembre 2025'},
-  {id:'e7', label:'Huella de carbono', cost:80, detail:'Emisiones GEI en producción primaria (cultivo, cosecha y beneficiado húmedo). Metodología Cool Farm Tool adaptada para café hondureño.', src:'Fuente: CIAT CCSaS / Cool Farm Alliance · Ciclo 2023–2024'},
-  {id:'e8', label:'Índice de biodiversidad', cost:80, detail:'Índice Shannon-Wiener sobre inventario de especies vegetales (estratos arbóreos, arbustivos y herbáceos). Valores >2.5 indican diversidad relevante.', src:'Fuente: CIAT Biodiversidad / Inventario de campo · Septiembre 2024'},
-];
-
 const LOANS_BANCO=[
   {id:'b1',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',tipo:'banco',paqueteFlexible: true,
    acopio:'L. 2,400,000',productores:'L. 680,000',nProd:38,plazo:'6 meses',precio:320,

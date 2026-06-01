@@ -47,7 +47,7 @@ function doLogin(){
   if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
   err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
   U=found;syncPills();initBalance();renderBalanceDisplay();
-  document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles — catálogo completo';
+  document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles';
   renderLoans();show('s-market');
 }
 function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');dismissedLoans.clear();document.getElementById('inp-p').value='';show('s-login');}
@@ -110,9 +110,22 @@ function renderDetail(){
   renderCart();
 }
 
-function toggleTier(){tierOn=!tierOn;renderDetail();}
-function toggleEsg(id){esgSel[id]=!esgSel[id];renderDetail();}
-function toggleEsgAll(){esgAllOn=!esgAllOn;if(esgAllOn){ESG.forEach(e=>esgSel[e.id]=true);}else{ESG.forEach(e=>esgSel[e.id]=false);}renderDetail();}
+function toggleTier(){
+  tierOn=!tierOn;
+  if(!tierOn){ESG.forEach(e=>esgSel[e.id]=false);esgAllOn=false;}
+  renderDetail();
+}
+function toggleEsg(id){
+  esgSel[id]=!esgSel[id];
+  if(esgSel[id]) tierOn=true;esgAllOn=ESG.every(e=>esgSel[e.id]);
+  renderDetail();
+}
+function toggleEsgAll(){
+  esgAllOn=!esgAllOn;
+  if(esgAllOn){tierOn=true;ESG.forEach(e=>esgSel[e.id]=true);
+  }else{ESG.forEach(e=>esgSel[e.id]=false);}
+  renderDetail();
+}
 
 function calcTotal(){
   let t=0;
@@ -145,9 +158,9 @@ function renderCart(){
 }
 
 function confirmAccess(){
-  const esgKeys=Object.keys(esgSel).filter(k=>esgSel[k]);
+  const esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
   const total=calcTotal();
-  const plan=tierOn&&esgKeys.length>0?'Premium':tierOn?'Estándar':esgKeys.length>0?'Solo ESG':'—';
+  const plan=esgKeys.length>0?'Premium':tierOn?'Estándar':'—';
   confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
   updateBalance(total);
   document.getElementById('scard').innerHTML=`
@@ -177,77 +190,6 @@ function renderProducersSection(l){
       tbody.appendChild(row);
     });
   }
-}
-
-
-function computeLoanEsg(loan){
-  const prods = loan.prod;
-  if(!prods || prods.length === 0) return [];
-  // Helper: average bar across producers for a given metric id
-  function avgBar(id){
-    const vals = prods.map(p => (p.esg.find(m => m.id === id) || {bar:0}).bar);
-    return Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
-  }
-  // Helper: mode of val strings for categorical metrics;
-  // on tie, pick the entry with the lowest bar (most conservative).
-  function modeVal(id){
-    const entries = prods.map(p => p.esg.find(m => m.id === id)).filter(Boolean);
-    const freq = {};
-    entries.forEach(m => { freq[m.val] = (freq[m.val] || 0) + 1; });
-    const maxFreq = Math.max(...Object.values(freq));
-    const tied = entries.filter(m => freq[m.val] === maxFreq);
-    // among tied entries, pick the one with the lowest bar (most conservative)
-    tied.sort((a, b) => a.bar - b.bar);
-    return tied[0];
-  }
-  // Helper: find the producer metric whose bar is closest to a given avg bar
-  function reprInterp(id, avgBarVal){
-    const entries = prods.map(p => p.esg.find(m => m.id === id)).filter(Boolean);
-    entries.sort((a, b) => Math.abs(a.bar - avgBarVal) - Math.abs(b.bar - avgBarVal));
-    return entries[0].interp;
-  }
-  // e1 — Riesgo climático (numeric: bar maps to a 0–10 scale, lower = better)
-  // bar = risk * 10, so val = (bar / 10).toFixed(1) + "/10"
-  const e1bar = avgBar('e1');
-  const e1val = (e1bar / 10).toFixed(1) + '/10';
-  const e1level = e1bar < 30 ? 'Bajo' : e1bar < 45 ? 'Medio-bajo' : e1bar < 60 ? 'Medio' : 'Alto';
-  // e2 — Adaptación climática (categorical: "N prácticas verificadas")
-  const e2mode = modeVal('e2');
-  const e2bar  = avgBar('e2');
-  // e3 — Fertilidad de suelos (numeric: bar = score/100)
-  const e3bar = avgBar('e3');
-  const e3level = e3bar >= 75 ? 'Alto' : e3bar >= 60 ? 'Medio' : 'Bajo';
-  const e3val = `${e3level} (${e3bar}/100)`;
-  // e4 — Disponibilidad hídrica (categorical: "Cuenca estable" or "Estrés leve")
-  const e4mode = modeVal('e4');
-  const e4bar  = avgBar('e4');
-  // e5 — Cobertura forestal (numeric: bar = percentage)
-  const e5bar = avgBar('e5');
-  const e5val = `${e5bar}% cobertura forestal activa`;
-  // e6 — Certificaciones (categorical: Rainforest Alliance, Comercio Justo, Orgánico, Sin certificación)
-  const e6mode = modeVal('e6');
-  const e6bar  = avgBar('e6');
-  // e7 — Huella de carbono (numeric, inverted: bar 100→0.8 kg, bar 0→2.8 kg)
-  // formula: kg = 2.8 - (bar * 0.02)  →  bar = (2.8 - kg) * 50
-  const e7bar = avgBar('e7');
-  const e7kg  = (2.8 - e7bar * 0.02).toFixed(1);
-  const e7val = `${e7kg} kg CO₂e / kg café`;
-  // e8 — Índice biodiversidad (numeric: bar maps to Shannon 0–4 scale)
-  // Shannon ≈ 0.8 + bar * 0.032  (bar 0 → 0.8, bar 100 → 4.0)
-  const e8bar = avgBar('e8');
-  const e8sh  = (0.8 + e8bar * 0.032).toFixed(1);
-  const e8level = e8bar >= 65 ? 'diversidad alta' : e8bar >= 50 ? 'diversidad media-alta' : e8bar >= 35 ? 'diversidad media' : 'diversidad baja';
-  const e8val = `Shannon ${e8sh} — ${e8level}`;
-  return [
-    {id:'e1', label:'Riesgo climático',          val:e1val,         bar:e1bar, detail:ESG_META.find(m=>m.id==='e1').detail, src:ESG_META.find(m=>m.id==='e1').src, interp:`${e1level}. ${reprInterp('e1', e1bar)}`},
-    {id:'e2', label:'Medidas de adaptación',      val:e2mode.val,    bar:e2bar, detail:ESG_META.find(m=>m.id==='e2').detail, src:ESG_META.find(m=>m.id==='e2').src, interp:reprInterp('e2', e2bar)},
-    {id:'e3', label:'Fertilidad de suelos',       val:e3val,         bar:e3bar, detail:ESG_META.find(m=>m.id==='e3').detail, src:ESG_META.find(m=>m.id==='e3').src, interp:reprInterp('e3', e3bar)},
-    {id:'e4', label:'Disponibilidad hídrica',     val:e4mode.val,    bar:e4bar, detail:ESG_META.find(m=>m.id==='e4').detail, src:ESG_META.find(m=>m.id==='e4').src, interp:reprInterp('e4', e4bar)},
-    {id:'e5', label:'Planes de manejo forestal',  val:e5val,         bar:e5bar, detail:ESG_META.find(m=>m.id==='e5').detail, src:ESG_META.find(m=>m.id==='e5').src, interp:reprInterp('e5', e5bar)},
-    {id:'e6', label:'Certificaciones ambientales',val:e6mode.val,    bar:e6bar, detail:ESG_META.find(m=>m.id==='e6').detail, src:ESG_META.find(m=>m.id==='e6').src, interp:reprInterp('e6', e6bar)},
-    {id:'e7', label:'Huella de carbono',          val:e7val,         bar:e7bar, detail:ESG_META.find(m=>m.id==='e7').detail, src:ESG_META.find(m=>m.id==='e7').src, interp:reprInterp('e7', e7bar)},
-    {id:'e8', label:'Índice de biodiversidad',    val:e8val,         bar:e8bar, detail:ESG_META.find(m=>m.id==='e8').detail, src:ESG_META.find(m=>m.id==='e8').src, interp:reprInterp('e8', e8bar)},
-  ];
 }
 
 
@@ -326,24 +268,16 @@ function fillProd(cod, includeEsg=true){
   if (!p) return;
   
   let metrics = [];
-  if (includeEsg) {
-    if (!confirmed.esgKeys || confirmed.esgKeys.length === 0) {
-      cell.innerHTML = '';
-      return;
-    }
+  if (includeEsg && confirmed.esgKeys && confirmed.esgKeys.length > 0) {
     const allMetrics = prodEsgMetrics(p);
     metrics = allMetrics.filter(m => confirmed.esgKeys.includes(m.id));
-    if (metrics.length === 0) {
-      cell.innerHTML = '';
-      return;
-    }
   }
   
   const rTag=p.riesgo.includes('negativo')?`<span class="tag eu">✓ Sin reportes</span>`:p.riesgo.includes('mora antigua')?`<span class="tag ok">${p.riesgo}</span>`:`<span class="tag pend">${p.riesgo}</span>`;
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
   
   let esgHtml = '';
-  if (includeEsg && metrics.length > 0) {
+  if (metrics.length > 0) {
     const cards=metrics.map(m=>`<div class="px-card">
     <div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
     <div class="px-card-src">${m.src}</div>
@@ -401,7 +335,11 @@ function renderAccess(){
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   h+=`<div class="access-actions"><button class="btn-ol" onclick="window.print()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">✉ Estructurar oferta de crédito →</button></div>`;
 
-  if(tierOn){
+  const hasFundamentals = tierOn;
+  const hasEsg = esgKeys.length > 0;
+  const hasAccess = hasFundamentals || hasEsg;
+
+  if(hasFundamentals){
     if(isG){
       h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div><div class="sc-sub">Perfil colectivo · ${l.nProd} productores vinculados</div></div></div>
       <div class="sc-body"><div class="ig">
@@ -439,41 +377,34 @@ function renderAccess(){
     const riesgoTag=p=>`<span class="tag ${p.riesgo.includes('negativo')?'eu':p.riesgo.includes('mora antigua')?'pend':'pend'}">${p.riesgo.includes('Sin reporte negativo')?'✓ Limpio':p.riesgo}</span>`;
     const confTag=p=>`<span class="tag ${p.confianza==='Aval otorgado'?'yes':p.confianza.includes('condición')?'pend':'pend'}">${p.confianza}</span>`;
 
-    h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver mapa y métricas ESG individuales</div></div></div>
-    <div class="sc-body" style="padding:0;overflow-x:auto">
-      <table class="ptable">
-        <thead><tr>
-          <th style="width:13%">Código</th><th style="width:16%">Productor</th>
-          <th style="width:12%">Monto</th><th style="width:10%">Plazo</th>
-          <th style="width:12%">Histórico</th><th style="width:8%">UE</th>
-          <th style="width:7%">Aval</th><th style="width:12%">Central riesgos</th>
-          <th style="width:10%">Confianza FGR</th>
-        </tr>
-        <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar el mapa de la finca y métricas ESG individuales del productor</td></tr>
-        </thead>
-        <tbody>${l.prod.map(p=>`
-          <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
-            <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
-            <td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td>
-            <td>${p.hist}</td>
-            <td><span class="tag ${p.eu==='Sí'?'eu':'pend'}">${p.eu==='Sí'?'✓':'Pend.'}</span></td>
-            <td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
-            <td>${riesgoTag(p)}</td>
-            <td>${confTag(p)}</td>
+    if(l.prod && l.prod.length>0){
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver mapa y métricas ESG individuales</div></div></div>
+      <div class="sc-body" style="padding:0;overflow-x:auto">
+        <table class="ptable">
+          <thead><tr>
+            <th style="width:13%">Código</th><th style="width:16%">Productor</th>
+            <th style="width:12%">Monto</th><th style="width:10%">Plazo</th>
+            <th style="width:12%">Histórico</th><th style="width:8%">UE</th>
+            <th style="width:7%">Aval</th><th style="width:12%">Central riesgos</th>
+            <th style="width:10%">Confianza FGR</th>
           </tr>
-          <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
-        </tbody>
-      </table>
-    </div></div>`;
-  }
-
-  if(esgKeys.length>0){
-    const loanEsg=computeLoanEsg(confirmed.loan);
-    const cards=esgKeys.map(k=>{
-      const e=loanEsg.find(x=>x.id===k);
-      return `<div class="esg-card"><div class="ec-name">${e.label}</div><div class="ec-val">${e.val}</div><div class="ec-detail">${e.detail}</div><div class="ec-src">${e.src}</div><div class="ebar"><div class="efill" style="width:${e.bar}%"></div></div><div class="ec-interp">${e.interp}</div></div>`;
-    }).join('');
-    h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">✦</div><div><div class="sc-title">Métricas ESG del crédito</div><div class="sc-sub">${esgKeys.length} de 8 métricas · fuentes y metodología</div></div></div><div class="sc-body"><div class="esg-ag">${cards}</div></div></div>`;
+          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar el mapa de la finca y métricas ESG individuales del productor</td></tr>
+          </thead>
+          <tbody>${l.prod.map(p=>`
+            <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
+              <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
+              <td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td>
+              <td>${p.hist}</td>
+              <td><span class="tag ${p.eu==='Sí'?'eu':'pend'}">${p.eu==='Sí'?'✓':'Pend.'}</span></td>
+              <td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+              <td>${riesgoTag(p)}</td>
+              <td>${confTag(p)}</td>
+            </tr>
+            <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div></div>`;
+    }
   }
 
   document.getElementById('access-inner').innerHTML=h;
