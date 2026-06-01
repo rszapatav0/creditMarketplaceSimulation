@@ -64,6 +64,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .pg-label{font-size:10px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;font-family:var(--mono);margin-bottom:.25rem}
 .pg-title{font-size:20px;font-weight:300;margin-bottom:1.5rem}
 .loan-list{display:flex;flex-direction:column;gap:10px;min-height:400px}
+.loan-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.5rem}
+.loan-tab{padding:12px 20px;background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;font-weight:500;font-family:var(--font);transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;position:relative;top:2px}
+.loan-tab:hover{color:var(--text)}
+.loan-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .lcard{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:grid;grid-template-columns:1fr auto;align-items:center;gap:1rem;cursor:pointer;transition:border-color .15s,box-shadow .15s;position:relative}
 .lcard:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(5,150,105,.08)}
 .loan-top{display:flex;align-items:center;gap:8px;margin-bottom:.5rem;flex-wrap:wrap}

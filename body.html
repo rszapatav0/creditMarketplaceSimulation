@@ -38,7 +38,11 @@
 <!-- S2: MARKETPLACE -->
 <div id="s-market" class="screen">
   <div class="topbar"><div class="tb-logo">DIG-IN · Honduras</div><div class="tb-right"><div class="tb-user" id="tb-u"></div><div class="rpill" id="tb-r"></div><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
-  <div class="pi"><div class="pg-label">Oportunidades disponibles</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
+  <div class="pi"><div class="pg-label">Oportunidades disponibles</div><div class="pg-title" id="mkt-title"></div><div class="loan-tabs">
+    <button class="loan-tab active" data-tipo="banco" onclick="selectLoanTab('banco')">Grupos de productores vinculados a créditos de acopio</button>
+    <button class="loan-tab" data-tipo="grupo" onclick="selectLoanTab('grupo')">Grupos de productores</button>
+    <button class="loan-tab" data-tipo="coop" onclick="selectLoanTab('coop')">Productores individuales</button>
+  </div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
 </div>
 
 <!-- S3: CHECKOUT -->
@@ -153,7 +157,7 @@
       </div>
       <div class="o-actions">
         <button class="btn-s" onclick="show('s-access')">Cancelar</button>
-        <button class="btn-p" onclick="submitOffer()">Enviar oferta al intermediario →</button>
+        <button class="btn-p" onclick="submitOffer()">Enviar oferta →</button>
       </div>
     </div>
   </div>
@@ -165,7 +169,7 @@
   <div class="offer-sent-wrap">
     <div class="sicon blue">✉</div>
     <div class="stitle">Oferta enviada al intermediario</div>
-    <div class="ssub">La propuesta ha sido transmitida a través del sistema DIG-IN. El intermediario recibirá una notificación y podrá evaluar y responder la oferta desde su portal.</div>
+    <div class="ssub">La propuesta ha sido transmitida a través del sistema DIG-IN. El encargado recibirá una notificación y podrá evaluar y responder la oferta desde su portal.</div>
     <div class="scard" id="offer-sent-card"></div>
     <div class="btn-row">
       <button class="btn-p" onclick="goMkt()">Explorar más créditos</button>
