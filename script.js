@@ -198,9 +198,9 @@ function prodEsgMetrics(p){
   return p.esg||[];
 }
 
-// ── SVG farm map (derived from esgSeed + geo) ─────────────────────────────
-function buildMap(p){
-  const s=p.esgSeed, W=240, H=188, cx=120, cy=90;
+ // ── SVG farm map (seed derived from p.cod since esgSeed was removed) ────────
+ function buildMap(p){
+   const s=p.cod.split('').reduce((a,c)=>a+c.charCodeAt(0),0), W=240, H=188, cx=120, cy=90;
   const hx=i=>(s*(i+3))%256;
   const nPts=6+(hx(0)%3);
   const pts=[];
