@@ -466,6 +466,31 @@ function renderAccess(){
   document.getElementById('access-inner').innerHTML=h;
 }
 
+function topInfoAccess(){
+  const {loan:l,esgKeys,plan,tierOn,isBanco}=confirmed;
+  const isG=l.tipo==='grupo';
+  let h='';
+  const mA=isBanco&&!isG
+    ? `<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`
+    : '';
+  const mP=isG
+    ? `<div><div class="am-l">Monto total</div><div class="am-v mv-g">${l.productores}</div></div>`
+    : isBanco
+      ? `<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`
+      : `<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
+  const mX=isG
+    ? `<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
+    : isBanco
+      ? `<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
+      : `<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
+  const mF=(isBanco||isG)&&l.paqueteFlexible!==undefined
+    ? `<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`
+    : '';
+  h += `<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  
+  document.getElementById('top-info').innerHTML = h;
+}
+
 function goOffer(){
   const l=confirmed.loan;
   document.getElementById('o-sub').textContent=`${l.name} · ${l.region} · Plazo referencia: ${l.plazo}`;
@@ -476,7 +501,8 @@ function goOffer(){
     el.removeEventListener(ev,updatePreview);el.addEventListener(ev,updatePreview);
   });
   renderProducersSection(l);
-  updatePreview();show('s-offer');
+  updatePreview();topInfoAccess();
+  show('s-offer');
 }
 
 function updatePreview(){
