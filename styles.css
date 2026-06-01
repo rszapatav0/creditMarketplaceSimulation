@@ -64,7 +64,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .pg-label{font-size:10px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;font-family:var(--mono);margin-bottom:.25rem}
 .pg-title{font-size:20px;font-weight:300;margin-bottom:1.5rem}
 .loan-list{display:flex;flex-direction:column;gap:10px;min-height:400px}
-.lcard{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:grid;grid-template-columns:1fr auto;align-items:center;gap:1rem;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.lcard{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:grid;grid-template-columns:1fr auto;align-items:center;gap:1rem;cursor:pointer;transition:border-color .15s,box-shadow .15s;position:relative}
 .lcard:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(5,150,105,.08)}
 .loan-top{display:flex;align-items:center;gap:8px;margin-bottom:.5rem;flex-wrap:wrap}
 .badge{font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:3px;border:1px solid;font-weight:500}
@@ -82,6 +82,9 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .mv-b{color:var(--blue)}.mv-g{color:var(--accent)}.mv-o{color:var(--gold)}.mv-m{color:var(--text2)}
 .lock-tag{font-size:11px;color:var(--text3);font-family:var(--mono)}
 .larr{font-size:20px;color:var(--accent);opacity:.5}
+.btn-dismiss{position:absolute;bottom:8px;right:8px;padding:4px 10px;border-radius:6px;background:#fff;border:1px solid var(--border2);color:var(--text3);cursor:pointer;font-size:12px;transition:all .15s;font-family:var(--font)}
+.lcard:hover .btn-dismiss{border-color:var(--red);color:var(--red);background:var(--red-lt)}
+.btn-dismiss:hover{background:var(--red);color:#fff;border-color:var(--red)}
 
 /* PAGINATION */
 .loan-pagination{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:1.5rem;padding:1rem;background:var(--white);border:1px solid var(--border);border-radius:10px}

@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3;
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3,dismissedLoans=new Set();
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return [...(U.role==='banco'?LOANS_BANCO:LOANS_COOP),...LOANS_GRUPO];}
@@ -52,11 +52,17 @@ function doLogin(){
     :'Créditos a productores individuales — contratos inteligentes con importadoras';
   renderLoans();show('s-market');
 }
-function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');document.getElementById('inp-p').value='';show('s-login');}
+function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');dismissedLoans.clear();document.getElementById('inp-p').value='';show('s-login');}
+
+function dismissLoan(id, event){
+  event.stopPropagation();
+  dismissedLoans.add(id);
+  renderLoans();
+}
 
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
-  getLoans().forEach(l=>{
+  getLoans().filter(l=>!dismissedLoans.has(l.id)).forEach(l=>{
     const iB=U.role==='banco';
     const isG=l.tipo==='grupo';
     const mA=iB&&!isG?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
@@ -77,6 +83,7 @@ function renderLoans(){
         <div class="loan-meta">${mA}${mP}${mX}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
       </div>
       <div class="larr">›</div>
+      <button class="btn-dismiss" onclick="dismissLoan('${l.id}', event)" title="No me interesa">No me interesa</button>
     </div>`;
   });
   initPagination();
