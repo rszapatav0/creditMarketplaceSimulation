@@ -547,6 +547,7 @@ function submitOffer(){
     <div class="srow"><span class="sr-l">Aval Confianza SA-FGR</span><span class="sr-v">${v('of-aval-conf')}</span></div>
     <div class="srow"><span class="sr-l">Vigencia</span><span class="sr-v">${v('of-vigencia')}</span></div>
     <div class="srow"><span class="sr-l">Estado</span><span class="sr-v" style="color:var(--blue)">Enviada · Pendiente respuesta</span></div>`;
+  dismissedLoans.add(l.id);
   show('s-offer-sent');
 }
 
