@@ -1,7 +1,7 @@
 let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3,dismissedLoans=new Set();
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
-function getLoans(){return [...(U.role==='banco'?LOANS_BANCO:LOANS_COOP),...LOANS_GRUPO];}
+function getLoans(){return [...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO];}
 
 function syncPills(){
   [['tb-u','tb-r'],['tb-u2','tb-r2'],['tb-u3','tb-r3'],['tb-u4','tb-r4'],['tb-u5','tb-r5']].forEach(([uid,rid])=>{
@@ -47,9 +47,7 @@ function doLogin(){
   if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
   err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
   U=found;syncPills();initBalance();renderBalanceDisplay();
-  document.getElementById('mkt-title').textContent=U.role==='banco'
-    ?'Créditos de acopio disponibles — intermediarios comerciales'
-    :'Créditos a productores individuales — contratos inteligentes con importadoras';
+  document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles — catálogo completo';
   renderLoans();show('s-market');
 }
 function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');dismissedLoans.clear();document.getElementById('inp-p').value='';show('s-login');}
@@ -63,19 +61,19 @@ function dismissLoan(id, event){
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
   getLoans().filter(l=>!dismissedLoans.has(l.id)).forEach(l=>{
-    const iB=U.role==='banco';
     const isG=l.tipo==='grupo';
-    const mA=iB&&!isG?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
+    const isB=l.tipo==='banco';
+    const mA=isB?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
     const mP=isG
       ?`<div class="mi"><div class="mi-lbl">Monto total</div><div class="mi-val mv-g">${l.productores}</div></div>`
-      :iB?`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`:`<div class="mi"><div class="mi-lbl">Monto crédito</div><div class="mi-val mv-o">${l.productores}</div></div>`;
+      :isB?`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`:`<div class="mi"><div class="mi-lbl">Monto crédito</div><div class="mi-val mv-o">${l.productores}</div></div>`;
     const mX=isG
       ?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
-      :iB?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`:`<div class="mi"><div class="mi-lbl">Importadora</div><div class="mi-val mv-o">${l.contrato}</div></div>`;
-    const mF=(iB||isG)&&l.paqueteFlexible!==undefined?`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
-    const smartB=!iB&&!isG?`<span class="badge smart">Smart Contract</span>`:'';
-    const badgeClass=isG?'grupo':U.role;
-    const badgeLabel=isG?'Grupo de productores':iB?'Acopio':'Productor';
+      :isB?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`:`<div class="mi"><div class="mi-lbl">Importadora</div><div class="mi-val mv-o">${l.contrato}</div></div>`;
+    const mF=(isB||isG)&&l.paqueteFlexible!==undefined?`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
+    const smartB=!isB&&!isG?`<span class="badge smart">Smart Contract</span>`:'';
+    const badgeClass=isG?'grupo':l.tipo;
+    const badgeLabel=isG?'Grupo de productores':isB?'Acopio':'Productor';
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
       <div>
         <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span>${smartB}<span class="loan-name">${l.name}</span></div>
@@ -92,10 +90,10 @@ function renderLoans(){
 function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.id===id);tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
 
 function renderDetail(){
-  const iB=U.role==='banco';
+  const isB=L.tipo==='banco';
   const isG=L.tipo==='grupo';
   let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region} · Plazo: ${L.plazo}`;
-  if(!iB&&!isG)h+=` &nbsp;·&nbsp; <span style="color:var(--gold);font-size:11px">Smart Contract: ${L.contrato}</span>`;
+  if(!isB&&!isG)h+=` &nbsp;·&nbsp; <span style="color:var(--gold);font-size:11px">Smart Contract: ${L.contrato}</span>`;
   h+=`</div></div>`;
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
@@ -143,7 +141,7 @@ function confirmAccess(){
   const esgKeys=Object.keys(esgSel).filter(k=>esgSel[k]);
   const total=calcTotal();
   const plan=tierOn&&esgKeys.length>0?'Premium':tierOn?'Estándar':esgKeys.length>0?'Solo ESG':'—';
-  confirmed={loan:L,total,esgKeys,plan,tierOn,isBanco:U.role==='banco'};
+  confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
   updateBalance(total);
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Institución</span><span class="sr-v">${U.name}</span></div>
@@ -381,17 +379,18 @@ function fillProd(cod, includeEsg=true){
 }
 
 function renderAccess(){
-  const {loan:l,esgKeys,plan,tierOn,isBanco}=confirmed;
+  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
+  const isB=l.tipo==='banco';
   let h='';
-  const mA=isBanco&&!isG?`<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`:'';
+  const mA=isB?`<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`:'';
   const mP=isG
     ?`<div><div class="am-l">Monto total</div><div class="am-v mv-g">${l.productores}</div></div>`
-    :isBanco?`<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`:`<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
+    :isB?`<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`:`<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
   const mX=isG
     ?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
-    :isBanco?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`:`<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
-  const mF=(isBanco||isG)&&l.paqueteFlexible!==undefined?`<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
+    :isB?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`:`<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
+  const mF=(isB||isG)&&l.paqueteFlexible!==undefined?`<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   h+=`<div class="access-actions"><button class="btn-ol" onclick="window.print()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">✉ Estructurar oferta de crédito →</button></div>`;
 
@@ -406,7 +405,7 @@ function renderAccess(){
         ${l.variedades?`<div class="ic"><div class="ic-l">Variedades cultivadas</div><div class="ic-v" style="font-size:12px">${l.variedades}</div><div class="ic-src">Fichas técnicas IHCAFE</div></div>`:''}
         ${l.destinos?`<div class="ic"><div class="ic-l">Destinos del crédito</div><div class="ic-v" style="font-size:12px">${l.destinos}</div><div class="ic-src">Solicitud del grupo</div></div>`:''}
       </div></div></div>`;
-    } else if(isBanco){
+    } else if(isB){
       h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador</div><div class="sc-sub">Perfil operativo y garantías del crédito de acopio</div></div></div>
       <div class="sc-body"><div class="ig">
         <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div><div class="ic-src">Registro Mercantil Honduras</div></div>
@@ -474,23 +473,24 @@ function renderAccess(){
 }
 
 function topInfoAccess(){
-  const {loan:l,esgKeys,plan,tierOn,isBanco}=confirmed;
+  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
+  const isB=loanType==='banco';
   let h='';
-  const mA=isBanco&&!isG
+  const mA=isB&&!isG
     ? `<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`
     : '';
   const mP=isG
     ? `<div><div class="am-l">Monto total</div><div class="am-v mv-g">${l.productores}</div></div>`
-    : isBanco
+    : isB
       ? `<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`
       : `<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
   const mX=isG
     ? `<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
-    : isBanco
+    : isB
       ? `<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
       : `<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
-  const mF=(isBanco||isG)&&l.paqueteFlexible!==undefined
+  const mF=(isB||isG)&&l.paqueteFlexible!==undefined
     ? `<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`
     : '';
   h += `<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
