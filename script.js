@@ -80,7 +80,7 @@ function renderLoans(){
     const mF=(isB||isG)&&l.paqueteFlexible!==undefined?`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
     const smartB=!isB&&!isG?`<span class="badge smart">Smart Contract</span>`:'';
     const badgeClass=isG?'grupo':l.tipo;
-    const badgeLabel=isG?'Grupo de productores':isB?'Acopio':'Productor';
+    const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
       <div>
         <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span>${smartB}<span class="loan-name">${l.name}</span></div>
@@ -186,7 +186,7 @@ function renderProducersSection(l){
   if(l.prod&&l.prod.length>0){
     l.prod.forEach(p=>{
       const row=document.createElement('tr');
-      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td><input class="finp-s" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="ej. 14.5"></td><td><input class="finp-s" type="number" placeholder="ej. 6"></td>`;
+      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td><td><input class="finp-s" type="number" placeholder="20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="14.5"></td><td><input class="finp-s" type="number" placeholder="6"></td>`;
       tbody.appendChild(row);
     });
   }
@@ -197,6 +197,7 @@ function renderProducersSection(l){
 function prodEsgMetrics(p){
   return p.esg||[];
 }
+
 
  // ── SVG farm map (seed derived from p.cod) ────────
  function buildMap(p){

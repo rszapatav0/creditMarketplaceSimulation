@@ -1,7 +1,10 @@
 const USERS=[
-  {email:'banco@bancafe.hn',pass:'banco2024',role:'banco',name:'BanCafé — Analista de Crédito'},
+  /* {email:'banco@bancafe.hn',pass:'banco2024',role:'banco',name:'BanCafé — Analista de Crédito'},
   {email:'gestor@cofemarcala.hn',pass:'coop2024',role:'coop',name:'Coop. Cafetalera Marcala'},
-  {email:'analista@fise.hn',pass:'imf2024',role:'imf',name:'FISE — Oficial de Cartera'},
+  {email:'analista@fise.hn',pass:'imf2024',role:'imf',name:'FISE — Oficial de Cartera'}, */
+  {email:'banco',pass:'123',role:'banco',name:'BanCafé — Analista de Crédito'},
+  {email:'gestor',pass:'123',role:'coop',name:'Coop. Cafetalera Marcala'},
+  {email:'analista',pass:'123',role:'imf',name:'FISE — Oficial de Cartera'},
 ];
 
 const ESG=[
