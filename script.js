@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3,dismissedLoans=new Set();
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3,dismissedLoans=new Set(),purchases={};
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return [...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO];}
@@ -50,7 +50,7 @@ function doLogin(){
   document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles';
   renderLoans();show('s-market');
 }
-function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');dismissedLoans.clear();document.getElementById('inp-p').value='';show('s-login');}
+function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');dismissedLoans.clear();purchases={};document.getElementById('inp-p').value='';show('s-login');}
 
 function dismissLoan(id, event){
   event.stopPropagation();
@@ -87,7 +87,7 @@ function renderLoans(){
   initPagination();
 }
 
-function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.id===id);tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
+function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.id===id);if(purchases[id]){confirmed=purchases[id];renderAccess();show('s-access');return;}tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
 
 function renderDetail(){
   const isB=L.tipo==='banco';
@@ -155,6 +155,7 @@ function confirmAccess(){
   const total=calcTotal();
   const plan=esgKeys.length>0?'Premium':tierOn?'Estándar':'—';
   confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
+  purchases[L.id]=confirmed;
   updateBalance(total);
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Institución</span><span class="sr-v">${U.name}</span></div>
