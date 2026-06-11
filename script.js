@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3,dismissedLoans=new Set(),purchases={};
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={};
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return [...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO];}
@@ -64,15 +64,11 @@ function renderLoans(){
   getLoans().filter(l=>!dismissedLoans.has(l.id)).forEach(l=>{
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
-    const mA=isB?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
-    const mP=isG
-      ?`<div class="mi"><div class="mi-lbl">Monto total</div><div class="mi-val mv-g">${l.productores}</div></div>`
-      :isB?`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`:`<div class="mi"><div class="mi-lbl">Monto crédito</div><div class="mi-val mv-o">${l.productores}</div></div>`;
-    const mX=isG
-      ?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
-      :isB?`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`:`<div class="mi"><div class="mi-lbl">Importadora</div><div class="mi-val mv-o">${l.contrato}</div></div>`;
-    const mF=(isB||isG)&&l.paqueteFlexible!==undefined?`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
-    const smartB=!isB&&!isG?`<span class="badge smart">Smart Contract</span>`:'';
+    const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio ?? 0}</div></div>`;
+    const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
+    const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
+    const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
+    const smartB=l.smartContract?`<span class="badge smart">Smart Contract</span>`:'';
     const badgeClass=isG?'grupo':l.tipo;
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
@@ -99,7 +95,7 @@ function renderDetail(){
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
   const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="esg-cost">+L.${e.cost}</span></div>`).join('');
-  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Métricas ESG</span><span class="tier-price">L. 80 por métrica</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
+  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
   document.getElementById('dmain').innerHTML=h;
   renderCart();
 }
@@ -134,7 +130,7 @@ function renderCart(){
   if(tierOn||esgKeys.length>0){
     if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${L.precio}</span></div>`;
     if(esgKeys.length>0){
-      h+=`<div class="cline"><span class="cl-l">Métricas ESG</span><span class="cl-v">L. ${esgKeys.length*80}</span></div>`;
+      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span><span class="cl-v">L. ${esgKeys.length*80}</span></div>`;
       esgKeys.forEach(k=>{const e=ESG.find(x=>x.id===k);h+=`<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L.80</span></div>`;});
     }
   } else {
@@ -162,7 +158,7 @@ function confirmAccess(){
     <div class="srow"><span class="sr-l">Institución</span><span class="sr-v">${U.name}</span></div>
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Plan activado</span><span class="sr-v">${plan}</span></div>
-    <div class="srow"><span class="sr-l">Métricas ESG</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
+    <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
     <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
   show('s-success');
 }
@@ -181,7 +177,7 @@ function renderProducersSection(l){
   if(l.prod&&l.prod.length>0){
     l.prod.forEach(p=>{
       const row=document.createElement('tr');
-      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td><td><input class="finp-s" type="number" placeholder="20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="14.5"></td><td><input class="finp-s" type="number" placeholder="6"></td>`;
+      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td><td><input class="finp-s" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="ej. 14.5"></td><td><input class="finp-s" type="number" placeholder="ej. 6"></td>`;
       tbody.appendChild(row);
     });
   }
@@ -281,7 +277,7 @@ function fillProd(cod, includeEsg=true){
     <div class="px-card-interp">${m.interp}</div>
   </div>`).join('');
     esgHtml = `<div class="px-esg">
-      <div class="px-esg-hdr">Métricas ESG individuales — ${p.nombre}</div>
+      <div class="px-esg-hdr">Herramientas de análisis climático — ${p.nombre}</div>
       ${cards}
     </div>`;
   }
@@ -320,16 +316,12 @@ function renderAccess(){
   const isG=l.tipo==='grupo';
   const isB=l.tipo==='banco';
   let h='';
-  const mA=isB?`<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`:'';
-  const mP=isG
-    ?`<div><div class="am-l">Monto total</div><div class="am-v mv-g">${l.productores}</div></div>`
-    :isB?`<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`:`<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
-  const mX=isG
-    ?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
-    :isB?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`:`<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
-  const mF=(isB||isG)&&l.paqueteFlexible!==undefined?`<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">✉ Estructurar oferta de crédito →</button></div>`;
+  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio ?? 0}</div></div>`;
+  const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
+  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
+  const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region} · Plazo: ${l.plazo}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
 
   const hasFundamentals = tierOn;
   const hasEsg = esgKeys.length > 0;
@@ -374,7 +366,7 @@ function renderAccess(){
     const confTag=p=>`<span class="tag ${p.confianza==='Aval otorgado'?'yes':p.confianza.includes('condición')?'pend':'pend'}">${p.confianza}</span>`;
 
     if(l.prod && l.prod.length>0){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver mapa y métricas ESG individuales</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver mapa y herramientas de análisis climático individuales</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
@@ -384,7 +376,7 @@ function renderAccess(){
             <th style="width:7%">Aval</th><th style="width:12%">Central riesgos</th>
             <th style="width:10%">Confianza FGR</th>
           </tr>
-          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar el mapa de la finca y métricas ESG individuales del productor</td></tr>
+          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar los fundamentales de la finca y las herramientas de análisis climático individuales del productor</td></tr>
           </thead>
           <tbody>${l.prod.map(p=>`
             <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
@@ -411,30 +403,18 @@ function topInfoAccess(){
   const isG=l.tipo==='grupo';
   const isB=loanType==='banco';
   let h='';
-  const mA=isB&&!isG
-    ? `<div><div class="am-l">Monto acopio</div><div class="am-v mv-b">${l.acopio}</div></div>`
-    : '';
-  const mP=isG
-    ? `<div><div class="am-l">Monto total</div><div class="am-v mv-g">${l.productores}</div></div>`
-    : isB
-      ? `<div><div class="am-l">Monto productores</div><div class="am-v mv-g">${l.productores}</div></div>`
-      : `<div><div class="am-l">Monto crédito</div><div class="am-v mv-o">${l.productores}</div></div>`;
-  const mX=isG
-    ? `<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
-    : isB
-      ? `<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`
-      : `<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
-  const mF=(isB||isG)&&l.paqueteFlexible!==undefined
-    ? `<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`
-    : '';
-  h += `<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio ?? 0}</div></div>`;
+  const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
+  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
+  const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region} · Plazo: ${l.plazo}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   
   document.getElementById('top-info').innerHTML = h;
 }
 
 function goOffer(){
   const l=confirmed.loan;
-  document.getElementById('o-sub').textContent=`${l.name} · ${l.region} · Plazo referencia: ${l.plazo}`;
+  document.getElementById('o-sub');
   const inputs=['of-monto','of-tasa','of-plazo','of-periodo','of-cuota','of-garantia','of-gracia','of-comision','of-seguro','of-aval-conf','of-destino','of-vigencia','of-etapa','of-notas'];
   inputs.forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
@@ -496,17 +476,6 @@ function updatePreview(){
   const sym=moneda.startsWith('L')?'L.':'$';
   let cuotaEst='—';
   if(monto>0&&tasa>0&&plazo){const n=parseInt(plazo),r=(tasa/100)/12;const c=r>0?monto*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1):monto/n;cuotaEst=`${sym} ${Math.round(c).toLocaleString('es-HN')} / mes`;}
-  document.getElementById('op-grid').innerHTML=`
-    <div class="op-cell"><div class="op-l">Monto ofertado</div><div class="op-v">${monto>0?sym+' '+monto.toLocaleString('es-HN'):'—'}</div></div>
-    <div class="op-cell"><div class="op-l">Tasa anual</div><div class="op-v">${tasa>0?tasa+'%':'—'}</div></div>
-    <div class="op-cell"><div class="op-l">Plazo</div><div class="op-v">${plazo?plazo+' meses':'—'}</div></div>
-    <div class="op-cell"><div class="op-l">Periodicidad</div><div class="op-v">${periodo||'—'}</div></div>
-    <div class="op-cell"><div class="op-l">Cuota estimada</div><div class="op-v">${cuotaEst}</div></div>
-    <div class="op-cell"><div class="op-l">Amortización</div><div class="op-v" style="font-size:11px">${cuota||'—'}</div></div>
-    <div class="op-cell"><div class="op-l">Garantía</div><div class="op-v" style="font-size:11px">${garantia||'—'}</div></div>
-    <div class="op-cell"><div class="op-l">Aval Confianza SA-FGR</div><div class="op-v" style="font-size:11px">${avalConf}</div></div>
-    <div class="op-cell"><div class="op-l">Comisión apertura</div><div class="op-v">${comision>0?comision+'%':'—'}</div></div>
-    <div class="op-cell"><div class="op-l">Vigencia oferta</div><div class="op-v" style="font-size:11px">${v('of-vigencia')}</div></div>`;
 }
 
 function submitOffer(){
@@ -543,13 +512,8 @@ function initPagination(){
   const cards=document.querySelectorAll('.loan-list .lcard');
   const totalCards=cards.length;
   const totalPages=Math.ceil(totalCards/cardsPerPage);
-  currentPage=1;
-  if(totalPages>1){
-    document.getElementById('loan-pagination').style.display='flex';
-    showPage(currentPage);
-  }else{
-    document.getElementById('loan-pagination').style.display='none';
-  }
+  if(currentPage > totalPages){currentPage = Math.max(1, totalPages);}
+  if(totalPages>1){document.getElementById('loan-pagination').style.display='flex';showPage(currentPage);}else{document.getElementById('loan-pagination').style.display='none';}
 }
 
 function showPage(page){

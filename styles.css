@@ -212,7 +212,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .btn-offer{background:var(--blue-lt);color:var(--blue);border:1px solid var(--blue-bd);border-radius:8px;font-size:13px;font-family:var(--font);font-weight:500;cursor:pointer;padding:8px 18px;transition:opacity .15s}
 .btn-offer:hover{opacity:.85}
 
-/* PRODUCER ROW EXPAND — NEW */
+/* PRODUCER ROW EXPAND */
 .px-wrap{display:grid;grid-template-columns:260px 1fr;gap:1rem;padding:1.25rem;background:#fafbfc}
 .px-right{display:flex;flex-direction:column;gap:1rem}
 .px-profile{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1rem}
@@ -237,7 +237,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .px-card-interp{font-size:10px;color:var(--text2);font-style:italic;margin-top:3px}
 
 /* OFFER */
-.oi{padding:1.5rem;max-width:760px;margin:0 auto}
+.oi{padding:1.5rem;max-width:1000px;margin:0 auto}
 .o-hdr{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .o-title{font-size:18px;font-weight:400;margin-bottom:.25rem}
 .o-sub{font-size:12px;color:var(--text2)}
