@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3,dismissedLoans=new Set(),selectedLoanTab='banco';
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=3,dismissedLoans=new Set();
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return [...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO];}
@@ -58,16 +58,9 @@ function dismissLoan(id, event){
   renderLoans();
 }
 
-function selectLoanTab(tipo){
-  selectedLoanTab=tipo;
-  currentPage=1;
-  document.querySelectorAll('.loan-tab').forEach(tab=>tab.classList.toggle('active',tab.dataset.tipo===tipo));
-  renderLoans();
-}
-
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
-  getLoans().filter(l=>!dismissedLoans.has(l.id)).filter(l=>l.tipo===selectedLoanTab).forEach(l=>{
+  getLoans().filter(l=>!dismissedLoans.has(l.id)).forEach(l=>{
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
     const mA=isB?`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio}</div></div>`:'';
