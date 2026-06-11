@@ -9,7 +9,7 @@ const USERS=[
 
 const ESG=[
   {id:'e1',label:'aCLIMAtar',cost:80},
-  {id:'e2',label:'Whisp - Open Foris',cost:8000},
+  {id:'e2',label:'Whisp - Open Foris',cost:70},
   {id:'e3',label:'AClimate',cost:80},
   {id:'e4',label:'Croppie',cost:80},
 ];
