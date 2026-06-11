@@ -36,7 +36,8 @@ function renderBalanceDisplay(){
   const wds=document.querySelectorAll('.wallet-display');
   if(!wds.length)return;
   const balance=getBalance();
-  wds.forEach(wd=>wd.textContent=`Saldo disponible: ${balance.toLocaleString('es-HN')} HNL`);
+  wds.forEach(wd=>{wd.textContent=`Saldo disponible: ${balance.toLocaleString('es-HN')} HNL`;
+  if(balance < 0){wd.classList.add('negative');}else{wd.classList.remove('negative');}});
 }
 
 function doLogin(){
