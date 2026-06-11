@@ -329,7 +329,7 @@ function renderAccess(){
     :isB?`<div><div class="am-l">Productores</div><div class="am-v">${l.nProd}</div></div>`:`<div><div class="am-l">Importadora</div><div class="am-v mv-o">${l.contrato}</div></div>`;
   const mF=(isB||isG)&&l.paqueteFlexible!==undefined?`<div><div class="am-l">Paquete flexible</div><div class="am-v ${l.paqueteFlexible ? 'mv-g' : ''}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`:'';
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="aregion">${l.region} · Plazo: ${l.plazo}</div></div><div class="aplan">Plan ${plan} · Activo</div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="window.print()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">✉ Estructurar oferta de crédito →</button></div>`;
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">✉ Estructurar oferta de crédito →</button></div>`;
 
   const hasFundamentals = tierOn;
   const hasEsg = esgKeys.length > 0;
@@ -447,6 +447,47 @@ function goOffer(){
   renderProducersSection(l);
   updatePreview();topInfoAccess();
   show('s-offer');
+}
+
+function exportPdf(){
+  const l = confirmed && confirmed.loan;
+  if(!l || !l.prod || l.prod.length===0){
+    window.print();
+    return;
+  }
+  const prevState = {};
+  l.prod.forEach(p=>{
+    const exp = document.getElementById('pexp-'+p.cod);
+    const prow = document.getElementById('prow-'+p.cod);
+    prevState[p.cod] = {expOpen: !!(exp && exp.classList.contains('open')), prowOpen: !!(prow && prow.classList.contains('open'))};
+  });
+  const prevOpenProd = _openProd;
+  // Expand all rows and ensure content is rendered
+  l.prod.forEach(p=>{
+    const exp = document.getElementById('pexp-'+p.cod);
+    const prow = document.getElementById('prow-'+p.cod);
+    if(prow) prow.classList.add('open');
+    if(exp) exp.classList.add('open');
+    fillProd(p.cod, true);
+  });
+  _openProd = null;
+  // Give the browser a moment to reflow before printing
+  setTimeout(()=>{
+    window.print();
+    // Restore previous open/closed state
+    l.prod.forEach(p=>{
+      const exp = document.getElementById('pexp-'+p.cod);
+      const prow = document.getElementById('prow-'+p.cod);
+      const prev = prevState[p.cod];
+      if(exp){
+        if(prev.expOpen) exp.classList.add('open'); else exp.classList.remove('open');
+      }
+      if(prow){
+        if(prev.prowOpen) prow.classList.add('open'); else prow.classList.remove('open');
+      }
+    });
+    _openProd = prevOpenProd;
+  }, 150);
 }
 
 function updatePreview(){
