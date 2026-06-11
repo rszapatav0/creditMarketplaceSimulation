@@ -157,7 +157,6 @@ function confirmAccess(){
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Institución</span><span class="sr-v">${U.name}</span></div>
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
-    <div class="srow"><span class="sr-l">Plan activado</span><span class="sr-v">${plan}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
     <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
   show('s-success');
@@ -263,25 +262,41 @@ function fillProd(cod, includeEsg=true){
   if (includeEsg && confirmed.esgKeys && confirmed.esgKeys.length > 0) {
     const allMetrics = prodEsgMetrics(p);
     metrics = allMetrics.filter(m => confirmed.esgKeys.includes(m.id));
+    metrics = metrics.map(m => {
+      if (m.id === 'e2') {
+        const hydrated = {
+      ...m,
+      n:      WHISP_CONFIG.n,
+      src:    WHISP_CONFIG.src,
+      interp: WHISP_CONFIG.interp[m.risk] || '',
+    };
+    console.log(`[Whisp hydration] producer=${p.cod} risk=${m.risk}`, hydrated);
+    return hydrated;
   }
+  return m;
+});  }
   
   const rTag=p.riesgo.includes('negativo')?`<span class="tag eu">✓ Sin reportes</span>`:p.riesgo.includes('mora antigua')?`<span class="tag ok">${p.riesgo}</span>`:`<span class="tag pend">${p.riesgo}</span>`;
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
   
   let esgHtml = '';
   if (metrics.length > 0) {
-    const cards=metrics.map(m=>`<div class="px-card">
-    <div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
-    <div class="px-card-src">${m.src}</div>
-    <div class="px-bar"><div class="px-fill" style="width:${m.bar}%"></div></div>
-    <div class="px-card-interp">${m.interp}</div>
-  </div>`).join('');
+    const cards=metrics.map(m=>{
+      if(m.n==='Whisp - Open Foris'){
+        return `
+        <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
+        <div class="risk-badge ${m.risk}">${m.risk === 'high'? '🔴 Alto riesgo': m.risk === 'low'? '🟢 Bajo riesgo': '❓ Se necesita más información'}</div>
+        <div class="px-card-interp">${m.interp}</div><div class="px-card-src">${m.src}</div></div>`;}
+        return `
+        <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
+        <div class="px-card-src">${m.src}</div><div class="px-bar"><div class="px-fill" style="width:${m.bar}%"></div></div><div class="px-card-interp">${m.interp}</div>
+        </div>`;}).join('');
     esgHtml = `<div class="px-esg">
       <div class="px-esg-hdr">Herramientas de análisis climático — ${p.nombre}</div>
       ${cards}
     </div>`;
   }
-  
+ 
   const euTag = p.eu === 'Sí'
     ? `<span class="tag eu">✓ Verificado</span>`
     : `<span class="tag pend">⏳ Pendiente</span>`;

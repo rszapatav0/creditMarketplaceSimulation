@@ -9,10 +9,20 @@ const USERS=[
 
 const ESG=[
   {id:'e1',label:'aCLIMAtar',cost:80},
-  {id:'e2',label:'Whisp',cost:80},
+  {id:'e2',label:'Whisp - Open Foris',cost:8000},
   {id:'e3',label:'AClimate',cost:80},
   {id:'e4',label:'Croppie',cost:80},
 ];
+
+const WHISP_CONFIG = {
+  n:   'Whisp - Open Foris',
+  src: 'Organización de las Naciones Unidas para la Alimentación y la Agricultura - 2025 OpenForis',
+  interp: {
+    low:      'La finca no presenta superposición con áreas de bosque cartografiado activo, o sus coincidencias corresponden a perturbaciones anteriores a finales de 2020. Sin indicios de deforestación reciente.',
+    high:     'La finca se encuentra dentro de un área de bosque cartografiado y registra una perturbación detectada después de 2020. Se recomienda verificación adicional antes del desembolso.',
+    moreInfo: 'La finca coincide con un área de bosque cartografiado sin perturbaciones registradas antes ni después de 2020, y sin solapamiento con actividades económicas. Se requiere investigación más detallada para determinar cumplimiento EUDR.',
+  }
+};
 
 const LOANS_BANCO=[
   {id:'b1',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',tipo:'banco',paqueteFlexible: true,
@@ -23,28 +33,28 @@ const LOANS_BANCO=[
     {cod:'HN-0041',nombre:'Martínez Flores, J.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',hist:'42 qq / 3 ciclos',geo:'14.21°N 86.83°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0041',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'42%',  bar:42, src:'ICF Honduras · 2024',                       interp:'Cobertura por encima del umbral EUDR (>30%). Plan de manejo vigente ante ICF.'},
-      {id:'e2',n:'Whisp',       val:'67/100',bar:67, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.2 kg CO₂e/kg). Por debajo del promedio regional. Potencial de certificación de carbono.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'80/100',bar:80, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'4 prácticas verificadas: sombra diversificada, barreras vivas, cosecha escalonada y manejo de tejido. Nivel alto.'},
       {id:'e4',n:'Croppie',  val:'84/100',bar:84, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Microcuenca con caudal sostenido en época seca. Riesgo hídrico bajo.'},
      ]},
     {cod:'HN-0052',nombre:'López Aguilar, R.',monto:'L. 22,000',plazo:'6 meses',destino:'Cosecha',hist:'55 qq / 4 ciclos',geo:'14.18°N 86.91°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0052',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'38%',  bar:38, src:'ICF Honduras · 2024',                       interp:'Cobertura en rango aceptable para EUDR. Plan de manejo forestal registrado.'},
-      {id:'e2',n:'Whisp',       val:'55/100',bar:55, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.4 kg CO₂e/kg). Levemente por encima del mejor de zona pero bajo el promedio regional.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'72/100',bar:72, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada y barreras vivas implementadas. Una práctica adicional en proceso.'},
       {id:'e4',n:'Croppie',  val:'82/100',bar:82, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Cuenca con caudal estable. Sin episodios de estrés hídrico documentados en el ciclo 2024.'},
      ]},
     {cod:'HN-0063',nombre:'Reyes Sorto, M.',monto:'L. 15,000',plazo:'5 meses',destino:'Infraestructura',hist:'28 qq / 2 ciclos',geo:'14.31°N 86.74°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0063',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'27%',  bar:27, src:'ICF Honduras · 2024',                       interp:'Cobertura por debajo del umbral EUDR. Se requiere ampliación de áreas bajo manejo forestal.'},
-      {id:'e2',n:'Whisp',       val:'38/100',bar:38, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 1.9 kg CO₂e/kg). Por encima del promedio regional. Margen de mejora con sombra y materia orgánica.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'48/100',bar:48, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas: solo sombra básica y cobertura de suelo. Productor en proceso de adopción de prácticas adicionales.'},
       {id:'e4',n:'Croppie',  val:'58/100',bar:58, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Subcuenca con reducción de caudal en época seca. Se recomienda cosecha de agua.'},
      ]},
     {cod:'HN-0071',nombre:'Perdomo Núñez, A.',monto:'L. 19,500',plazo:'6 meses',destino:'Insumos',hist:'37 qq / 3 ciclos',geo:'14.24°N 86.80°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0071',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'35%',  bar:35, src:'ICF Honduras · 2024',                       interp:'Dentro del umbral EUDR. Área bajo plan de manejo registrado y activo.'},
-      {id:'e2',n:'Whisp',       val:'60/100',bar:60, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Por debajo del promedio regional. Manejo orgánico parcial contribuye.'},
+      {id:'e2', risk:'moreInfo'},
       {id:'e3',n:'AClimate',    val:'74/100',bar:74, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y manejo de tejido. Nivel medio-alto.'},
       {id:'e4',n:'Croppie',  val:'80/100',bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Caudal estable en los últimos 3 ciclos. Infraestructura de captación básica en predio.'},
      ]},
@@ -57,21 +67,21 @@ const LOANS_BANCO=[
     {cod:'MR-0012',nombre:'García Tosta, C.',monto:'L. 20,000',plazo:'7 meses',destino:'Cosecha',hist:'61 qq / 5 ciclos',geo:'14.12°N 88.01°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2019-0012',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'45%',  bar:45, src:'ICF Honduras · 2024',                       interp:'Cobertura alta. Sistema silvo-pastoril y cortinas rompevientos bien establecidos.'},
-      {id:'e2',n:'Whisp',       val:'72/100',bar:72, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.1 kg CO₂e/kg). Mejor de su zona. Alta captura de carbono por aCLIMAtar densa.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'82/100',bar:82, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'4 prácticas verificadas. Productor referente en adopción de tecnología climática.'},
       {id:'e4',n:'Croppie',  val:'88/100',bar:88, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Cuenca del Río Chinacla con caudal sostenido. Infraestructura de riego complementaria en predio.'},
      ]},
     {cod:'MR-0019',nombre:'Amaya Velásquez, F.',monto:'L. 16,500',plazo:'6 meses',destino:'Insumos',hist:'44 qq / 3 ciclos',geo:'14.08°N 88.13°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2021-0019',variedad:'Bourbon',riesgo:'Historial con mora antigua saldada',confianza:'Aval otorgado con condición',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'31%',  bar:31, src:'ICF Honduras · 2024',                       interp:'Justo en el umbral EUDR. Plan de manejo registrado pero con cobertura mínima requerida.'},
-      {id:'e2',n:'Whisp',       val:'48/100',bar:48, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.6 kg CO₂e/kg). Oportunidad de mejora con manejo de residuos de beneficiado.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'52/100',bar:52, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas: sombra básica y cobertura de suelo. Barreras vivas en proceso de establecimiento.'},
       {id:'e4',n:'Croppie',  val:'76/100',bar:76, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso a fuentes superficiales adecuado. Sin reporte de estrés hídrico crítico.'},
      ]},
     {cod:'MR-0024',nombre:'Hernández Cruz, L.',monto:'L. 24,000',plazo:'8 meses',destino:'Infraestructura',hist:'72 qq / 6 ciclos',geo:'14.22°N 87.92°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2018-0024',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'48%',  bar:48, src:'ICF Honduras · 2024',                       interp:'Mayor cobertura del grupo. Sistema agroforestal denso con registro ICF actualizado.'},
-      {id:'e2',n:'Whisp',       val:'75/100',bar:75, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella más baja del grupo (aprox. 1.0 kg CO₂e/kg). Manejo orgánico integral y alta captura por cobertura arbórea.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'84/100',bar:84, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'Productor con mayor adopción del grupo. Incluye cosecha de agua y manejo integrado de plagas.'},
       {id:'e4',n:'Croppie',  val:'90/100',bar:90, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso directo a naciente. Caudal estable históricamente. Sin riesgo de estrés hídrico.'},
      ]},
@@ -84,14 +94,14 @@ const LOANS_BANCO=[
     {cod:'CP-0007',nombre:'Moya Castellanos, B.',monto:'L. 17,000',plazo:'4 meses',destino:'Cosecha',hist:'33 qq / 2 ciclos',geo:'14.84°N 89.14°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0007',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'22%',  bar:22, src:'ICF Honduras · 2024',                       interp:'Por debajo del umbral EUDR. Sin plan de manejo forestal registrado. Requiere acción inmediata.'},
-      {id:'e2',n:'Whisp',       val:'32/100',bar:32, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 2.1 kg CO₂e/kg). Por encima del promedio regional. Baja cobertura arbórea limita la captura.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'30/100',bar:30, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'1 práctica verificada: solo sombra básica. Productor nuevo con pocos ciclos. Plan de mejora en desarrollo.'},
       {id:'e4',n:'Croppie',  val:'55/100',bar:55, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Subcuenca con reducción de caudal en meses críticos. Riesgo hídrico moderado para cosecha.'},
      ]},
     {cod:'CP-0011',nombre:'Flores Portillo, J.',monto:'L. 21,000',plazo:'5 meses',destino:'Insumos',hist:'49 qq / 4 ciclos',geo:'14.91°N 89.06°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0011',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'36%',  bar:36, src:'ICF Honduras · 2024',                       interp:'Cobertura en rango aceptable EUDR. Plan de manejo ICF actualizado para ciclo 2024.'},
-      {id:'e2',n:'Whisp',       val:'52/100',bar:52, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella dentro del rango regional promedio (aprox. 1.5 kg CO₂e/kg). Oportunidad de reducción con manejo de pulpa.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'70/100',bar:70, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra, barreras vivas y conservación de suelos. Buen nivel de adopción.'},
       {id:'e4',n:'Croppie',  val:'78/100',bar:78, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso a fuente superficial permanente. Sin incidentes hídricos en últimos 3 ciclos.'},
      ]},
@@ -104,21 +114,21 @@ const LOANS_BANCO=[
     {cod:'IN-0101',nombre:'Hernández Mejía, D.',monto:'L. 16,000',plazo:'5 meses',destino:'Insumos',hist:'39 qq / 3 ciclos',geo:'14.31°N 88.17°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0101',variedad:'Bourbon',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'40%',  bar:40, src:'ICF Honduras · 2024',                       interp:'Cobertura sobre umbral EUDR. Plan de manejo vigente con reforestación activa de bordes.'},
-      {id:'e2',n:'Whisp',       val:'62/100',bar:62, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Manejo orgánico parcial y alta cobertura arbórea reducen emisiones netas.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'74/100',bar:74, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y manejo de tejido activos. Nivel medio-alto.'},
       {id:'e4',n:'Croppie',  val:'82/100',bar:82, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Microcuenca de Intibucá con caudal estable. Sin reportes de estrés hídrico en ciclo 2024.'},
      ]},
     {cod:'IN-0108',nombre:'Castillo Ramos, E.',monto:'L. 19,000',plazo:'6 meses',destino:'Cosecha',hist:'47 qq / 4 ciclos',geo:'14.28°N 88.21°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2020-0108',variedad:'Catuaí rojo',riesgo:'Historial con mora leve',confianza:'Aval condicionado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'30%',  bar:30, src:'ICF Honduras · 2024',                       interp:'En el límite mínimo EUDR. Se recomienda ampliar área bajo manejo en próximo ciclo.'},
-      {id:'e2',n:'Whisp',       val:'45/100',bar:45, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.7 kg CO₂e/kg). Mejora posible con reforestación de bordes.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'54/100',bar:54, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas: sombra y cobertura. Prácticas de conservación hídrica pendientes de implementar.'},
       {id:'e4',n:'Croppie',  val:'74/100',bar:74, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico adecuado aunque con leve variabilidad estacional documentada.'},
      ]},
     {cod:'IN-0113',nombre:'Vásquez López, M.',monto:'L. 14,500',plazo:'5 meses',destino:'Infraestructura',hist:'26 qq / 2 ciclos',geo:'14.35°N 88.12°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0113',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'25%',  bar:25, src:'ICF Honduras · 2024',                       interp:'Por debajo del umbral EUDR. Sin registro ICF activo. Requiere plan de manejo urgente.'},
-      {id:'e2',n:'Whisp',       val:'35/100',bar:35, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 2.0 kg CO₂e/kg). Baja cobertura y uso de agroquímicos elevan la huella actual.'},
+      {id:'e2', risk:'moreInfo'},
       {id:'e3',n:'AClimate',    val:'28/100',bar:28, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'1 práctica verificada: solo sombra básica. Productor con 2 ciclos; adoptando nuevas prácticas gradualmente.'},
       {id:'e4',n:'Croppie',  val:'56/100',bar:56, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Parcela en subcuenca con reducción de caudal documentada en época seca. Monitoreo recomendado.'},
      ]},
@@ -131,21 +141,21 @@ const LOANS_BANCO=[
     {cod:'SB-0021',nombre:'Pineda Cruz, A.',monto:'L. 21,000',plazo:'6 meses',destino:'Cosecha',hist:'58 qq / 5 ciclos',geo:'15.08°N 88.35°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2019-0021',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'50%',  bar:50, src:'ICF Honduras · 2024',                       interp:'Mayor cobertura del grupo. Sistema agroforestal denso con registro ICF vigente.'},
-      {id:'e2',n:'Whisp',       val:'70/100',bar:70, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.1 kg CO₂e/kg). Alta cobertura y manejo orgánico compensan emisiones de proceso.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'82/100',bar:82, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'Productor referente de la cooperativa. Cosecha de agua, sombra densa, barreras vivas y rotación verificadas.'},
       {id:'e4',n:'Croppie',  val:'87/100',bar:87, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Naciente en predio. Caudal permanente. Sin episodios de estrés hídrico en todo el historial.'},
      ]},
     {cod:'SB-0029',nombre:'López Martínez, J.',monto:'L. 18,000',plazo:'6 meses',destino:'Insumos',hist:'46 qq / 3 ciclos',geo:'15.12°N 88.28°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2021-0029',variedad:'Catuaí amarillo',riesgo:'Deuda vigente sin mora',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'34%',  bar:34, src:'ICF Honduras · 2024',                       interp:'Sobre el umbral EUDR. Plan de manejo ICF registrado y activo.'},
-      {id:'e2',n:'Whisp',       val:'50/100',bar:50, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.6 kg CO₂e/kg). Oportunidad de mejora con compost y manejo de aguas mieles.'},
+      {id:'e2', risk:'moreInfo'},
       {id:'e3',n:'AClimate',    val:'56/100',bar:56, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas: sombra y barreras vivas. Cosecha de agua en fase de planificación.'},
       {id:'e4',n:'Croppie',  val:'78/100',bar:78, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso a fuente superficial. Caudal adecuado aunque con leve variabilidad estacional.'},
      ]},
     {cod:'SB-0035',nombre:'Mejía Torres, R.',monto:'L. 23,500',plazo:'7 meses',destino:'Infraestructura',hist:'63 qq / 5 ciclos',geo:'15.05°N 88.40°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2018-0035',variedad:'Bourbon',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'44%',  bar:44, src:'ICF Honduras · 2024',                       interp:'Cobertura alta. Sistema silvo-agroforestal consolidado con plan de manejo actualizado.'},
-      {id:'e2',n:'Whisp',       val:'65/100',bar:65, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.2 kg CO₂e/kg). Sombra densa y manejo orgánico contribuyen a la reducción de emisiones netas.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'76/100',bar:76, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: cosecha de agua, sombra tecnificada y conservación de suelos. Nivel alto.'},
       {id:'e4',n:'Croppie',  val:'85/100',bar:85, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso permanente a fuente hídrica. Sin reportes de estrés en los últimos 5 ciclos.'},
      ]},
@@ -158,14 +168,14 @@ const LOANS_BANCO=[
     {cod:'EP-0005',nombre:'Rodríguez Díaz, F.',monto:'L. 15,000',plazo:'5 meses',destino:'Cosecha',hist:'31 qq / 2 ciclos',geo:'14.05°N 86.57°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0005',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'20%',  bar:20, src:'ICF Honduras · 2024',                       interp:'Por debajo del umbral EUDR. Sin plan de manejo ICF activo. Acción urgente requerida.'},
-      {id:'e2',n:'Whisp',       val:'28/100',bar:28, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 2.2 kg CO₂e/kg). Baja cobertura y uso convencional de insumos. Mayor en el grupo.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'28/100',bar:28, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'1 práctica verificada: solo cobertura de suelo básica. Productor nuevo en proceso de adopción.'},
       {id:'e4',n:'Croppie',  val:'52/100',bar:52, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Zona con déficit hídrico documentado en meses de enero–marzo. Requiere infraestructura de captación.'},
      ]},
     {cod:'EP-0014',nombre:'Gómez Herrera, L.',monto:'L. 17,500',plazo:'5 meses',destino:'Insumos',hist:'42 qq / 3 ciclos',geo:'14.09°N 86.62°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0014',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'33%',  bar:33, src:'ICF Honduras · 2024',                       interp:'En el umbral mínimo EUDR. Plan de manejo ICF vigente aunque con cobertura ajustada.'},
-      {id:'e2',n:'Whisp',       val:'53/100',bar:53, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella dentro del rango promedio (aprox. 1.5 kg CO₂e/kg). Mejora posible con compostaje de pulpa.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'68/100',bar:68, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y conservación hídrica. Nivel medio-alto.'},
       {id:'e4',n:'Croppie',  val:'72/100',bar:72, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso a fuente superficial secundaria. Caudal adecuado en estación lluviosa; monitoreo en seca.'},
      ]},
@@ -178,21 +188,21 @@ const LOANS_BANCO=[
     {cod:'LE-0032',nombre:'Santos Reyes, P.',monto:'L. 19,000',plazo:'6 meses',destino:'Cosecha',hist:'53 qq / 4 ciclos',geo:'14.55°N 88.60°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2019-0032',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'38%',  bar:38, src:'ICF Honduras · 2024',                       interp:'Sobre el umbral EUDR. Plan de manejo ICF activo con registro de reforestación 2023.'},
-      {id:'e2',n:'Whisp',       val:'63/100',bar:63, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Cobertura arbórea y prácticas de sombra reducen emisiones.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'76/100',bar:76, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y cosecha de agua. Buen nivel de adopción.'},
       {id:'e4',n:'Croppie',  val:'82/100',bar:82, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Caudal estable. Infraestructura básica de captación en predio. Sin estrés hídrico documentado.'},
      ]},
     {cod:'LE-0040',nombre:'Ortiz López, G.',monto:'L. 16,500',plazo:'5 meses',destino:'Insumos',hist:'38 qq / 3 ciclos',geo:'14.60°N 88.52°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2021-0040',variedad:'Catuaí amarillo',riesgo:'Historial con mora leve',confianza:'Aval condicionado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'29%',  bar:29, src:'ICF Honduras · 2024',                       interp:'Ligeramente por debajo del umbral EUDR. Plan de reforestación de bordes necesario.'},
-      {id:'e2',n:'Whisp',       val:'44/100',bar:44, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada-alta (aprox. 1.8 kg CO₂e/kg). En el promedio regional. Oportunidad de mejora con aumento de cobertura.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'50/100',bar:50, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas: sombra y barreras vivas. Cosecha de agua en planificación. Adopción en proceso.'},
       {id:'e4',n:'Croppie',  val:'73/100',bar:73, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico adecuado con leve variabilidad en época seca. Sin episodios críticos registrados.'},
      ]},
     {cod:'LE-0048',nombre:'Ramírez Díaz, C.',monto:'L. 20,000',plazo:'6 meses',destino:'Infraestructura',hist:'57 qq / 4 ciclos',geo:'14.49°N 88.65°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0048',variedad:'Bourbon',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'43%',  bar:43, src:'ICF Honduras · 2024',                       interp:'Cobertura alta. Sistema agroforestal diverso con registro ICF actualizado.'},
-      {id:'e2',n:'Whisp',       val:'66/100',bar:66, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.2 kg CO₂e/kg). Manejo integrado y alta cobertura reducen emisiones netas de manera consistente.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'80/100',bar:80, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'4 prácticas recomendadas verificadas. Referente del grupo en manejo climático adaptativo.'},
       {id:'e4',n:'Croppie',  val:'84/100',bar:84, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Naciente en predio con caudal permanente. Infraestructura de almacenamiento básica activa.'},
      ]},
@@ -208,7 +218,7 @@ const LOANS_COOP=[
    prod:[{cod:'OC-0033',nombre:'Rosales Aguilar, R.',monto:'L. 45,000',plazo:'5 meses',destino:'Cosecha + insumos',hist:'38 qq / 3 ciclos',geo:'14.41°N 89.22°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'38%',  bar:38, src:'ICF Honduras · 2024',                       interp:'Sobre el umbral EUDR. Plan de manejo ICF registrado con áreas de reserva activas.'},
-      {id:'e2',n:'Whisp',       val:'63/100',bar:63, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). aCLIMAtar y manejo conservacionista contribuyen.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'74/100',bar:74, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y cosecha de agua. Buen nivel de adopción.'},
       {id:'e4',n:'Croppie',  val:'82/100',bar:82, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Cuenca tributaria del Río Lempa con caudal estable. Sin estrés hídrico documentado.'},
     ]}]},
@@ -220,7 +230,7 @@ const LOANS_COOP=[
    prod:[{cod:'EP-0047',nombre:'Enamorado López, D.',monto:'L. 38,000',plazo:'6 meses',destino:'Cosecha',hist:'31 qq / 4 ciclos',geo:'14.18°N 86.84°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2019-0047',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'36%',  bar:36, src:'ICF Honduras · 2024',                       interp:'Sobre el umbral EUDR. Plan de manejo registrado ante ICF. Reforestación de bordes en 2023.'},
-      {id:'e2',n:'Whisp',       val:'57/100',bar:57, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella bajo el promedio regional (aprox. 1.4 kg CO₂e/kg). Manejo integrado mantiene la huella controlada.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'72/100',bar:72, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y conservación de suelos.'},
       {id:'e4',n:'Croppie',  val:'80/100',bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico adecuado con caudal estable en los últimos 4 ciclos productivos.'},
     ]}]},
@@ -232,7 +242,7 @@ const LOANS_COOP=[
    prod:[{cod:'SB-0018',nombre:'Zelaya, M.C.',monto:'L. 29,500',plazo:'4 meses',destino:'Insumos',hist:'22 qq / 2 ciclos',geo:'15.10°N 88.23°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0018',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'28%',  bar:28, src:'ICF Honduras · 2024',                       interp:'Ligeramente por debajo del umbral EUDR. Plan de reforestación recomendado antes del ciclo 2025.'},
-      {id:'e2',n:'Whisp',       val:'36/100',bar:36, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 2.0 kg CO₂e/kg). Baja cobertura y manejo convencional elevan la huella actual.'},
+      {id:'e2', risk:'moreInfo'},
       {id:'e3',n:'AClimate',    val:'32/100',bar:32, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'1 práctica verificada: solo cobertura básica de suelo. Productora nueva con 2 ciclos en proceso de adopción.'},
       {id:'e4',n:'Croppie',  val:'75/100',bar:75, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico adecuado gracias a la cuenca de Santa Bárbara. Sin episodios críticos documentados.'},
     ]}]},
@@ -244,7 +254,7 @@ const LOANS_COOP=[
    prod:[{cod:'IN-0029',nombre:'Meza Ordóñez, C.',monto:'L. 52,000',plazo:'7 meses',destino:'Cosecha + infraestructura',hist:'48 qq / 5 ciclos',geo:'14.32°N 88.54°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2018-0029',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'46%',  bar:46, src:'ICF Honduras · 2024',                       interp:'Cobertura alta. Sistema silvo-agroforestal bien establecido con plan de manejo ICF vigente.'},
-      {id:'e2',n:'Whisp',       val:'70/100',bar:70, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.1 kg CO₂e/kg). Manejo orgánico parcial y alta cobertura arbórea reducen emisiones netas.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'82/100',bar:82, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'Productor con mayor adopción de prácticas en su zona. Cosecha de agua, sombra tecnificada y más.'},
       {id:'e4',n:'Croppie',  val:'88/100',bar:88, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso a naciente en predio. Caudal permanente con infraestructura de almacenamiento activa.'},
     ]}]},
@@ -256,7 +266,7 @@ const LOANS_COOP=[
    prod:[{cod:'CP-0062',nombre:'Figueroa, J.A.',monto:'L. 34,000',plazo:'5 meses',destino:'Cosecha',hist:'27 qq / 3 ciclos',geo:'14.85°N 89.12°W',eu:'Sí',aval:'B',carnet:'IHCAFE-2021-0062',variedad:'Bourbon',riesgo:'Historial con mora leve',confianza:'Aval condicionado',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'32%',  bar:32, src:'ICF Honduras · 2024',                       interp:'Sobre el umbral mínimo EUDR. Plan de manejo ICF vigente aunque con cobertura ajustada.'},
-      {id:'e2',n:'Whisp',       val:'47/100',bar:47, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.7 kg CO₂e/kg). Oportunidad de mejora con manejo de aguas mieles y aumento de cobertura.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'54/100',bar:54, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas: sombra diversificada y cobertura de suelo. Barreras vivas en proceso inicial.'},
       {id:'e4',n:'Croppie',  val:'74/100',bar:74, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico adecuado aunque con variabilidad leve en época seca. Sin episodios críticos.'},
     ]}]},
@@ -268,7 +278,7 @@ const LOANS_COOP=[
    prod:[{cod:'LP-0084',nombre:'Paredes, A.L.',monto:'L. 41,500',plazo:'6 meses',destino:'Insumos',hist:'35 qq / 4 ciclos',geo:'14.12°N 88.05°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0084',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'39%',  bar:39, src:'ICF Honduras · 2024',                       interp:'Sobre el umbral EUDR. Plan de manejo ICF vigente con área de reserva activa.'},
-      {id:'e2',n:'Whisp',       val:'62/100',bar:62, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Buena cobertura y manejo conservacionista reducen emisiones.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'76/100',bar:76, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y conservación de suelos. Nivel medio-alto.'},
       {id:'e4',n:'Croppie',  val:'84/100',bar:84, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico permanente. Cuenca del Río Otoro con caudal estable históricamente.'},
     ]}]},
@@ -280,7 +290,7 @@ const LOANS_COOP=[
    prod:[{cod:'LE-0056',nombre:'Cáceres, M.A.',monto:'L. 28,000',plazo:'4 meses',destino:'Cosecha',hist:'21 qq / 2 ciclos',geo:'14.56°N 88.58°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0056',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'23%',  bar:23, src:'ICF Honduras · 2024',                       interp:'Por debajo del umbral EUDR. Sin registro ICF activo. Plan de reforestación necesario.'},
-      {id:'e2',n:'Whisp',       val:'30/100',bar:30, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 2.1 kg CO₂e/kg). Baja cobertura y manejo convencional elevan las emisiones del sistema.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'26/100',bar:26, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'1 práctica verificada: solo sombra básica. Productor nuevo con 2 ciclos. Proceso de adopción iniciando.'},
       {id:'e4',n:'Croppie',  val:'57/100',bar:57, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Subcuenca con reducción de caudal en época seca. Infraestructura de captación inexistente.'},
     ]}]},
@@ -292,7 +302,7 @@ const LOANS_COOP=[
    prod:[{cod:'EP-0091',nombre:'Mendoza, R.E.',monto:'L. 36,500',plazo:'5 meses',destino:'Insumos',hist:'30 qq / 3 ciclos',geo:'14.20°N 86.78°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0091',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'37%',  bar:37, src:'ICF Honduras · 2024',                       interp:'Sobre el umbral EUDR. Plan de manejo ICF activo con reforestación de linderos en 2023.'},
-      {id:'e2',n:'Whisp',       val:'57/100',bar:57, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella bajo el promedio regional (aprox. 1.4 kg CO₂e/kg). aCLIMAtar y sombra mantienen emisiones controladas.'},
+      {id:'e2', risk:'moreInfo'},
       {id:'e3',n:'AClimate',    val:'70/100',bar:70, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra, barreras vivas y manejo de tejido. Nivel de adopción adecuado.'},
       {id:'e4',n:'Croppie',  val:'80/100',bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico permanente. Sin reportes de estrés en los últimos 3 ciclos productivos.'},
     ]}]},
@@ -304,7 +314,7 @@ const LOANS_COOP=[
    prod:[{cod:'SB-0073',nombre:'Ordóñez, L.F.',monto:'L. 47,000',plazo:'6 meses',destino:'Cosecha + insumos',hist:'41 qq / 5 ciclos',geo:'15.07°N 88.30°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2019-0073',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     esg:[
       {id:'e1',n:'aCLIMAtar',      val:'44%',  bar:44, src:'ICF Honduras · 2024',                       interp:'Cobertura alta. Sistema agroforestal diverso con plan de manejo ICF actualizado.'},
-      {id:'e2',n:'Whisp',       val:'65/100',bar:65, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.2 kg CO₂e/kg). Manejo integrado y alta cobertura reducen consistentemente las emisiones netas.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'80/100',bar:80, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'4 prácticas verificadas. Productor con historial sólido en adopción tecnológica.'},
       {id:'e4',n:'Croppie',  val:'87/100',bar:87, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso a naciente permanente. Sin episodios de estrés hídrico en los últimos 5 ciclos.'},
     ]}]},
@@ -321,7 +331,7 @@ const LOANS_GRUPO=[
      parcela:'2.1 ha · Finca El Roble',volContrato:'40 qq',contrato:'Exportadora Centroamérica S.A.',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'40%',  bar:40, src:'ICF Honduras · 2024',                       interp:'Sobre umbral EUDR. Plan de manejo activo ante ICF.'},
-      {id:'e2',n:'Whisp',       val:'60/100',bar:60, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Por debajo del promedio regional.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'72/100',bar:72, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas. Nivel medio-alto de adopción.'},
       {id:'e4',n:'Croppie',  val:'82/100',bar:82, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Sin estrés hídrico relevante. Microcuenca estable.'},
      ]},
@@ -329,7 +339,7 @@ const LOANS_GRUPO=[
      parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'36%',  bar:36, src:'ICF Honduras · 2024',                       interp:'Cumple umbral EUDR. Plan de manejo forestal registrado.'},
-      {id:'e2',n:'Whisp',       val:'55/100',bar:55, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.4 kg CO₂e/kg). Levemente bajo el promedio regional.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'70/100',bar:70, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas. Buenas prácticas de adaptación implementadas.'},
       {id:'e4',n:'Croppie',  val:'80/100',bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico estable en microcuenca del área.'},
      ]},
@@ -337,7 +347,7 @@ const LOANS_GRUPO=[
      parcela:'2.5 ha · Finca El Mirador',volContrato:'35 qq',contrato:'Exportadora Centroamérica S.A.',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'28%',  bar:28, src:'ICF Honduras · 2024',                       interp:'Bajo umbral EUDR. Se requiere ampliar cobertura bajo plan de manejo forestal.'},
-      {id:'e2',n:'Whisp',       val:'38/100',bar:38, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 1.9 kg CO₂e/kg). Sobre el promedio regional. Requiere mejoras.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'50/100',bar:50, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas. En proceso de adopción de prácticas adicionales.'},
       {id:'e4',n:'Croppie',  val:'58/100',bar:58, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Riesgo hídrico moderado. Subcuenca con reducción de caudal en época seca.'},
      ]}
@@ -352,7 +362,7 @@ const LOANS_GRUPO=[
      parcela:'2.3 ha · Finca Los Pinares',volContrato:'42 qq',contrato:'Coop. Cafetalera Occidente',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'39%',  bar:39, src:'ICF Honduras · 2024',                       interp:'Cumple umbral EUDR. Plan de manejo activo y registrado.'},
-      {id:'e2',n:'Whisp',       val:'60/100',bar:60, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Bajo el promedio regional.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'70/100',bar:70, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas. Nivel adecuado de adopción.'},
       {id:'e4',n:'Croppie',  val:'80/100',bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Cuenca estable. Sin estrés hídrico documentado.'},
      ]},
@@ -360,7 +370,7 @@ const LOANS_GRUPO=[
      parcela:'2.0 ha · Finca El Cedro',volContrato:'36 qq',contrato:'Coop. Cafetalera Occidente',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'35%',  bar:35, src:'ICF Honduras · 2024',                       interp:'Dentro del umbral EUDR. Plan de manejo registrado.'},
-      {id:'e2',n:'Whisp',       val:'55/100',bar:55, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.4 kg CO₂e/kg). Controlada en el rango aceptable.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'68/100',bar:68, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas. Buenas prácticas de adaptación implementadas.'},
       {id:'e4',n:'Croppie',  val:'78/100',bar:78, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Cuenca estable. Sin estrés hídrico documentado.'},
      ]},
@@ -368,7 +378,7 @@ const LOANS_GRUPO=[
      parcela:'2.6 ha · Finca El Pinar',volContrato:'39 qq',contrato:'Coop. Cafetalera Occidente',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'30%',  bar:30, src:'ICF Honduras · 2024',                       interp:'En el límite umbral EUDR. Cobertura ajustada, se recomienda ampliar.'},
-      {id:'e2',n:'Whisp',       val:'45/100',bar:45, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.7 kg CO₂e/kg). Oportunidad de mejora con prácticas adicionales.'},
+      {id:'e2', risk:'moreInfo'},
       {id:'e3',n:'AClimate',    val:'55/100',bar:55, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas. En proceso de adopción de prácticas adicionales.'},
       {id:'e4',n:'Croppie',  val:'60/100',bar:60, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Estrés hídrico leve. Riesgo moderado en época seca.'},
      ]},
@@ -376,7 +386,7 @@ const LOANS_GRUPO=[
      parcela:'2.2 ha · Finca El Mango',volContrato:'35 qq',contrato:'Coop. Cafetalera Occidente',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'37%',  bar:37, src:'ICF Honduras · 2024',                       interp:'Cumple umbral EUDR. Plan de manejo registrado y activo.'},
-      {id:'e2',n:'Whisp',       val:'60/100',bar:60, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Dentro del rango favorable.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'70/100',bar:70, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas. Nivel adecuado de adopción.'},
       {id:'e4',n:'Croppie',  val:'78/100',bar:78, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Sin estrés hídrico. Acceso estable al recurso hídrico.'},
      ]}
@@ -391,7 +401,7 @@ const LOANS_GRUPO=[
      parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'36%',  bar:36, src:'ICF Honduras · 2024',                       interp:'Cumple umbral EUDR. Plan de manejo forestal vigente.'},
-      {id:'e2',n:'Whisp',       val:'55/100',bar:55, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.4 kg CO₂e/kg). Levemente bajo el promedio regional.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'70/100',bar:70, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas. Buenas prácticas implementadas.'},
       {id:'e4',n:'Croppie',  val:'80/100',bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso hídrico estable en microcuenca.'},
      ]},
@@ -399,7 +409,7 @@ const LOANS_GRUPO=[
      parcela:'2.5 ha · Finca El Mirador',volContrato:'35 qq',contrato:'Exportadora Centroamérica S.A.',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'28%',  bar:28, src:'ICF Honduras · 2024',                       interp:'Bajo umbral EUDR. Cobertura insuficiente, requiere plan de manejo.'},
-      {id:'e2',n:'Whisp',       val:'38/100',bar:38, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 1.9 kg CO₂e/kg). Sobre el promedio regional. Requiere mejoras.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'50/100',bar:50, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas. En proceso de adopción.'},
       {id:'e4',n:'Croppie',  val:'58/100',bar:58, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Riesgo hídrico moderado. Caudal reducido en época seca.'},
      ]},
@@ -407,7 +417,7 @@ const LOANS_GRUPO=[
      parcela:'2.6 ha · Finca El Pinar',volContrato:'39 qq',contrato:'Coop. Cafetalera Occidente',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'30%',  bar:30, src:'ICF Honduras · 2024',                       interp:'En el límite umbral EUDR. Cobertura ajustada, se recomienda ampliar.'},
-      {id:'e2',n:'Whisp',       val:'45/100',bar:45, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella moderada (aprox. 1.7 kg CO₂e/kg). Oportunidad de mejora.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'55/100',bar:55, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas. En proceso de adopción de prácticas adicionales.'},
       {id:'e4',n:'Croppie',  val:'60/100',bar:60, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Estrés hídrico leve. Riesgo moderado en época seca.'},
      ]},
@@ -415,14 +425,14 @@ const LOANS_GRUPO=[
      parcela:'2.2 ha · Finca El Mango',volContrato:'35 qq',contrato:'Coop. Cafetalera Occidente',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'37%',  bar:37, src:'ICF Honduras · 2024',                       interp:'Cumple umbral EUDR. Plan de manejo activo.'},
-      {id:'e2',n:'Whisp',       val:'60/100',bar:60, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Dentro del rango favorable.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'70/100',bar:70, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas. Nivel adecuado de adopción.'},
       {id:'e4',n:'Croppie',  val:'78/100',bar:78, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Sin estrés hídrico. Acceso estable al recurso hídrico.'},
      ]},
      {cod:'OC-0305',nombre:'Rodríguez Díaz, F.',monto:'L. 15,000',plazo:'5 meses',destino:'Cosecha',hist:'31 qq / 2 ciclos',geo:'14.05°N 86.57°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0005',variedad:'IHCAFE-90',riesgo:'Sin historial en central',confianza:'En evaluación',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'20%',  bar:20, src:'ICF Honduras · 2024',                       interp:'Por debajo del umbral EUDR. Sin plan de manejo ICF activo. Acción urgente requerida.'},
-      {id:'e2',n:'Whisp',       val:'28/100',bar:28, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 2.2 kg CO₂e/kg). Baja cobertura y uso convencional de insumos.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'28/100',bar:28, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'1 práctica verificada. Productor nuevo en proceso de adopción de prácticas.'},
       {id:'e4',n:'Croppie',  val:'52/100',bar:52, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Zona con déficit hídrico documentado en meses de enero–marzo. Requiere infraestructura de captación.'},
      ]}
@@ -436,21 +446,21 @@ const LOANS_GRUPO=[
     {cod:'OC-0401',nombre:'Gómez Herrera, L.',monto:'L. 17,500',plazo:'5 meses',destino:'Insumos',hist:'42 qq / 3 ciclos',geo:'14.09°N 86.62°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2020-0014',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'33%',  bar:33, src:'ICF Honduras · 2024',                       interp:'En el umbral mínimo EUDR. Plan de manejo ICF vigente aunque con cobertura ajustada.'},
-      {id:'e2',n:'Whisp',       val:'53/100',bar:53, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella dentro del rango promedio (aprox. 1.5 kg CO₂e/kg). Mejora posible con compostaje de pulpa.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'68/100',bar:68, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y conservación hídrica. Nivel medio-alto.'},
       {id:'e4',n:'Croppie',  val:'72/100',bar:72, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Acceso a fuente superficial secundaria. Caudal adecuado en estación lluviosa; monitoreo en seca.'},
      ]},
      {cod:'OC-0402',nombre:'Reyes Sorto, M.',monto:'L. 15,000',plazo:'5 meses',destino:'Infraestructura',hist:'28 qq / 2 ciclos',geo:'14.31°N 86.74°W',eu:'Pendiente',aval:'B',carnet:'IHCAFE-2022-0063',variedad:'IHCAFE-90',riesgo:'Deuda vigente sin mora',confianza:'En evaluación',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'27%',  bar:27, src:'ICF Honduras · 2024',                       interp:'Por debajo del umbral EUDR. Se requiere ampliación de áreas bajo manejo forestal.'},
-      {id:'e2',n:'Whisp',       val:'38/100',bar:38, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella alta (aprox. 1.9 kg CO₂e/kg). Por encima del promedio regional. Margen de mejora.'},
+      {id:'e2', risk:'low'},
       {id:'e3',n:'AClimate',    val:'48/100',bar:48, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'2 prácticas verificadas: solo sombra básica y cobertura de suelo. En proceso de adopción.'},
       {id:'e4',n:'Croppie',  val:'58/100',bar:58, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Subcuenca con reducción de caudal en época seca. Se recomienda cosecha de agua.'},
      ]},
     {cod:'OC-0403',nombre:'Perdomo Núñez, A.',monto:'L. 19,500',plazo:'6 meses',destino:'Insumos',hist:'37 qq / 3 ciclos',geo:'14.24°N 86.80°W',eu:'Sí',aval:'A',carnet:'IHCAFE-2021-0071',variedad:'Catuaí amarillo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
      esg:[
       {id:'e1',n:'aCLIMAtar',      val:'35%',  bar:35, src:'ICF Honduras · 2024',                       interp:'Dentro del umbral EUDR. Área bajo plan de manejo registrado y activo.'},
-      {id:'e2',n:'Whisp',       val:'60/100',bar:60, src:'Alianza Bioversity & CIAT · 2024',          interp:'Huella baja (aprox. 1.3 kg CO₂e/kg). Manejo orgánico parcial contribuye a reducción de emisiones.'},
+      {id:'e2', risk:'high'},
       {id:'e3',n:'AClimate',    val:'74/100',bar:74, src:'Fichas IHCAFE / TraceFoodChain · nov 2024', interp:'3 prácticas verificadas: sombra diversificada, barreras vivas y manejo de tejido. Nivel medio-alto.'},
       {id:'e4',n:'Croppie',  val:'80/100',bar:80, src:'SERNA Honduras / AQUASTAT 2022–2024',       interp:'Caudal estable en los últimos 3 ciclos. Infraestructura de captación básica en predio.'},
      ]}
