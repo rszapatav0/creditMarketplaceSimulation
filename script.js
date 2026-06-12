@@ -264,17 +264,18 @@ function fillProd(cod, includeEsg=true){
     metrics = allMetrics.filter(m => confirmed.esgKeys.includes(m.id));
     metrics = metrics.map(m => {
       if (m.id === 'e2') {
-        const hydrated = {
-      ...m,
-      n:      WHISP_CONFIG.n,
-      src:    WHISP_CONFIG.src,
-      interp: WHISP_CONFIG.interp[m.risk] || '',
-    };
-    console.log(`[Whisp hydration] producer=${p.cod} risk=${m.risk}`, hydrated);
-    return hydrated;
-  }
-  return m;
-});  }
+        const hydrated = {...m,
+          n: WHISP_CONFIG.n,src: WHISP_CONFIG.src,interp: WHISP_CONFIG.interp[m.risk] || '',};
+          console.log(`[Whisp hydration] producer=${p.cod} risk=${m.risk}`, hydrated);
+          return hydrated;}
+      if (m.id === 'e4') {
+        const hydrated = {...m,
+          n: CROPPIE_CONFIG.n,src: CROPPIE_CONFIG.src,};
+          console.log(`[Croppie hydration] producer=${p.cod}`, hydrated);
+          return hydrated;
+        }
+      return m;
+    });  }
   
   const rTag=p.riesgo.includes('negativo')?`<span class="tag eu">✓ Sin reportes</span>`:p.riesgo.includes('mora antigua')?`<span class="tag ok">${p.riesgo}</span>`:`<span class="tag pend">${p.riesgo}</span>`;
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
@@ -287,6 +288,13 @@ function fillProd(cod, includeEsg=true){
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
         <div class="risk-badge ${m.risk}">${m.risk === 'high'? '🔴 Alto riesgo': m.risk === 'low'? '🟢 Bajo riesgo': '❓ Se necesita más información'}</div>
         <div class="px-card-interp">${m.interp}</div><div class="px-card-src">${m.src}</div></div>`;}
+        if(m.n==='Croppie'){
+          return `
+          <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
+          <div class="px-kpi-grid">
+          <div class="px-kpi-box"><div class="px-kpi-label">Rendimiento (quintales de café verde por hectárea)</div><div class="px-kpi-value">${m.yield}</div></div>
+          <div class="px-kpi-box"><div class="px-kpi-label">Producción estimada (quintales de café verde)</div><div class="px-kpi-value">${m.production}</div></div></div>
+          <div class="px-card-interp">Fecha de estimación de cosecha: ${m.estimationDate}</div><div class="px-card-src">${m.src}</div></div>`;}    
         return `
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
         <div class="px-card-src">${m.src}</div><div class="px-bar"><div class="px-fill" style="width:${m.bar}%"></div></div><div class="px-card-interp">${m.interp}</div>

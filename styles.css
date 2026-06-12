@@ -239,6 +239,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .px-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
 .px-fill{height:3px;background:var(--accent);border-radius:2px}
 .px-card-interp{font-size:10px;color:var(--text2);font-style:italic;margin-top:3px}
+.px-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0;}
+.px-kpi-box{padding:10px;border-radius:10px;background:rgba(255,255,255,.04);text-align:center;}
+.px-kpi-value{font-size:10px;font-weight:700;margin-bottom:1px;}
+.px-kpi-label{font-size:10px;opacity:.75;line-height:1.2;}
 
 /* OFFER */
 .oi{padding:1.5rem;max-width:1000px;margin:0 auto}
