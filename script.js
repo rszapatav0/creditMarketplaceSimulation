@@ -263,11 +263,24 @@ function fillProd(cod, includeEsg=true){
     const allMetrics = prodEsgMetrics(p);
     metrics = allMetrics.filter(m => confirmed.esgKeys.includes(m.id));
     metrics = metrics.map(m => {
+      if (m.id === 'e1') {
+        const hydrated = {...m,
+          n: ACLIMATAR_CONFIG.n,src: ACLIMATAR_CONFIG.src,
+          aptitudClimActualClass: ACLIMATAR_CONFIG.aptitudClimActualClass[m.aptitudClimActual]||'',aptitudClimActualLabel: ACLIMATAR_CONFIG.aptitudClimActualLabel[m.aptitudClimActual]||'',aptitudClimActualInterp: ACLIMATAR_CONFIG.aptitudClimActualInterp[m.aptitudClimActual] || '',
+          aptitudClimFuturaClass: ACLIMATAR_CONFIG.aptitudClimFuturaClass[m.aptitudClimFutura]||'',aptitudClimFuturaLabel: ACLIMATAR_CONFIG.aptitudClimFuturaLabel[m.aptitudClimFutura]||'',aptitudClimFuturaInterp: ACLIMATAR_CONFIG.aptitudClimFuturaInterp[m.aptitudClimFutura] || '',
+          gradienteClimClass: ACLIMATAR_CONFIG.gradienteClimClass[m.gradienteClim]||'',gradienteClimLabel: ACLIMATAR_CONFIG.gradienteClimLabel[m.gradienteClim]||'',gradienteClimInterp: ACLIMATAR_CONFIG.gradienteClimInterp[m.gradienteClim] || '',
+          calorClass: ACLIMATAR_CONFIG.calorClass[m.calor]||'',calorLabel: ACLIMATAR_CONFIG.calorLabel[m.calor]||'',calorInterp: ACLIMATAR_CONFIG.calorInterp[m.calor] || '',
+          sequiaClass: ACLIMATAR_CONFIG.sequiaClass[m.sequia]||'',sequiaLabel: ACLIMATAR_CONFIG.sequiaLabel[m.sequia]||'',sequiaInterp: ACLIMATAR_CONFIG.sequiaInterp[m.sequia] || '',};
+        console.log(`[aCLIMAtar hydration] producer=${p.cod}`, hydrated);
+        return hydrated;}
+
       if (m.id === 'e2') {
         const hydrated = {...m,
-          n: WHISP_CONFIG.n,src: WHISP_CONFIG.src,interp: WHISP_CONFIG.interp[m.risk] || '',};
-          console.log(`[Whisp hydration] producer=${p.cod} risk=${m.risk}`, hydrated);
+          n: WHISP_CONFIG.n,src: WHISP_CONFIG.src,
+          riskClass: WHISP_CONFIG.riskClass[m.risk] || '',riskLabel: WHISP_CONFIG.riskLabel[m.risk] || '',riskInterp: WHISP_CONFIG.riskInterp[m.risk] || '',};
+          console.log(`[Whisp hydration] producer=${p.cod}`, hydrated);
           return hydrated;}
+
       if (m.id === 'e4') {
         const hydrated = {...m,
           n: CROPPIE_CONFIG.n,src: CROPPIE_CONFIG.src,};
@@ -281,20 +294,49 @@ function fillProd(cod, includeEsg=true){
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
   
   let esgHtml = '';
-  if (metrics.length > 0) {
+  if (metrics.length > 0) {   
+    const getRiskInfo= risk => ({
+    class: risk==='high'?'high':risk==='low'?'low':risk ==='medium'?'medium':risk==='uncertain'?'uncertain':risk==='limitations'?'limitations':risk==='unsuitable'?'unsuitable':'unknown',
+    text:  risk==='high'?'Riesgo Alto':risk==='low'?'Riesgo bajo':risk==='medium'?'Riesgo medio':risk==='uncertain'?'Riesgo incierto':risk==='limitations'?'Limitaciones':risk==='unsuitable'?'No apto':'Sin riesgo asignado' });
+ 
     const cards=metrics.map(m=>{
+      
+      if(m.n === 'aCLIMAtar'){
+        const aptitudClimActualfn = getRiskInfo(m.aptitudClimActual);
+        const aptitudClimFuturafn = getRiskInfo(m.aptitudClimFutura);
+        const gradienteClimfn = getRiskInfo(m.gradienteClim);
+        const calorfn = getRiskInfo(m.calor);
+        const sequiafn = getRiskInfo(m.sequia);
+        return `
+        <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
+        <div class="px-grid">
+        <div class="px-grid-title">Reporte de aptitud agroclimática</div>
+        <div class="px-grid-label">Aptitud Agroclimática Actual</div><div class="px-grid-value"><span class="px-status ${m.aptitudClimActualClass}">${m.aptitudClimActualLabel}</span><div class="px-grid-detail">${m.aptitudClimActualInterp}</div></div>
+        <div class="px-grid-label">Aptitud Agroclimática Futura 30 años (2020–2049)</div><div class="px-grid-value"><span class="px-status ${m.aptitudClimFuturaClass}">${m.aptitudClimFuturaLabel}</span><div class="px-grid-detail">${m.aptitudClimFuturaInterp}</div></div>
+        <div class="px-grid-label">Gradiente de Impacto a 30 años (2020–2049)</div><div class="px-grid-value"><span class="px-status ${m.gradienteClimClass}">${m.gradienteClimLabel}</span><div class="px-grid-detail">${m.gradienteClimInterp}</div></div>
+        <div class="px-grid-label">Calor</div><div class="px-grid-value"><span class="px-status ${m.calorClass}">${m.calorLabel}</span><div class="px-grid-detail">${m.calorInterp}</div></div>
+        <div class="px-grid-label">Sequía</div><div class="px-grid-value"><span class="px-status ${m.sequiaClass}">${m.sequiaLabel}</span><div class="px-grid-detail">${m.sequiaInterp}</div></div>
+        <div class="px-grid-label">Prácticas muy recomendadas</div><div class="px-grid-value">${m.practicasMuyRecomendadas}</div>
+        <div class="px-grid-label">Prácticas recomendadas</div><div class="px-grid-value">${m.practicasRecomendadas}</div>
+        <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
+        <div class="px-card-src">${m.src}</div></div>`;}
+      if(m.n==='Croppie'){
+        return `
+        <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
+        <div class="px-grid">
+        <div class="px-grid-title">Estimación de producción (quintales de café verde)</div>
+        <div class="px-grid-label">Rendimiento por hectárea</div><div class="px-grid-value">${m.yield}</div>
+        <div class="px-grid-label">Producción</div><div class="px-grid-value">${m.production}</div>
+        <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
+        <div class="px-card-src">${m.src}</div></div>`;}
       if(m.n==='Whisp - Open Foris'){
         return `
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
-        <div class="risk-badge ${m.risk}">${m.risk === 'high'? '🔴 Alto riesgo': m.risk === 'low'? '🟢 Bajo riesgo': '❓ Se necesita más información'}</div>
-        <div class="px-card-interp">${m.interp}</div><div class="px-card-src">${m.src}</div></div>`;}
-        if(m.n==='Croppie'){
-          return `
-          <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
-          <div class="px-kpi-grid">
-          <div class="px-kpi-box"><div class="px-kpi-label">Rendimiento (quintales de café verde por hectárea)</div><div class="px-kpi-value">${m.yield}</div></div>
-          <div class="px-kpi-box"><div class="px-kpi-label">Producción estimada (quintales de café verde)</div><div class="px-kpi-value">${m.production}</div></div></div>
-          <div class="px-card-interp">Fecha de estimación de cosecha: ${m.estimationDate}</div><div class="px-card-src">${m.src}</div></div>`;}    
+        <div class="px-grid">
+        <div class="px-grid-title">Riesgo de deforestación</div>
+        <div class="px-grid-label">Resultado</div><div class="px-grid-value"><span class="px-status ${m.riskClass}">${m.riskLabel}</span><div class="px-grid-detail">${m.riskInterp}</div></div>
+        <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
+        <div class="px-card-src">${m.src}</div></div>`;}
         return `
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
         <div class="px-card-src">${m.src}</div><div class="px-bar"><div class="px-fill" style="width:${m.bar}%"></div></div><div class="px-card-interp">${m.interp}</div>
