@@ -225,6 +225,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .px-map-box{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .px-map-hdr{padding:.4rem .75rem;background:var(--surface);border-bottom:1px solid var(--border);font-size:10px;font-family:var(--mono);color:var(--text2);display:flex;justify-content:space-between;align-items:center}
 .px-map-foot{padding:.4rem .75rem;font-size:9px;font-family:var(--mono);color:var(--text3);background:var(--surface);border-top:1px solid var(--border);line-height:1.7}
+.px-farm-map svg{max-width:250px;margin:auto;margin-top:10px}
 .px-esg{display:flex;flex-direction:column;gap:.5rem}
 .px-esg-hdr{font-size:10px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase;padding-bottom:.35rem;border-bottom:1px solid var(--border);margin-bottom:.1rem}
 .px-card{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:.6rem .85rem}
@@ -235,6 +236,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .px-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
 .px-fill{height:3px;background:var(--accent);border-radius:2px}
 .px-card-interp{font-size:10px;color:var(--text2);font-style:italic;margin-top:3px}
+.px-grid2{  display:grid;grid-template-columns:140px 1fr 140px 1fr;gap:0;}
+.px-grid2-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:600;text-align:left;background:rgba(0,0,0,.03);border-bottom:1px solid var(--border);}
+.px-grid2-label{padding:6px 8px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border);}
+.px-grid2-value{padding:6px 8px;font-size:10px;border-bottom:1px solid var(--border);}
 .px-grid{display:grid;grid-template-columns:140px 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:4px 0;}
 .px-grid-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:600;text-align:left;background:rgba(0,0,0,.03);border-bottom:1px solid var(--border);}
 .px-grid-label{padding:6px 8px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border);}

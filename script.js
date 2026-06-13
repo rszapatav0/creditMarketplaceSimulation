@@ -294,19 +294,10 @@ function fillProd(cod, includeEsg=true){
   const cTag=p.confianza==='Aval otorgado'?`<span class="tag yes">✓ Aval otorgado</span>`:`<span class="tag pend">${p.confianza}</span>`;
   
   let esgHtml = '';
-  if (metrics.length > 0) {   
-    const getRiskInfo= risk => ({
-    class: risk==='high'?'high':risk==='low'?'low':risk ==='medium'?'medium':risk==='uncertain'?'uncertain':risk==='limitations'?'limitations':risk==='unsuitable'?'unsuitable':'unknown',
-    text:  risk==='high'?'Riesgo Alto':risk==='low'?'Riesgo bajo':risk==='medium'?'Riesgo medio':risk==='uncertain'?'Riesgo incierto':risk==='limitations'?'Limitaciones':risk==='unsuitable'?'No apto':'Sin riesgo asignado' });
- 
+  if (metrics.length > 0) {    
     const cards=metrics.map(m=>{
       
       if(m.n === 'aCLIMAtar'){
-        const aptitudClimActualfn = getRiskInfo(m.aptitudClimActual);
-        const aptitudClimFuturafn = getRiskInfo(m.aptitudClimFutura);
-        const gradienteClimfn = getRiskInfo(m.gradienteClim);
-        const calorfn = getRiskInfo(m.calor);
-        const sequiafn = getRiskInfo(m.sequia);
         return `
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
         <div class="px-grid">
@@ -320,6 +311,7 @@ function fillProd(cod, includeEsg=true){
         <div class="px-grid-label">Prácticas recomendadas</div><div class="px-grid-value">${m.practicasRecomendadas}</div>
         <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
         <div class="px-card-src">${m.src}</div></div>`;}
+
       if(m.n==='Croppie'){
         return `
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
@@ -329,6 +321,7 @@ function fillProd(cod, includeEsg=true){
         <div class="px-grid-label">Producción</div><div class="px-grid-value">${m.production}</div>
         <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
         <div class="px-card-src">${m.src}</div></div>`;}
+
       if(m.n==='Whisp - Open Foris'){
         return `
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
@@ -337,10 +330,7 @@ function fillProd(cod, includeEsg=true){
         <div class="px-grid-label">Resultado</div><div class="px-grid-value"><span class="px-status ${m.riskClass}">${m.riskLabel}</span><div class="px-grid-detail">${m.riskInterp}</div></div>
         <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
         <div class="px-card-src">${m.src}</div></div>`;}
-        return `
-        <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span><span class="px-card-val">${m.val}</span></div>
-        <div class="px-card-src">${m.src}</div><div class="px-bar"><div class="px-fill" style="width:${m.bar}%"></div></div><div class="px-card-interp">${m.interp}</div>
-        </div>`;}).join('');
+      }).join('');
     esgHtml = `<div class="px-esg">
       <div class="px-esg-hdr">Herramientas de análisis climático — ${p.nombre}</div>
       ${cards}
@@ -351,16 +341,38 @@ function fillProd(cod, includeEsg=true){
     ? `<span class="tag eu">✓ Verificado</span>`
     : `<span class="tag pend">⏳ Pendiente</span>`;
 
-  const profileHtml = `<div class="px-profile">
-    <div class="px-profile-hdr">Perfil productivo</div>
-    <div class="px-profile-grid">
-      <div class="px-pf"><span class="px-pf-l">Variedad</span><span class="px-pf-v">${p.variedad || '—'}</span></div>
-      <div class="px-pf"><span class="px-pf-l">Historial de acopio</span><span class="px-pf-v">${p.hist || '—'}</span></div>
-      <div class="px-pf"><span class="px-pf-l">Destino del crédito</span><span class="px-pf-v">${p.destino || '—'}</span></div>
-      <div class="px-pf"><span class="px-pf-l">Carnet IHCAFE</span><span class="px-pf-v" style="font-family:var(--mono);font-size:11px">${p.carnet || '—'}</span></div>
-      <div class="px-pf"><span class="px-pf-l">Geolocalización</span><span class="px-pf-v" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</span></div>
-      <div class="px-pf"><span class="px-pf-l">Verificación EUDR</span><span class="px-pf-v">${euTag}</span></div>
-    </div>
+const profileHtml = `
+  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información general</span></div>
+  <div class="px-grid2">
+  <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '—'}</div>
+  <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '—'}</div>
+  <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '—'}</div>
+  <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '—'}</div>
+  <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '—'}</div>
+  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '—'}</div></div>
+  </div>`;
+
+const profileHtmlFinca = `
+  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información de la finca</span></div>
+  <div class="px-grid2">
+  <div class="px-grid2-label">Departamento</div><div class="px-grid2-value">${p.department || '—'}</div>
+  <div class="px-grid2-label">Municipio</div><div class="px-grid2-value">${p.municipality || '—'}</div>
+  <div class="px-grid2-label">Aldea</div><div class="px-grid2-value">${p.aldea || '—'}</div>
+  <div class="px-grid2-label">Geolocalización</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</div>
+  <div class="px-grid2-label">Cuenta con documentos de propiedad</div><div class="px-grid2-value">${p.propertyDocument || '—'}</div>
+  <div class="px-grid2-label">Tipo de tenencia</div><div class="px-grid2-value">${p.tenancyTipe || '—'}</div>
+  <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
+  <div class="px-grid2-label">Variedades de café</div><div class="px-grid2-value">${p.variedad || '—'}</div></div>
+  <div class="px-farm-map">${buildMap(p)}</div>
+  </div>`;
+
+const profileHtmlProductiva = `
+  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información productiva y comercial</span></div>
+  <div class="px-grid2">
+  <div class="px-grid2-label">Promedio histórico de acopio</div><div class="px-grid2-value">${p.histAcopio || '—'}</div>
+  <div class="px-grid2-label">Promedio histórico de ingresos</div><div class="px-grid2-value">${p.histIngresos || '—'}</div>
+  <div class="px-grid2-label">Otros ingresos</div><div class="px-grid2-value">${p.otherIncome || '—'}</div>
+  <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div></div>
   </div>`;
   
   cell.innerHTML=`<div class="px-wrap">
@@ -370,7 +382,10 @@ function fillProd(cod, includeEsg=true){
       <div class="px-map-foot">Carnet: ${p.carnet}<br>Central riesgos: ${rTag}<br>Confianza FGR: ${cTag}</div>
     </div>
     <div class="px-right">
+    <div class="px-esg"><div class="px-esg-hdr">Perfil del productor</div></div>
       ${profileHtml}
+      ${profileHtmlFinca}
+      ${profileHtmlProductiva}
       ${esgHtml}
     </div>
   </div>`;
@@ -435,11 +450,9 @@ function renderAccess(){
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
-            <th style="width:13%">Código</th><th style="width:16%">Productor</th>
+            <th style="width:15%">Código</th><th style="width:28%">Productor</th>
             <th style="width:12%">Monto</th><th style="width:10%">Plazo</th>
-            <th style="width:12%">Histórico</th><th style="width:8%">UE</th>
-            <th style="width:7%">Aval</th><th style="width:12%">Central riesgos</th>
-            <th style="width:10%">Confianza FGR</th>
+            <th style="width:28%">Destino</th><th style="width:7%">Aval</th>
           </tr>
           <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar los fundamentales de la finca y las herramientas de análisis climático individuales del productor</td></tr>
           </thead>
@@ -447,11 +460,7 @@ function renderAccess(){
             <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
               <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
               <td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td>
-              <td>${p.hist}</td>
-              <td><span class="tag ${p.eu==='Sí'?'eu':'pend'}">${p.eu==='Sí'?'✓':'Pend.'}</span></td>
-              <td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
-              <td>${riesgoTag(p)}</td>
-              <td>${confTag(p)}</td>
+              <td>${p.destino}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
             </tr>
             <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
           </tbody>
