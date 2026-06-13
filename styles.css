@@ -213,7 +213,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .btn-offer:hover{opacity:.85}
 
 /* PRODUCER ROW EXPAND */
-.px-wrap{display:grid;grid-template-columns:260px 1fr;gap:1rem;padding:1.25rem;background:#fafbfc}
+.px-wrap{display:grid;grid-template-columns:1fr;gap:1rem;padding:1.25rem;background:#fafbfc}
 .px-right{display:flex;flex-direction:column;gap:1rem}
 .px-profile{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1rem}
 .px-profile-hdr{font-size:11px;color:var(--text2);font-weight:500;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.5px;font-family:var(--mono)}
@@ -236,11 +236,11 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .px-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
 .px-fill{height:3px;background:var(--accent);border-radius:2px}
 .px-card-interp{font-size:10px;color:var(--text2);font-style:italic;margin-top:3px}
-.px-grid2{  display:grid;grid-template-columns:140px 1fr 140px 1fr;gap:0;}
+.px-grid2{  display:grid;grid-template-columns:150px 1fr 150px 1fr;gap:0;}
 .px-grid2-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:600;text-align:left;background:rgba(0,0,0,.03);border-bottom:1px solid var(--border);}
 .px-grid2-label{padding:6px 8px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border);}
 .px-grid2-value{padding:6px 8px;font-size:10px;border-bottom:1px solid var(--border);}
-.px-grid{display:grid;grid-template-columns:140px 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:4px 0;}
+.px-grid{display:grid;grid-template-columns:150px 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:4px 0;}
 .px-grid-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:600;text-align:left;background:rgba(0,0,0,.03);border-bottom:1px solid var(--border);}
 .px-grid-label{padding:6px 8px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border);}
 .px-grid-value{padding:6px 8px;font-size:10px;border-bottom:1px solid var(--border);}

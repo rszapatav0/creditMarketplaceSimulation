@@ -90,7 +90,6 @@ function renderDetail(){
   const isB=L.tipo==='banco';
   const isG=L.tipo==='grupo';
   let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region} · Plazo: ${L.plazo}`;
-  if(!isB&&!isG)h+=` &nbsp;·&nbsp; <span style="color:var(--gold);font-size:11px">Smart Contract: ${L.contrato}</span>`;
   h+=`</div></div>`;
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
@@ -375,20 +374,9 @@ const profileHtmlProductiva = `
   <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div></div>
   </div>`;
   
-  cell.innerHTML=`<div class="px-wrap">
-    <div class="px-map-box">
-      <div class="px-map-hdr"><span>${p.nombre}</span><span style="color:var(--accent)">${p.variedad}</span></div>
-      ${buildMap(p)}
-      <div class="px-map-foot">Carnet: ${p.carnet}<br>Central riesgos: ${rTag}<br>Confianza FGR: ${cTag}</div>
-    </div>
-    <div class="px-right">
-    <div class="px-esg"><div class="px-esg-hdr">Perfil del productor</div></div>
-      ${profileHtml}
-      ${profileHtmlFinca}
-      ${profileHtmlProductiva}
-      ${esgHtml}
-    </div>
-  </div>`;
+cell.innerHTML=`<div class="px-wrap">
+  <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor</div></div>
+    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${esgHtml}</div></div>`;
 }
 
 function renderAccess(){
