@@ -84,10 +84,14 @@
     <div>
       <div class="fs-title">Condiciones financieras principales</div>
       <div class="frow">
-          <div class="fg"><label class="flabel">Monto ofertado (L.)</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
+        <div id="financial-flex-fields">
+          <div class="fg"><label class="flabel">Monto ofertado</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
           <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1" placeholder="ej. 14.5"></div>
           <div class="fg"><label class="flabel">Plazo (meses)</label>
             <select class="fsel" id="of-plazo"><option value="">Seleccionar...</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
+        </div></div>
+        <div class="financial-spacer"></div>
+      <div class="frow">
           <div class="fg"><label class="flabel">Periodicidad de pago</label>
             <select class="fsel" id="of-periodo"><option value="">Seleccionar...</option><option>Mensual</option><option>Bimestral</option><option>Trimestral</option><option>Al vencimiento</option></select></div>
           <div class="fg"><label class="flabel">Tipo de amortización</label>

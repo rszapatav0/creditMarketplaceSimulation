@@ -276,3 +276,5 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .op-v{font-size:13px;font-weight:500;color:var(--blue)}
 .o-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:.5rem}
 .offer-sent-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:1.5rem;padding:2rem;text-align:center}
+#financial-flex-fields{display: contents;margin-bottom:20px}
+.financial-spacer{height:12px;}

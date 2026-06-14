@@ -118,7 +118,8 @@ function toggleEsgAll(){
 function calcTotal(){
   let t=0;
   if(tierOn)t+=precioFundamentales;
-  Object.values(esgSel).forEach(v=>{if(v)t+=80;});
+  ESG.forEach(e => {
+    if(esgSel[e.id]) t += e.cost;});
   return t;
 }
 
@@ -128,8 +129,8 @@ function renderCart(){
   if(tierOn||esgKeys.length>0){
     if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${precioFundamentales}</span></div>`;
     if(esgKeys.length>0){
-      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span><span class="cl-v">L. ${esgKeys.length*80}</span></div>`;
-      esgKeys.forEach(k=>{const e=ESG.find(x=>x.id===k);h+=`<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L.80</span></div>`;});
+      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span></div>`;
+      esgKeys.forEach(k=>{const e=ESG.find(x=>x.id===k);h+=`<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L. ${e.cost}</span></div>`;});
     }
   } else {
     h=`<div style="font-size:12px;color:var(--text3);padding:8px 0">Active los ítems que desea adquirir.</div>`;
@@ -177,6 +178,10 @@ function renderProducersSection(l){
   }
 }
 
+function renderFinancialSection(l){
+  const sec = document.getElementById('financial-flex-fields');
+  sec.style.display = l.paqueteFlexible ? 'none' : '';
+}
 
 // ── Per-producer ESG (uses embedded data) ──────────────────────────────────
 function prodEsgMetrics(p){
@@ -477,6 +482,7 @@ function goOffer(){
     el.removeEventListener(ev,updatePreview);el.addEventListener(ev,updatePreview);
   });
   renderProducersSection(l);
+  renderFinancialSection(l);
   updatePreview();topInfoAccess();
   show('s-offer');
 }
