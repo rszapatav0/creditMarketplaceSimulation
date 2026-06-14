@@ -61,7 +61,9 @@ function dismissLoan(id, event){
 
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
-  getLoans().filter(l=>!dismissedLoans.has(l.id)).forEach(l=>{
+  getLoans().filter(l=>!dismissedLoans.has(l.id))
+  .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
+  .forEach(l=>{
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
     const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio ?? 0}</div></div>`;

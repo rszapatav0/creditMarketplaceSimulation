@@ -149,7 +149,7 @@ const LOANS_BANCO=[
       {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
      ]},
    ]},
-  {id:'b3',tipo:'banco',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
+  {id:'b3',tipo:'banco',fechaDesembolso:'2024-11-06',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',mercados:'Alemania, Países Bajos',
@@ -192,7 +192,7 @@ const LOANS_COOP=[
       {id:'e2', risk:'low', estimationDate:'2024-11-01'},
       {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
     ]}]},
-  {id:'c2',tipo:'coop',fechaDesembolso:'2024-11-01',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',
+  {id:'c2',tipo:'coop',fechaDesembolso:'2024-11-04',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
     contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
@@ -209,7 +209,7 @@ const LOANS_COOP=[
 ];
 
 const LOANS_GRUPO=[
-  {id:'g1',tipo:'grupo',fechaDesembolso:'2024-11-01',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
+  {id:'g1',tipo:'grupo',fechaDesembolso:'2024-11-03',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     contrato:null,smartContract:true,volContrato:null,
@@ -237,7 +237,7 @@ const LOANS_GRUPO=[
       {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
      ]},
    ]},
-  {id:'g2',tipo:'grupo',fechaDesembolso:'2024-11-01',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
+  {id:'g2',tipo:'grupo',fechaDesembolso:'2024-11-05',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     contrato:null,smartContract:true,volContrato:null,
