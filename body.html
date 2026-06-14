@@ -11,16 +11,9 @@
 
 <!-- S1: LOGIN -->
 <div id="s-login" class="screen active">
-  <div class="brand-tag">DIG-IN · Honduras</div>
-  <div class="brand-h1">Mercado de <b>Crédito Agrícola</b></div>
-  <div class="brand-sub">Infraestructura Digital de Inclusión Financiera - Sector Café</div>
-  <div class="subs-banner">
-    <div class="subs-icon">ℹ</div>
-    <div class="subs-text">
-      <strong>Suscripción base incluida — L. 500/mes</strong>
-      Su membresía activa le da acceso al listado completo de créditos. El detalle de cada crédito y las métricas ESG se adquieren por separado según lo que necesite consultar.
-    </div>
-  </div>
+  <div class="brand-tag">Confianza SA-FGR</div>
+  <div class="brand-h1"><b>Marketplace de Garantías</b> · Central de <b>C</b>rédito <b>V</b>erde</div>
+  <div class="brand-sub">Infraestructura Digital de Inclusión Financiera · Sector Café</div>
   <div class="login-card">
     <div><label class="flabel">Usuario</label><input class="finput" id="inp-u" type="text" placeholder="usuario@institucion.hn" autocomplete="off"></div>
     <div><label class="flabel">Contraseña</label><input class="finput" id="inp-p" type="password" placeholder="••••••••"></div>
@@ -37,13 +30,13 @@
 
 <!-- S2: MARKETPLACE -->
 <div id="s-market" class="screen">
-  <div class="topbar"><div class="tb-logo">DIG-IN · Honduras</div><div class="tb-right"><div class="tb-user" id="tb-u"></div><div class="rpill" id="tb-r"></div><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
-  <div class="pi"><div class="pg-label">Oportunidades disponibles</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
+  <div class="topbar"><div class="tb-logo">Confianza SA-FGR</div><div class="tb-right"><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
+  <div class="pi"><div class="pg-label">Consulta de preaprobaciones</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
 </div>
 
 <!-- S3: CHECKOUT -->
 <div id="s-detail" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u2"></div><div class="rpill" id="tb-r2"></div><div class="wallet-display"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="wallet-display"></div></div></div>
   <div style="max-width:1020px;margin:0 auto">
     <div class="dlayout">
       <div class="dmain" id="dmain"></div>
@@ -53,7 +46,7 @@
         <hr class="cdiv">
         <div class="ctotal"><div class="ct-l">Total</div><div class="ct-v"><small>L. </small><span id="cart-num">0</span></div></div>
         <button class="btn-p" style="width:100%" id="cart-cta" onclick="confirmAccess()">Confirmar acceso →</button>
-        <div class="cart-note">La suscripción base (L. 500/mes) ya está activa en su cuenta.<br>Este cobro es por el acceso específico a este crédito.</div>
+        <div class="cart-note">Al confirmar, accederá a la información seleccionada para este crédito específico.</div>
         <div class="cart-info" id="cart-info" style="display:none"></div>
       </div>
     </div>

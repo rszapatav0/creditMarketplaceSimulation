@@ -7,6 +7,7 @@ const USERS=[
   {email:'3',pass:'3',role:'imf',name:'FISE — Oficial de Cartera'},
 ];
 
+const precioFundamentales=100;
 
 // ── Metrics and tools ──────────────────────────────────────────────────────
 const ESG=[
@@ -96,7 +97,59 @@ const CROPPIE_CONFIG = {
 
 // ── Credits list ──────────────────────────────────────────────────────
 const LOANS_BANCO=[
-  {id:'b1',tipo:'banco',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
+  {id:'b1',tipo:'banco',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
+    acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
+    plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',mercados:'Alemania, Países Bajos',
+   prod:[
+    {cod:'HN-0041',nombre:'Martínez Flores, J.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+      department:'Santa Bárbara', municipality:'San Nicolás', aldea:'Las Marías', areaProd:'2.4 mz', geo:'14.21°N 86.83°W',carnet:'IHCAFE-2021-0041',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+      propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'42 qq / 3 ciclos',histIngresos:'1000 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+     esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'unsuitable', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+    {cod:'HN-0052',nombre:'López Aguilar, R.',monto:'L. 22,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+      department:'Lempira', municipality:'Lempira', aldea:'Las Marías', areaProd:'1.3 mz', geo:'14.18°N 86.91°W',carnet:'IHCAFE-2020-0052',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+      propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'55 qq / 4 ciclos',histIngresos:'2000 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+     esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'medium', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'high', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+   ]},
+  {id:'b2',tipo:'banco',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
+    acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
+    plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',mercados:'Alemania, Países Bajos',
+   prod:[
+    {cod:'HN-0041',nombre:'Martínez Flores, J.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+      department:'Santa Bárbara', municipality:'San Nicolás', aldea:'Las Marías', areaProd:'2.4 mz', geo:'14.21°N 86.83°W',carnet:'IHCAFE-2021-0041',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+      propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'42 qq / 3 ciclos',histIngresos:'1000 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+     esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'unsuitable', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+    {cod:'HN-0052',nombre:'López Aguilar, R.',monto:'L. 22,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+      department:'Lempira', municipality:'Lempira', aldea:'Las Marías', areaProd:'1.3 mz', geo:'14.18°N 86.91°W',carnet:'IHCAFE-2020-0052',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+      propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'55 qq / 4 ciclos',histIngresos:'2000 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+     esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'medium', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'high', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+   ]},
+  {id:'b3',tipo:'banco',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',mercados:'Alemania, Países Bajos',
@@ -125,7 +178,21 @@ const LOANS_BANCO=[
 ];
 
 const LOANS_COOP=[
-  {id:'c1',tipo:'coop',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',
+  {id:'c1',tipo:'coop',fechaDesembolso:'2024-11-01',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',
+    acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
+    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
+   prod:[{cod:'OC-0033',nombre:'Rosales Aguilar, R.',monto:'L. 45,000',plazo:'5 meses',destino:'Cosecha + insumos',aval:'A',
+    department:'Santa Bárbara', municipality:'Arada', aldea:'La Esperanza', areaProd:'3.1 mz', geo:'14.41°N 89.22°W',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+    propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'38 qq / 3 ciclos',histIngresos:'1300 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+    esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'low', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+    ]}]},
+  {id:'c2',tipo:'coop',fechaDesembolso:'2024-11-01',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
     contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
@@ -142,7 +209,35 @@ const LOANS_COOP=[
 ];
 
 const LOANS_GRUPO=[
-  {id:'g1',tipo:'grupo',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
+  {id:'g1',tipo:'grupo',fechaDesembolso:'2024-11-01',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
+    acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
+    contrato:null,smartContract:true,volContrato:null,
+   prod:[
+    {cod:'EP-0101',nombre:'García Méndez, L.',monto:'L. 35,000',plazo:'5 meses',destino:'Cosecha',aval:'A',
+      department:'Yoro', municipality:'Yoro', aldea:'San Rafael', areaProd:'0.5 mz', geo:'14.20°N 86.85°W',carnet:'IHCAFE-2021-0101',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'40 qq / 3 ciclos',histIngresos:'1500 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'3200 HNL',
+     parcela:'2.1 ha · Finca El Roble',volContrato:'40 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1', aptitudClimActual:'uncertain', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'low', sequia: 'high', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+    {cod:'EP-0102',nombre:'Pineda López, M.',monto:'L. 30,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+      department:'Yoro', municipality:'Yorito', aldea:'San Carlos', areaProd:'0.4 mz', geo:'14.18°N 86.88°W',carnet:'IHCAFE-2020-0102',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'36 qq / 4 ciclos',histIngresos:'1200 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+     parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1', aptitudClimActual:'limitations', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'high', sequia: 'high', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+   ]},
+  {id:'g2',tipo:'grupo',fechaDesembolso:'2024-11-01',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     contrato:null,smartContract:true,volContrato:null,

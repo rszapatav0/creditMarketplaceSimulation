@@ -90,7 +90,7 @@ function renderDetail(){
   const isG=L.tipo==='grupo';
   let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region}`;
   h+=`</div></div>`;
-  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
+  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${precioFundamentales}</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
   const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="esg-cost">+L.${e.cost}</span></div>`).join('');
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
@@ -117,7 +117,7 @@ function toggleEsgAll(){
 
 function calcTotal(){
   let t=0;
-  if(tierOn)t+=L.precio;
+  if(tierOn)t+=precioFundamentales;
   Object.values(esgSel).forEach(v=>{if(v)t+=80;});
   return t;
 }
@@ -126,7 +126,7 @@ function renderCart(){
   const esgKeys=Object.keys(esgSel).filter(k=>esgSel[k]);
   let h='';
   if(tierOn||esgKeys.length>0){
-    if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${L.precio}</span></div>`;
+    if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${precioFundamentales}</span></div>`;
     if(esgKeys.length>0){
       h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span><span class="cl-v">L. ${esgKeys.length*80}</span></div>`;
       esgKeys.forEach(k=>{const e=ESG.find(x=>x.id===k);h+=`<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L.80</span></div>`;});
@@ -141,8 +141,6 @@ function renderCart(){
   const ci=document.getElementById('cart-info');
   cta.disabled=total===0;
   cta.textContent=total===0?'Seleccione al menos un ítem':'Confirmar acceso →';
-  if(total>0){ci.style.display='block';ci.textContent='Al confirmar, accederá a la información seleccionada para este crédito específico. La suscripción base (L. 500/mes) cubre el acceso al listado y está activa en su cuenta.';}
-  else{ci.style.display='none';}
 }
 
 function confirmAccess(){
@@ -153,7 +151,6 @@ function confirmAccess(){
   purchases[L.id]=confirmed;
   updateBalance(total);
   document.getElementById('scard').innerHTML=`
-    <div class="srow"><span class="sr-l">Institución</span><span class="sr-v">${U.name}</span></div>
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
     <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
@@ -427,7 +424,7 @@ function renderAccess(){
       </div></div></div>`;}
 
     if(l.prod && l.prod.length>0){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver mapa y herramientas de análisis climático individuales</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver la información específica de cada productor</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
