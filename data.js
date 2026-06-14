@@ -17,7 +17,7 @@ const ESG=[
 
 const ACLIMATAR_CONFIG = {
   n:   'aCLIMAtar',
-  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Fundación Mundial del Cacao (WCF), Rikolto, Fundación Hanns R. Neumann Stiftung',
+  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Fundación Mundial del Cacao (WCF), Rikolto, Fundación Hanns R. Neumann Stiftung.',
   aptitudClimActualClass: {
     low:'low',medium:'medium',high:'high',uncertain:'uncertain',limitations:'limitations',unsuitable:'unsuitable',unknown:'unknown'},
   aptitudClimActualLabel: {
@@ -76,7 +76,7 @@ const ACLIMATAR_CONFIG = {
 
 const WHISP_CONFIG = {
   n:   'Whisp - Open Foris',
-  src: 'Organización de las Naciones Unidas para la Alimentación y la Agricultura - 2025 OpenForis',
+  src: 'Organización de las Naciones Unidas para la Alimentación y la Agricultura - 2025 OpenForis.',
   riskClass: {
     low:'low',high:'high',uncertain:'uncertain',unknown:'unknown'},
   riskLabel: {
@@ -90,16 +90,16 @@ const WHISP_CONFIG = {
 
 const CROPPIE_CONFIG = {
   n:   'Croppie',
-  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Tecnicafé',
+  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Tecnicafé.',
 };
 
 
 // ── Credits list ──────────────────────────────────────────────────────
 const LOANS_BANCO=[
-  {id:'b1',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',tipo:'banco',paqueteFlexible: true,
-   acopio:'L. 2,400,000',productores:'L. 680,000',nProd:38,plazo:'6 meses',precio:320,smartContract:true,
-   anios:12,volExport:'1,840 qq',mercados:'Alemania, Países Bajos',
-   garantias:'Garantía prendaria sobre café en bodega · Aval solidario · Carta de compromiso Supremo Hamburg GmbH',
+  {id:'b1',tipo:'banco',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
+    acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
+    plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',mercados:'Alemania, Países Bajos',
    prod:[
     {cod:'HN-0041',nombre:'Martínez Flores, J.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',aval:'A',
       department:'Santa Bárbara', municipality:'San Nicolás', aldea:'Las Marías', areaProd:'2.4 mz', geo:'14.21°N 86.83°W',carnet:'IHCAFE-2021-0041',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
@@ -125,16 +125,15 @@ const LOANS_BANCO=[
 ];
 
 const LOANS_COOP=[
-  {id:'c1',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',tipo:'coop',paqueteFlexible: false,
-   acopio:null,productores:'L. 45,000',nProd:1,plazo:'5 meses',precio:270,smartContract:true,
-   parcela:'2.4 ha · Finca El Aguacate',contrato:'Supremo Hamburg GmbH',volContrato:'38 qq',
-   geo:'14.41°N 89.22°W',eu:'Sí',aval:'A',hist:'3 ciclos · 34 qq promedio',
-   carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+  {id:'c1',tipo:'coop',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',
+    acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
+    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
    prod:[{cod:'OC-0033',nombre:'Rosales Aguilar, R.',monto:'L. 45,000',plazo:'5 meses',destino:'Cosecha + insumos',aval:'A',
     department:'Santa Bárbara', municipality:'Arada', aldea:'La Esperanza', areaProd:'3.1 mz', geo:'14.41°N 89.22°W',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'38 qq / 3 ciclos',histIngresos:'1300 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
     esg:[
-      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'uncertain', sequia: 'limitations', estimationDate:'2024-11-01',
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'low', estimationDate:'2024-11-01',
         practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
         practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
       {id:'e2', risk:'low', estimationDate:'2024-11-01'},
@@ -143,11 +142,10 @@ const LOANS_COOP=[
 ];
 
 const LOANS_GRUPO=[
-  {id:'g1',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',tipo:'grupo',paqueteFlexible:true,
-   acopio:null,productores:'L. 105,000',nProd:3,plazo:'5.3 meses',precio:285,smartContract:true,
-   destinos:'Cosecha, insumos, infraestructura',variedades:'Catuaí rojo, Lempira, IHCAFE-90',
-   volumenTotal:'111 qq',promedioHist:'37 qq / 3 ciclos',
-   organizacion:'Asociación local no formalizada',asistenciaTecnica:'IHCAFE regional',accesoMercado:'Intermediario local + exportadora',
+  {id:'g1',tipo:'grupo',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
+    acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
+    contrato:null,smartContract:true,volContrato:null,
    prod:[
     {cod:'EP-0101',nombre:'García Méndez, L.',monto:'L. 35,000',plazo:'5 meses',destino:'Cosecha',aval:'A',
       department:'Yoro', municipality:'Yoro', aldea:'San Rafael', areaProd:'0.5 mz', geo:'14.20°N 86.85°W',carnet:'IHCAFE-2021-0101',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',

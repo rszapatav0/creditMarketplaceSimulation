@@ -68,13 +68,12 @@ function renderLoans(){
     const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
     const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
     const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-    const smartB=l.smartContract?`<span class="badge smart">Smart Contract</span>`:'';
     const badgeClass=isG?'grupo':l.tipo;
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
       <div>
-        <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span>${smartB}<span class="loan-name">${l.name}</span></div>
-        <div class="loan-region">${l.region} · Plazo: ${l.plazo}</div>
+        <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span><span class="loan-name">${l.name}</span></div>
+        <div class="loan-region">${l.region}</div>
         <div class="loan-meta">${mA}${mP}${mX}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
       </div>
       <div class="larr">›</div>
@@ -89,7 +88,7 @@ function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.
 function renderDetail(){
   const isB=L.tipo==='banco';
   const isG=L.tipo==='grupo';
-  let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region} · Plazo: ${L.plazo}`;
+  let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region}`;
   h+=`</div></div>`;
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
@@ -343,13 +342,14 @@ function fillProd(cod, includeEsg=true){
 const profileHtml = `
   <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información general</span></div>
   <div class="px-grid2">
-  <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '—'}</div>
-  <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '—'}</div>
-  <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '—'}</div>
-  <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '—'}</div>
-  <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '—'}</div>
-  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '—'}</div></div>
-  </div>`;
+  <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '-'}</div>
+  <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '-'}</div>
+  <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '-'}</div>
+  <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '-'}</div>
+  <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '-'}</div>
+  <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza}</div>
+  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
+  </div></div>`;
 
 const profileHtmlFinca = `
   <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información de la finca</span></div>
@@ -361,7 +361,8 @@ const profileHtmlFinca = `
   <div class="px-grid2-label">Cuenta con documentos de propiedad</div><div class="px-grid2-value">${p.propertyDocument || '—'}</div>
   <div class="px-grid2-label">Tipo de tenencia</div><div class="px-grid2-value">${p.tenancyTipe || '—'}</div>
   <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
-  <div class="px-grid2-label">Variedades de café</div><div class="px-grid2-value">${p.variedad || '—'}</div></div>
+  <div class="px-grid2-label">Variedades de café</div><div class="px-grid2-value">${p.variedad || '—'}</div>
+  </div>
   <div class="px-farm-map">${buildMap(p)}</div>
   </div>`;
 
@@ -371,8 +372,8 @@ const profileHtmlProductiva = `
   <div class="px-grid2-label">Promedio histórico de acopio</div><div class="px-grid2-value">${p.histAcopio || '—'}</div>
   <div class="px-grid2-label">Promedio histórico de ingresos</div><div class="px-grid2-value">${p.histIngresos || '—'}</div>
   <div class="px-grid2-label">Otros ingresos</div><div class="px-grid2-value">${p.otherIncome || '—'}</div>
-  <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div></div>
-  </div>`;
+  <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div>
+  </div></div>`;
   
 cell.innerHTML=`<div class="px-wrap">
   <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor</div></div>
@@ -388,7 +389,7 @@ function renderAccess(){
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
   const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region} · Plazo: ${l.plazo}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
 
   const hasFundamentals = tierOn;
@@ -396,59 +397,51 @@ function renderAccess(){
   const hasAccess = hasFundamentals || hasEsg;
 
   if(hasFundamentals){
-    if(isG){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div><div class="sc-sub">Perfil colectivo · ${l.nProd} productores vinculados</div></div></div>
+    h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div></div></div>
       <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Monto total solicitado</div><div class="ic-v mv-g">${l.productores}</div><div class="ic-src">Solicitud agregada DIG-IN</div></div>
-        <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v">${l.nProd}</div><div class="ic-src">Registro del grupo</div></div>
-        <div class="ic"><div class="ic-l">Plazo referencia</div><div class="ic-v">${l.plazo}</div><div class="ic-src">Promedio ponderado del grupo</div></div>
-        ${l.volumenTotal?`<div class="ic"><div class="ic-l">Volumen total estimado</div><div class="ic-v">${l.volumenTotal}</div><div class="ic-src">Declaración del grupo / IHCAFE</div></div>`:''}
-        ${l.variedades?`<div class="ic"><div class="ic-l">Variedades cultivadas</div><div class="ic-v" style="font-size:12px">${l.variedades}</div><div class="ic-src">Fichas técnicas IHCAFE</div></div>`:''}
-        ${l.destinos?`<div class="ic"><div class="ic-l">Destinos del crédito</div><div class="ic-v" style="font-size:12px">${l.destinos}</div><div class="ic-src">Solicitud del grupo</div></div>`:''}
+        <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
+        <div class="ic"><div class="ic-l">Destino de los créditos</div><div class="ic-v">${l.destinos}</div></div>
+        <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
+        <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
+        <div class="ic"><div class="ic-l">Área productiva de café, total del grupo de productores</div><div class="ic-v">${l.areaProd} Manzanas</div></div>
+        <div class="ic"><div class="ic-l">Volumen anual comercializado, total del grupo de productores</div><div class="ic-v">${l.volumenTotal} quintales de café verde</div></div>
       </div></div></div>`;
-    } else if(isB){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador</div><div class="sc-sub">Perfil operativo y garantías del crédito de acopio</div></div></div>
+    if(isB){
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador - ${l.name}</div></div></div>
       <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div><div class="ic-src">Registro Mercantil Honduras</div></div>
-        <div class="ic"><div class="ic-l">Volumen histórico exportado</div><div class="ic-v">${l.volExport}</div><div class="ic-src">TraceFoodChain / IHCAFE 2024</div></div>
-        <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div><div class="ic-src">Certificados de exportación SAG</div></div>
-        <div class="ic"><div class="ic-l">Garantías del crédito</div><div class="ic-v" style="font-size:12px">${l.garantias}</div><div class="ic-src">Declaración del intermediario</div></div>
+      <div class="ic"><div class="ic-l">Monto crédito de acopio</div><div class="ic-v mv-g">L. ${l.acopio}</div></div>
+      <div class="ic"><div class="ic-l">Plazo crédito de acopio</div><div class="ic-v">${l.plazoAcopio} meses</div></div>
+      <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div></div>
+        <div class="ic"><div class="ic-l">Volumen histórico comercializado, promedio anual</div><div class="ic-v">${l.volExport} quintales de café verde</div></div>
+        <div class="ic"><div class="ic-l">Contrato de exportación</div><div class="ic-v">${l.contrato}</div></div>
+        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+        <div class="ic"><div class="ic-l">Volumen contrato de exportación</div><div class="ic-v">${l.volContrato} quintales de café verde</div></div>
+        <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div></div>
       </div></div></div>`;
     } else {
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-o">◈</div><div><div class="sc-title">Perfil del productor y contrato inteligente</div><div class="sc-sub">Datos productivos, trazabilidad y respaldo contractual</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información de comercialización</div></div></div>
       <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Parcela</div><div class="ic-v">${l.parcela}</div><div class="ic-src">Georreferenciación IHCAFE / TraceFoodChain</div></div>
-        <div class="ic"><div class="ic-l">Carnet IHCAFE</div><div class="ic-v">${l.carnet}</div><div class="ic-src">Sistema carnetización IHCAFE 2024</div></div>
-        <div class="ic"><div class="ic-l">Variedad cultivada</div><div class="ic-v">${l.variedad}</div><div class="ic-src">Ficha técnica IHCAFE</div></div>
-        <div class="ic"><div class="ic-l">Historial con la cooperativa</div><div class="ic-v">${l.hist}</div><div class="ic-src">Registros de acopio TraceFoodChain</div></div>
-        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.contrato}</span></div><div class="ic-src">Blockchain DIG-IN / Permarobotics</div></div>
-        <div class="ic"><div class="ic-l">Volumen comprometido</div><div class="ic-v">${l.volContrato}</div><div class="ic-src">Smart contract verificado en cadena</div></div>
-        <div class="ic"><div class="ic-l">Geolocalización</div><div class="ic-v" style="font-family:var(--mono);font-size:12px">${l.geo}</div><div class="ic-src">App CartoCafé / IHCAFE</div></div>
-        <div class="ic"><div class="ic-l">Verificación EUDR</div><div class="ic-v"><span class="tag ${l.eu==='Sí'?'eu':'pend'}">${l.eu==='Sí'?'✓ Verificado (deforestación)':'⏳ En revisión'}</span></div><div class="ic-src">EU Deforestation Regulation Portal</div></div>
-        <div class="ic"><div class="ic-l">Central de riesgos</div><div class="ic-v" style="font-size:12px">${l.riesgo}</div><div class="ic-src">CNBS Honduras / Buró de Crédito</div></div>
-        <div class="ic"><div class="ic-l">Aval Confianza SA-FGR</div><div class="ic-v"><span class="tag ${l.confianza==='Aval otorgado'?'yes':'pend'}">${l.confianza}</span></div><div class="ic-src">Confianza SA-FGR · FDG Honduras</div></div>
-      </div></div></div>`;
-    }
-
-    const riesgoTag=p=>`<span class="tag ${p.riesgo.includes('negativo')?'eu':p.riesgo.includes('mora antigua')?'pend':'pend'}">${p.riesgo.includes('Sin reporte negativo')?'✓ Limpio':p.riesgo}</span>`;
-    const confTag=p=>`<span class="tag ${p.confianza==='Aval otorgado'?'yes':p.confianza.includes('condición')?'pend':'pend'}">${p.confianza}</span>`;
+        <div class="ic"><div class="ic-l">Contrato de comercialización</div><div class="ic-v">${l.contrato || '-'}</div></div>
+        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+        <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
+      </div></div></div>`;}
 
     if(l.prod && l.prod.length>0){
       h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver mapa y herramientas de análisis climático individuales</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
-            <th style="width:15%">Código</th><th style="width:28%">Productor</th>
-            <th style="width:12%">Monto</th><th style="width:10%">Plazo</th>
-            <th style="width:28%">Destino</th><th style="width:7%">Aval</th>
+            <th style="width:15%">Código</th><th style="width:25%">Productor</th>
+            <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
+            <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
           </tr>
           <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar los fundamentales de la finca y las herramientas de análisis climático individuales del productor</td></tr>
           </thead>
           <tbody>${l.prod.map(p=>`
             <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
               <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
-              <td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td>
-              <td>${p.destino}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+              <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
+              <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
             </tr>
             <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
           </tbody>
@@ -469,7 +462,7 @@ function topInfoAccess(){
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
   const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region} · Plazo: ${l.plazo}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   
   document.getElementById('top-info').innerHTML = h;
 }
