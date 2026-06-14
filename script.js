@@ -334,7 +334,7 @@ function fillProd(cod, includeEsg=true){
         <div class="px-card-src">${m.src}</div></div>`;}
       }).join('');
     esgHtml = `<div class="px-esg">
-      <div class="px-esg-hdr">Herramientas de análisis climático — ${p.nombre}</div>
+      <div class="px-esg-hdr">Herramientas de análisis climático - ${p.nombre}</div>
       ${cards}
     </div>`;
   }
@@ -380,7 +380,7 @@ const profileHtmlProductiva = `
   </div></div>`;
   
 cell.innerHTML=`<div class="px-wrap">
-  <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor</div></div>
+  <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor - ${p.nombre}</div></div>
     ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${esgHtml}</div></div>`;
 }
 
@@ -431,7 +431,7 @@ function renderAccess(){
       </div></div></div>`;}
 
     if(l.prod && l.prod.length>0){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver la información específica de cada productor</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title"Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
@@ -439,7 +439,7 @@ function renderAccess(){
             <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
             <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
           </tr>
-          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar los fundamentales de la finca y las herramientas de análisis climático individuales del productor</td></tr>
+          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
           </thead>
           <tbody>${l.prod.map(p=>`
             <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
@@ -541,7 +541,7 @@ function updatePreview(){
 function submitOffer(){
   const v=id=>{const el=document.getElementById(id);return el?el.value:'';};
   const monto=parseFloat(v('of-monto'))||0,tasa=parseFloat(v('of-tasa'))||0,plazo=v('of-plazo');
-  if(!monto||!tasa||!plazo){alert('Complete al menos el monto, la tasa y el plazo para enviar la oferta.');return;}
+  /*if(!monto||!tasa||!plazo){alert('Complete al menos el monto, la tasa y el plazo para enviar la oferta.');return;}*/
   const l=confirmed.loan;const sym=v('of-moneda').startsWith('L')?'L.':'$';
   document.getElementById('offer-sent-card').innerHTML=`
     <div class="srow"><span class="sr-l">Destinatario</span><span class="sr-v">${l.name}</span></div>

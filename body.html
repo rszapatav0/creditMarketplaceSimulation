@@ -67,13 +67,13 @@
 
 <!-- S5: ACCESS -->
 <div id="s-access" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u3"></div><div class="rpill" id="tb-r3"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"></div></div>
   <div class="ai" id="access-inner"></div>
 </div>
 
 <!-- S6: OFFER -->
 <div id="s-offer" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="show('s-access')">← Volver a la información</button><div class="tb-right"><div class="tb-user" id="tb-u4"></div><div class="rpill" id="tb-r4"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="show('s-access')">← Volver a la información</button><div class="tb-right"></div></div>
 <div class="oi">
   <div class="o-hdr">
     <div class="o-title">Estructurar oferta de crédito</div>
@@ -87,8 +87,7 @@
         <div id="financial-flex-fields">
           <div class="fg"><label class="flabel">Monto ofertado</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
           <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1" placeholder="ej. 14.5"></div>
-          <div class="fg"><label class="flabel">Plazo (meses)</label>
-            <select class="fsel" id="of-plazo"><option value="">Seleccionar...</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
+          <div class="fg"><label class="flabel">Plazo (meses)</label><input class="finp-s" id="of-plazo" type="number" step="1" placeholder="ej. 5"></div>
         </div></div>
         <div class="financial-spacer"></div>
       <div class="frow">
@@ -134,9 +133,9 @@
             <tr>
               <th>Código</th>
               <th>Nombre</th>
-              <th>Monto solicitado (L.)</th>
+              <th>Monto solicitado</th>
               <th>Plazo solicitado (meses)</th>
-              <th>Monto ofertado (L.)</th>
+              <th>Monto ofertado</th>
               <th>Tasa de interés anual (%)</th>
               <th>Plazo ofertado (meses)</th>
             </tr>
@@ -155,11 +154,11 @@
 
 <!-- S7: OFFER SENT -->
 <div id="s-offer-sent" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u5"></div><div class="rpill" id="tb-r5"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"></div></div>
   <div class="offer-sent-wrap">
     <div class="sicon blue">✉</div>
-    <div class="stitle">Oferta enviada al intermediario</div>
-    <div class="ssub">La propuesta ha sido transmitida a través del sistema DIG-IN. El encargado recibirá una notificación y podrá evaluar y responder la oferta desde su portal.</div>
+    <div class="stitle">Oferta enviada</div>
+    <div class="ssub">La propuesta ha sido transmitida a través del sistema DIG-IN. La persona encargada recibirá una notificación y podrá evaluar y responder la oferta desde su portal.</div>
     <div class="scard" id="offer-sent-card"></div>
     <div class="btn-row">
       <button class="btn-p" onclick="goMkt()">Explorar más créditos</button>
