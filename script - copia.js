@@ -102,8 +102,8 @@ function renderDetail(){
   let h=`<div class="dhdr"><div class="dname">${L.name}</div>`;
   h+=`</div></div>`;
   if(L.testValue==='no'){
-    const fundOn=L.fundamentales==='yes';
-    const fundPriceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="tier-price">L. ${L.priceFundamentales}</span>`:'';
+    const fundOn=L.fundamentales===true;
+    const fundPriceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="tier-price"></span>`:'';
     h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span>${fundPriceHtml}</div><button class="toggle${fundOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${fundOn?'1':'.45'}"></button></div></div>`;
 
     const toolsDef=[
@@ -113,13 +113,13 @@ function renderDetail(){
     ];
     let nToolsOn=0;
     const esgItems=toolsDef.map(t=>{
-      const on=L[t.key]==='yes';
+      const on=L[t.key]===true;
       if(on)nToolsOn++;
       return `<div class="esg-item${on?' sel':''}" style="pointer-events:none;cursor:default;opacity:${on?'1':'.45'}"><div class="esg-check">${on?'✓':''}</div><span class="esg-lbl">${t.label}</span></div>`;
     }).join('');
     const toolsOn=nToolsOn>0;
     const toolsPriceHtml=(L.priceTools!==null&&L.priceTools!==undefined)?`<span class="tier-price">L. ${L.priceTools}</span>`:'';
-    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span>${toolsPriceHtml}</div><span class="tier-count">${nToolsOn} seleccionadas</span><button class="toggle${toolsOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${toolsOn?'1':'.45'}"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
+    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nToolsOn} seleccionadas</span><button class="toggle${toolsOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${toolsOn?'1':'.45'}"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
 
     document.getElementById('dmain').innerHTML=h;
     renderCartFixed(fundOn,toolsOn);
@@ -141,12 +141,12 @@ function renderCartFixed(fundOn,toolsOn){
   if(fundOn||toolsOn){
     if(fundOn){
       const priceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="cl-v">L. ${L.priceFundamentales}</span>`:'';
-      h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span>${priceHtml}</div>`;
+      h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span></div>`;
       total+=fp;
     }
     if(toolsOn){
       const priceHtml=(L.priceTools!==null&&L.priceTools!==undefined)?`<span class="cl-v">+L. ${L.priceTools}</span>`:'';
-      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span>${priceHtml}</div>`;
+      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span></div>`;
       total+=tp;
     }
   } else {
@@ -211,12 +211,12 @@ function renderCart(){
 function confirmAccess(){
   let esgKeys, total, tierOnFinal;
   if(L.testValue==='no'){
-    const fundOn=L.fundamentales==='yes';
-    const toolsOn=(L.aclimatar==='yes')||(L.whisp==='yes')||(L.croppie==='yes');
+    const fundOn=L.fundamentales===true;
+    const toolsOn=(L.aclimatar===true)||(L.whisp===true)||(L.croppie===true);
     const fp=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?Number(String(L.priceFundamentales).replace(/,/g,'')):0;
     const tp=(L.priceTools!==null&&L.priceTools!==undefined)?Number(String(L.priceTools).replace(/,/g,'')):0;
     total=(fundOn?fp:0)+(toolsOn?tp:0);
-    esgKeys=['aclimatar','whisp','croppie'].filter(k=>L[k]==='yes');
+    esgKeys=['aclimatar','whisp','croppie'].filter(k=>L[k]===true);
     tierOnFinal=fundOn;
   } else {
     esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
@@ -328,6 +328,7 @@ function toggleProd(cod){
 
 function findProd(cod){
   for(const l of LOANS_BANCO_TEST.concat(LOANS_BANCO).concat(LOANS_COOP_TEST).concat(LOANS_COOP).concat(LOANS_GRUPO_TEST).concat(LOANS_GRUPO)){
+    if(!l.prod)continue;
     const p=l.prod.find(x=>x.cod===cod);
     if(p)return p;
   }
@@ -514,27 +515,30 @@ function renderAccess(){
       </div></div></div>`;}
   }
 
-  if(hasAccess && l.prod && l.prod.length>0){
-    h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
-    <div class="sc-body" style="padding:0;overflow-x:auto">
-      <table class="ptable">
-        <thead><tr>
-          <th style="width:15%">Código</th><th style="width:25%">Productor</th>
-          <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
-          <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
-        </tr>
-        <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
-        </thead>
-        <tbody>${l.prod.map(p=>`
-          <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
-            <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
-            <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
-            <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+  // Tabla de productores vinculados: para testValue='yes' debe poder renderizarse
+  // si hay fundamentales y/o herramientas seleccionadas (no solo cuando hay fundamentales).
+  const showProdTable = l.testValue==='yes' ? hasAccess : (hasFundamentals && hasAccess);
+  if(showProdTable && l.prod && l.prod.length>0){
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
+      <div class="sc-body" style="padding:0;overflow-x:auto">
+        <table class="ptable">
+          <thead><tr>
+            <th style="width:15%">Código</th><th style="width:25%">Productor</th>
+            <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
+            <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
           </tr>
-          <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
-        </tbody>
-      </table>
-    </div></div>`;
+          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
+          </thead>
+          <tbody>${l.prod.map(p=>`
+            <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
+              <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
+              <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
+              <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+            </tr>
+            <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div></div>`;
   }
 
   document.getElementById('access-inner').innerHTML=h;

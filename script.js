@@ -328,6 +328,7 @@ function toggleProd(cod){
 
 function findProd(cod){
   for(const l of LOANS_BANCO_TEST.concat(LOANS_BANCO).concat(LOANS_COOP_TEST).concat(LOANS_COOP).concat(LOANS_GRUPO_TEST).concat(LOANS_GRUPO)){
+    if(!l.prod)continue;
     const p=l.prod.find(x=>x.cod===cod);
     if(p)return p;
   }
@@ -512,8 +513,12 @@ function renderAccess(){
         <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
         <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
       </div></div></div>`;}
+    }
 
-  if(hasAccess && l.prod && l.prod.length>0){
+  // Tabla de productores vinculados: para testValue='yes' debe poder renderizarse
+  // si hay fundamentales y/o herramientas seleccionadas (no solo cuando hay fundamentales).
+  const showProdTable = l.testValue==='yes' ? hasAccess : (hasFundamentals && hasAccess);
+  if(showProdTable && l.prod && l.prod.length>0){
       h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
@@ -535,7 +540,6 @@ function renderAccess(){
         </table>
       </div></div>`;
     }
-  }
 
   document.getElementById('access-inner').innerHTML=h;
 }
