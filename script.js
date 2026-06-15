@@ -1,7 +1,7 @@
 let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={},activeLoanTab='yes';
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
-function getLoans(){return [...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO];}
+function getLoans(){return [...LOANS_BANCO_TEST,...LOANS_BANCO,...LOANS_COOP_TEST,...LOANS_COOP,...LOANS_GRUPO_TEST,...LOANS_GRUPO];}
 
 function syncPills(){
   [['tb-u','tb-r'],['tb-u2','tb-r2'],['tb-u3','tb-r3'],['tb-u4','tb-r4'],['tb-u5','tb-r5']].forEach(([uid,rid])=>{
@@ -91,7 +91,10 @@ function renderLoans(){
   initPagination();
 }
 
-function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.id===id);if(purchases[id]){confirmed=purchases[id];renderAccess();show('s-access');return;}tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');}
+function openLoan(id){
+  L=[...LOANS_BANCO_TEST,...LOANS_BANCO,...LOANS_COOP_TEST,...LOANS_COOP,...LOANS_GRUPO_TEST,...LOANS_GRUPO]
+  .find(l=>l.id===id);if(purchases[id]){confirmed=purchases[id];renderAccess();show('s-access');return;}tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');
+}
 
 function renderDetail(){
   const isB=L.tipo==='banco';
@@ -173,6 +176,7 @@ function cancelAccess(){
   dismissedLoans.add(L.id);
   goMkt();
 }
+
 
 function goAccess(){renderAccess();show('s-access');}
 
@@ -261,7 +265,7 @@ function toggleProd(cod){
 }
 
 function findProd(cod){
-  for(const l of LOANS_BANCO.concat(LOANS_COOP).concat(LOANS_GRUPO)){
+  for(const l of LOANS_BANCO_TEST.concat(LOANS_BANCO).concat(LOANS_COOP_TEST).concat(LOANS_COOP).concat(LOANS_GRUPO_TEST).concat(LOANS_GRUPO)){
     const p=l.prod.find(x=>x.cod===cod);
     if(p)return p;
   }

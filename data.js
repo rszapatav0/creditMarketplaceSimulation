@@ -95,8 +95,8 @@ const CROPPIE_CONFIG = {
 };
 
 
-// ── Credits list ──────────────────────────────────────────────────────
-const LOANS_BANCO=[
+// ── Credits list: demo ──────────────────────────────────────────────────────
+const LOANS_BANCO_TEST=[
   {id:'b1',tipo:'banco',testValue:'yes',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A. Test',region:'El Paraíso, Honduras',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
@@ -123,7 +123,60 @@ const LOANS_BANCO=[
       {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
      ]},
    ]},
-  {id:'b2',tipo:'banco',testValue:null,fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
+];
+
+const LOANS_COOP_TEST=[
+  {id:'c1',tipo:'coop',testValue:'yes',fechaDesembolso:'2024-11-01',name:'Ramiro Rosales Aguilar Test',region:'Ocotepeque, Honduras',
+    acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
+    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
+   prod:[{cod:'OC-0033',nombre:'Rosales Aguilar, R.',monto:'L. 45,000',plazo:'5 meses',destino:'Cosecha + insumos',aval:'A',
+    department:'Santa Bárbara', municipality:'Arada', aldea:'La Esperanza', areaProd:'3.1 mz', geo:'14.41°N 89.22°W',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+    propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'38 qq / 3 ciclos',histIngresos:'1300 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+    esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'low', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+    ]}]},
+];
+
+const LOANS_GRUPO_TEST=[
+  {id:'g1',tipo:'grupo',testValue:'yes',fechaDesembolso:'2024-11-03',name:'Grupo Productores La Esperanza Test',region:'El Paraíso, Honduras',
+    acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
+    destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
+    contrato:null,smartContract:true,volContrato:null,
+   prod:[
+    {cod:'EP-0101',nombre:'García Méndez, L.',monto:'L. 35,000',plazo:'5 meses',destino:'Cosecha',aval:'A',
+      department:'Yoro', municipality:'Yoro', aldea:'San Rafael', areaProd:'0.5 mz', geo:'14.20°N 86.85°W',carnet:'IHCAFE-2021-0101',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'40 qq / 3 ciclos',histIngresos:'1500 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'3200 HNL',
+     parcela:'2.1 ha · Finca El Roble',volContrato:'40 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1', aptitudClimActual:'uncertain', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'low', sequia: 'high', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+    {cod:'EP-0102',nombre:'Pineda López, M.',monto:'L. 30,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+      department:'Yoro', municipality:'Yorito', aldea:'San Carlos', areaProd:'0.4 mz', geo:'14.18°N 86.88°W',carnet:'IHCAFE-2020-0102',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'36 qq / 4 ciclos',histIngresos:'1200 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+     parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
+     esg:[
+      {id:'e1', aptitudClimActual:'limitations', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'high', sequia: 'high', estimationDate:'2024-11-01',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+     ]},
+   ]},
+];
+
+
+// ── Credits list: DCE ──────────────────────────────────────────────────────
+const LOANS_BANCO=[
+  {id:'b2',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',mercados:'Alemania, Países Bajos',
@@ -152,20 +205,6 @@ const LOANS_BANCO=[
 ];
 
 const LOANS_COOP=[
-  {id:'c1',tipo:'coop',testValue:'yes',fechaDesembolso:'2024-11-01',name:'Ramiro Rosales Aguilar Test',region:'Ocotepeque, Honduras',
-    acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
-    destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
-    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
-   prod:[{cod:'OC-0033',nombre:'Rosales Aguilar, R.',monto:'L. 45,000',plazo:'5 meses',destino:'Cosecha + insumos',aval:'A',
-    department:'Santa Bárbara', municipality:'Arada', aldea:'La Esperanza', areaProd:'3.1 mz', geo:'14.41°N 89.22°W',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-    propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'38 qq / 3 ciclos',histIngresos:'1300 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
-    esg:[
-      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'low', estimationDate:'2024-11-01',
-        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
-        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
-    ]}]},
   {id:'c2',tipo:'coop',testValue:'no',fechaDesembolso:'2024-11-04',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
@@ -197,34 +236,6 @@ const LOANS_COOP=[
 ];
 
 const LOANS_GRUPO=[
-  {id:'g1',tipo:'grupo',testValue:'yes',fechaDesembolso:'2024-11-03',name:'Grupo Productores La Esperanza Test',region:'El Paraíso, Honduras',
-    acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
-    destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
-    contrato:null,smartContract:true,volContrato:null,
-   prod:[
-    {cod:'EP-0101',nombre:'García Méndez, L.',monto:'L. 35,000',plazo:'5 meses',destino:'Cosecha',aval:'A',
-      department:'Yoro', municipality:'Yoro', aldea:'San Rafael', areaProd:'0.5 mz', geo:'14.20°N 86.85°W',carnet:'IHCAFE-2021-0101',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'40 qq / 3 ciclos',histIngresos:'1500 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'3200 HNL',
-     parcela:'2.1 ha · Finca El Roble',volContrato:'40 qq',contrato:'Exportadora Centroamérica S.A.',
-     esg:[
-      {id:'e1', aptitudClimActual:'uncertain', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'low', sequia: 'high', estimationDate:'2024-11-01',
-        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
-        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
-     ]},
-    {cod:'EP-0102',nombre:'Pineda López, M.',monto:'L. 30,000',plazo:'6 meses',destino:'Insumos',aval:'A',
-      department:'Yoro', municipality:'Yorito', aldea:'San Carlos', areaProd:'0.4 mz', geo:'14.18°N 86.88°W',carnet:'IHCAFE-2020-0102',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'36 qq / 4 ciclos',histIngresos:'1200 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
-     parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
-     esg:[
-      {id:'e1', aptitudClimActual:'limitations', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'high', sequia: 'high', estimationDate:'2024-11-01',
-        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
-        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
-     ]},
-   ]},
   {id:'g2',tipo:'grupo',testValue:'no',fechaDesembolso:'2024-11-05',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
