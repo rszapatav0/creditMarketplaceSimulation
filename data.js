@@ -178,28 +178,28 @@ const LOANS_GRUPO_TEST=[
 const LOANS_BANCO=[
   {id:'b2',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
-    fundamentales:'yes',priceFundamentales:'100',
-    aclimatar:'yes',whisp:'yes',croppie:'yes',priceTools:'150',
+    fundamentales:true,priceFundamentales:'100',
+    aclimatar:true,whisp:true,croppie:true,priceTools:'150',
   },
   {id:'b6',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
-    fundamentales:'yes',priceFundamentales:'100',
-    aclimatar:null,whisp:null,croppie:null,priceTools:null,
+    fundamentales:true,priceFundamentales:'100',
+    aclimatar:false,whisp:false,croppie:false,priceTools:null,
   },
 ];
 
 const LOANS_COOP=[
   {id:'c2',tipo:'coop',testValue:'no',fechaDesembolso:'2024-11-04',name:'Ramiro Rosales Aguilar',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
-    fundamentales:'yes',priceFundamentales:'100',
-    aclimatar:null,whisp:null,croppie:'yes',priceTools:'50',
+    fundamentales:true,priceFundamentales:'100',
+    aclimatar:false,whisp:false,croppie:true,priceTools:'50',
   },
 ];
 
 const LOANS_GRUPO=[
   {id:'g2',tipo:'grupo',testValue:'no',fechaDesembolso:'2024-11-05',name:'Grupo Productores La Esperanza',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
-    fundamentales:null,priceFundamentales:null,
-    aclimatar:'yes',whisp:'yes',croppie:'yes',priceTools:'150',
+    fundamentales:false,priceFundamentales:null,
+    aclimatar:true,whisp:false,croppie:true,priceTools:'150',
   },
 ];
