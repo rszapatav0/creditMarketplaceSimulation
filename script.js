@@ -160,7 +160,7 @@ function renderCart(){
 function confirmAccess(){
   const esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
   const total=calcTotal();
-  const plan=esgKeys.length>0?'Premium':tierOn?'Estándar':'—';
+  const plan=esgKeys.length>0?'Premium':tierOn?'Estándar':'-';
   confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
   purchases[L.id]=confirmed;
   updateBalance(total);
@@ -173,10 +173,9 @@ function confirmAccess(){
 }
 
 function cancelAccess(){
-  dismissedLoans.add(L.id);
-  goMkt();
+  if(L.testValue==='no'){dismissedLoans.add(L.id); goMkt();}
+  else if (L.testValue==='yes'){goMkt();}
 }
-
 
 function goAccess(){renderAccess();show('s-access');}
 
