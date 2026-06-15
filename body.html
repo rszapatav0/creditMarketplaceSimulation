@@ -31,8 +31,14 @@
 <!-- S2: MARKETPLACE -->
 <div id="s-market" class="screen">
   <div class="topbar"><div class="tb-logo">Confianza SA-FGR</div><div class="tb-right"><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
-  <div class="pi"><div class="pg-label">Consulta de preaprobaciones</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
-</div>
+  <div class="pi"><div class="pg-label">Consulta de preaprobaciones</div><div class="pg-title" id="mkt-title"></div>
+    <div class="loan-tabs" id="loan-tabs">
+      <button class="loan-tab active" data-tab="yes" onclick="switchLoanTab('yes')">Créditos de demostración</button>
+      <button class="loan-tab" data-tab="no" onclick="switchLoanTab('no')">Oportunidades disponibles</button>
+    </div>
+    <div class="loan-list" id="loan-list"></div>
+    <div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div>
+  </div></div>
 
 <!-- S3: CHECKOUT -->
 <div id="s-detail" class="screen">

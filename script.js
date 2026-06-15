@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={};
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={},activeLoanTab='yes';
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return [...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO];}
@@ -59,9 +59,16 @@ function dismissLoan(id, event){
   renderLoans();
 }
 
+function switchLoanTab(tab){
+  activeLoanTab=tab;
+  currentPage=1;
+  document.querySelectorAll('.loan-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  renderLoans();
+}
+
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
-  getLoans().filter(l=>!dismissedLoans.has(l.id))
+  getLoans().filter(l=>!dismissedLoans.has(l.id)&&l.testValue===activeLoanTab)
   .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
   .forEach(l=>{
     const isG=l.tipo==='grupo';
@@ -75,7 +82,6 @@ function renderLoans(){
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
       <div>
         <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span><span class="loan-name">${l.name}</span></div>
-        <div class="loan-region">${l.region}</div>
         <div class="loan-meta">${mA}${mP}${mX}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
       </div>
       <div class="larr">›</div>
@@ -90,7 +96,7 @@ function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.
 function renderDetail(){
   const isB=L.tipo==='banco';
   const isG=L.tipo==='grupo';
-  let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region}`;
+  let h=`<div class="dhdr"><div class="dname">${L.name}</div>`;
   h+=`</div></div>`;
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${precioFundamentales}</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
@@ -393,7 +399,7 @@ function renderAccess(){
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
   const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
 
   const hasFundamentals = tierOn;
@@ -431,7 +437,7 @@ function renderAccess(){
       </div></div></div>`;}
 
     if(l.prod && l.prod.length>0){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title"Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
@@ -466,7 +472,7 @@ function topInfoAccess(){
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
   const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
   
   document.getElementById('top-info').innerHTML = h;
 }
