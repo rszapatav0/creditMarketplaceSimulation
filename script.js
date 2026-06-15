@@ -101,12 +101,64 @@ function renderDetail(){
   const isG=L.tipo==='grupo';
   let h=`<div class="dhdr"><div class="dname">${L.name}</div>`;
   h+=`</div></div>`;
+  if(L.testValue==='no'){
+    const fundOn=L.fundamentales==='yes';
+    const fundPriceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="tier-price">L. ${L.priceFundamentales}</span>`:'';
+    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span>${fundPriceHtml}</div><button class="toggle${fundOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${fundOn?'1':'.45'}"></button></div></div>`;
+
+    const toolsDef=[
+      {key:'aclimatar',label:'aCLIMAtar'},
+      {key:'whisp',label:'Whisp - Open Foris'},
+      {key:'croppie',label:'Croppie'},
+    ];
+    let nToolsOn=0;
+    const esgItems=toolsDef.map(t=>{
+      const on=L[t.key]==='yes';
+      if(on)nToolsOn++;
+      return `<div class="esg-item${on?' sel':''}" style="pointer-events:none;cursor:default;opacity:${on?'1':'.45'}"><div class="esg-check">${on?'✓':''}</div><span class="esg-lbl">${t.label}</span></div>`;
+    }).join('');
+    const toolsOn=nToolsOn>0;
+    const toolsPriceHtml=(L.priceTools!==null&&L.priceTools!==undefined)?`<span class="tier-price">L. ${L.priceTools}</span>`:'';
+    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span>${toolsPriceHtml}</div><span class="tier-count">${nToolsOn} seleccionadas</span><button class="toggle${toolsOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${toolsOn?'1':'.45'}"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
+
+    document.getElementById('dmain').innerHTML=h;
+    renderCartFixed(fundOn,toolsOn);
+    return;
+  }
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${precioFundamentales}</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
   const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="esg-cost">+L.${e.cost}</span></div>`).join('');
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
   document.getElementById('dmain').innerHTML=h;
   renderCart();
+}
+
+function renderCartFixed(fundOn,toolsOn){
+  let h='';
+  let total=0;
+  const fp=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?Number(String(L.priceFundamentales).replace(/,/g,'')):0;
+  const tp=(L.priceTools!==null&&L.priceTools!==undefined)?Number(String(L.priceTools).replace(/,/g,'')):0;
+  if(fundOn||toolsOn){
+    if(fundOn){
+      const priceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="cl-v">L. ${L.priceFundamentales}</span>`:'';
+      h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span>${priceHtml}</div>`;
+      total+=fp;
+    }
+    if(toolsOn){
+      const priceHtml=(L.priceTools!==null&&L.priceTools!==undefined)?`<span class="cl-v">+L. ${L.priceTools}</span>`:'';
+      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span>${priceHtml}</div>`;
+      total+=tp;
+    }
+  } else {
+    h=`<div style="font-size:12px;color:var(--text3);padding:8px 0">No hay ítems seleccionados para este crédito.</div>`;
+  }
+  document.getElementById('cart-lines').innerHTML=h;
+  document.getElementById('cart-num').textContent=total.toLocaleString('es-HN');
+  const cta=document.getElementById('cart-cta');
+  const cancelBtn=document.getElementById('cart-cancel');
+  cta.disabled=total===0;
+  cta.textContent=total===0?'Sin ítems disponibles':'Confirmar acceso →';
+  cancelBtn.style.display=total===0?'none':'block';
 }
 
 function toggleTier(){
@@ -158,10 +210,22 @@ function renderCart(){
 }
 
 function confirmAccess(){
-  const esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
-  const total=calcTotal();
-  const plan=esgKeys.length>0?'Premium':tierOn?'Estándar':'-';
-  confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
+  let esgKeys, total, tierOnFinal;
+  if(L.testValue==='no'){
+    const fundOn=L.fundamentales==='yes';
+    const toolsOn=(L.aclimatar==='yes')||(L.whisp==='yes')||(L.croppie==='yes');
+    const fp=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?Number(String(L.priceFundamentales).replace(/,/g,'')):0;
+    const tp=(L.priceTools!==null&&L.priceTools!==undefined)?Number(String(L.priceTools).replace(/,/g,'')):0;
+    total=(fundOn?fp:0)+(toolsOn?tp:0);
+    esgKeys=['aclimatar','whisp','croppie'].filter(k=>L[k]==='yes');
+    tierOnFinal=fundOn;
+  } else {
+    esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
+    total=calcTotal();
+    tierOnFinal=tierOn;
+  }
+  const plan=esgKeys.length>0?'Premium':tierOnFinal?'Estándar':'-';
+  confirmed={loan:L,total,esgKeys,plan,tierOn:tierOnFinal,loanType:L.tipo};
   purchases[L.id]=confirmed;
   updateBalance(total);
   if(L.testValue==='no'){dismissedLoans.add(L.id); goMkt(); return;}

@@ -178,19 +178,28 @@ const LOANS_GRUPO_TEST=[
 const LOANS_BANCO=[
   {id:'b2',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
-    fundamentales:'100',aclimatar:'10',whisp:'20',croppie:'30',
-  },];
+    fundamentales:'yes',priceFundamentales:'100',
+    aclimatar:'yes',whisp:'yes',croppie:'yes',priceTools:'150',
+  },
+  {id:'b6',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',
+    acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
+    fundamentales:'yes',priceFundamentales:'100',
+    aclimatar:null,whisp:null,croppie:null,priceTools:null,
+  },
+];
 
 const LOANS_COOP=[
   {id:'c2',tipo:'coop',testValue:'no',fechaDesembolso:'2024-11-04',name:'Ramiro Rosales Aguilar',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
-    fundamentales:'100',aclimatar:null,whisp:null,croppie:'30',
+    fundamentales:'yes',priceFundamentales:'100',
+    aclimatar:null,whisp:null,croppie:'yes',priceTools:'50',
   },
 ];
 
 const LOANS_GRUPO=[
   {id:'g2',tipo:'grupo',testValue:'no',fechaDesembolso:'2024-11-05',name:'Grupo Productores La Esperanza',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
-    fundamentales:null,aclimatar:'10',whisp:'20',croppie:'30',
+    fundamentales:null,priceFundamentales:null,
+    aclimatar:'yes',whisp:'yes',croppie:'yes',priceTools:'150',
   },
 ];
