@@ -142,8 +142,10 @@ function renderCart(){
   document.getElementById('cart-num').textContent=total.toLocaleString('es-HN');
   const cta=document.getElementById('cart-cta');
   const ci=document.getElementById('cart-info');
+  const cancelBtn=document.getElementById('cart-cancel');
   cta.disabled=total===0;
   cta.textContent=total===0?'Seleccione al menos un ítem':'Confirmar acceso →';
+  cancelBtn.style.display=total===0?'none':'block';
 }
 
 function confirmAccess(){
@@ -153,11 +155,17 @@ function confirmAccess(){
   confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
   purchases[L.id]=confirmed;
   updateBalance(total);
+  if(L.testValue==='no'){dismissedLoans.add(L.id); goMkt(); return;}
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
     <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
   show('s-success');
+}
+
+function cancelAccess(){
+  dismissedLoans.add(L.id);
+  goMkt();
 }
 
 function goAccess(){renderAccess();show('s-access');}
