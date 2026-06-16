@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={},activeLoanTab='yes';
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={};
 let generalQuestionsCompleted = false;
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
@@ -537,67 +537,75 @@ function renderAccess(){
   const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button><button class="btn-s" onclick="goMkt()">Explorar más créditos</button></div>`;
 
   const hasFundamentals = tierOn;
   const hasEsg = esgKeys.length > 0;
   const hasAccess = hasFundamentals || hasEsg;
 
-  if(hasFundamentals){
-    h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div></div></div>
-      <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
-        <div class="ic"><div class="ic-l">Destino de los créditos</div><div class="ic-v">${l.destinos}</div></div>
-        <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
-        <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
-        <div class="ic"><div class="ic-l">Área productiva de café, total del grupo de productores</div><div class="ic-v">${l.areaProd} Manzanas</div></div>
-        <div class="ic"><div class="ic-l">Volumen anual comercializado, total del grupo de productores</div><div class="ic-v">${l.volumenTotal} quintales de café verde</div></div>
-      </div></div></div>`;
-    if(isB){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador - ${l.name}</div></div></div>
-      <div class="sc-body"><div class="ig">
-      <div class="ic"><div class="ic-l">Monto crédito de acopio</div><div class="ic-v mv-g">L. ${l.acopio}</div></div>
-      <div class="ic"><div class="ic-l">Plazo crédito de acopio</div><div class="ic-v">${l.plazoAcopio} meses</div></div>
-      <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div></div>
-        <div class="ic"><div class="ic-l">Volumen histórico comercializado, promedio anual</div><div class="ic-v">${l.volExport} quintales de café verde</div></div>
-        <div class="ic"><div class="ic-l">Contrato de exportación</div><div class="ic-v">${l.contrato}</div></div>
-        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
-        <div class="ic"><div class="ic-l">Volumen contrato de exportación</div><div class="ic-v">${l.volContrato} quintales de café verde</div></div>
-        <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div></div>
-      </div></div></div>`;
-    } else {
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información de comercialización</div></div></div>
-      <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Contrato de comercialización</div><div class="ic-v">${l.contrato || '-'}</div></div>
-        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
-        <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
-      </div></div></div>`;}
-    }
+  if(L.testValue==='yes'){
+    if(hasFundamentals){
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div></div></div>
+        <div class="sc-body"><div class="ig">
+          <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
+          <div class="ic"><div class="ic-l">Destino de los créditos</div><div class="ic-v">${l.destinos}</div></div>
+          <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
+          <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
+          <div class="ic"><div class="ic-l">Área productiva de café, total del grupo de productores</div><div class="ic-v">${l.areaProd} Manzanas</div></div>
+          <div class="ic"><div class="ic-l">Volumen anual comercializado, total del grupo de productores</div><div class="ic-v">${l.volumenTotal} quintales de café verde</div></div>
+        </div></div></div>`;
+      if(isB){
+        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador - ${l.name}</div></div></div>
+        <div class="sc-body"><div class="ig">
+        <div class="ic"><div class="ic-l">Monto crédito de acopio</div><div class="ic-v mv-g">L. ${l.acopio}</div></div>
+        <div class="ic"><div class="ic-l">Plazo crédito de acopio</div><div class="ic-v">${l.plazoAcopio} meses</div></div>
+        <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div></div>
+          <div class="ic"><div class="ic-l">Volumen histórico comercializado, promedio anual</div><div class="ic-v">${l.volExport} quintales de café verde</div></div>
+          <div class="ic"><div class="ic-l">Contrato de exportación</div><div class="ic-v">${l.contrato}</div></div>
+          <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+          <div class="ic"><div class="ic-l">Volumen contrato de exportación</div><div class="ic-v">${l.volContrato} quintales de café verde</div></div>
+          <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div></div>
+        </div></div></div>`;
+      } else {
+        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información de comercialización</div></div></div>
+        <div class="sc-body"><div class="ig">
+          <div class="ic"><div class="ic-l">Contrato de comercialización</div><div class="ic-v">${l.contrato || '-'}</div></div>
+          <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+          <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
+        </div></div></div>`;}
+      }
 
-  // Tabla de productores vinculados: para testValue='yes' debe poder renderizarse
-  // si hay fundamentales y/o herramientas seleccionadas (no solo cuando hay fundamentales).
-  const showProdTable = l.testValue==='yes' ? hasAccess : (hasFundamentals && hasAccess);
-  if(showProdTable && l.prod && l.prod.length>0){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
-      <div class="sc-body" style="padding:0;overflow-x:auto">
-        <table class="ptable">
-          <thead><tr>
-            <th style="width:15%">Código</th><th style="width:25%">Productor</th>
-            <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
-            <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
-          </tr>
-          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
-          </thead>
-          <tbody>${l.prod.map(p=>`
-            <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
-              <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
-              <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
-              <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+    const showProdTable = l.testValue==='yes' ? hasAccess : (hasFundamentals && hasAccess);
+    if(showProdTable && l.prod && l.prod.length>0){
+        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
+        <div class="sc-body" style="padding:0;overflow-x:auto">
+          <table class="ptable">
+            <thead><tr>
+              <th style="width:15%">Código</th><th style="width:25%">Productor</th>
+              <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
+              <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
             </tr>
-            <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
-          </tbody>
-        </table>
-      </div></div>`;
+            <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
+            </thead>
+            <tbody>${l.prod.map(p=>`
+              <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
+                <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
+                <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
+                <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+              </tr>
+              <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div></div>`;
+      }
+    } else {
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información general del crédito</div></div></div>
+        <div class="sc-body"><div class="ig">
+          <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
+          <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
+          <div class="ic"><div class="ic-l">Monto de crédito de acopio</div><div class="ic-v">L. ${l.acopio ?? 0}</div></div>
+          <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
+        </div></div></div>`;
     }
 
   document.getElementById('access-inner').innerHTML=h;
@@ -691,7 +699,6 @@ function submitOffer(){
   const l=confirmed.loan;const sym=v('of-moneda').startsWith('L')?'L.':'$';
   document.getElementById('offer-sent-card').innerHTML=`
     <div class="srow"><span class="sr-l">Destinatario</span><span class="sr-v">${l.name}</span></div>
-    <div class="srow"><span class="sr-l">Región</span><span class="sr-v">${l.region}</span></div>
     <div class="srow"><span class="sr-l">Institución oferente</span><span class="sr-v">${U.name}</span></div>
     <div class="srow"><span class="sr-l">Monto ofertado</span><span class="sr-v">${sym} ${monto.toLocaleString('es-HN')}</span></div>
     <div class="srow"><span class="sr-l">Tasa anual</span><span class="sr-v">${tasa}%</span></div>
