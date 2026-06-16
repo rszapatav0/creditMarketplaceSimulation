@@ -1,4 +1,5 @@
 let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={},activeLoanTab='yes';
+let generalQuestionsCompleted = false;
 
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return [...LOANS_BANCO_TEST,...LOANS_BANCO,...LOANS_COOP_TEST,...LOANS_COOP,...LOANS_GRUPO_TEST,...LOANS_GRUPO];}
@@ -49,7 +50,7 @@ function doLogin(){
   err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
   U=found;syncPills();initBalance();renderBalanceDisplay();
   document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles';
-  renderLoans();show('s-market');
+  showGeneralQuestions();show('s-market');
 }
 function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');dismissedLoans.clear();purchases={};document.getElementById('inp-p').value='';show('s-login');}
 
@@ -66,6 +67,28 @@ function switchLoanTab(tab){
   renderLoans();
 }
 
+function finishGeneralQuestions(){
+  const requiredFields = ['participant-name','institution-name','institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
+  if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
+  if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
+  const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
+  if(missing){
+    alert('Por favor complete todas las preguntas antes de continuar.');
+    document.getElementById(missing)?.focus();return;}
+  generalQuestionsCompleted = true;
+  document.getElementById('general-tab').disabled = true;
+  switchLoanTab('yes');
+}
+
+function toggleOther(select){
+  const input=document.querySelector(`[data-other-for="${select.id}"]`);
+  if(!input) return;
+  const enabled = select.value === 'otro';
+  input.disabled = !enabled;
+  if(enabled){input.placeholder = 'Especifique...';
+  }else{input.placeholder = 'No aplica';}
+}
+
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');
   });
@@ -77,39 +100,28 @@ function showGeneralQuestions(){
     <div class="frow">
       <div class="fg"><label class="flabel">Nombre del participante</label><input class="finp-s" id="participant-name" type="text"></div>
       <div class="fg"><label class="flabel">Nombre de la institución a la que pertenece</label><input class="finp-s" id="institution-name" type="text"></div>
-      <div class="fg"><label class="flabel">Tipo de institución</label><select class="fsel" id="institution-type"><option value="">Seleccionar...</option>
-          <option value="banco">Banco comercial</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
-      <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other-group" type="text"></div>
-      <div class="fg"><label class="flabel">Rol en la institución</label><select class="fsel" id="institution-role"><option value="">Seleccionar...</option>
-          <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
-      <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" type="text"></div>
+      <div class="fg"><label class="flabel">Tipo de institución</label>
+        <select class="fsel" id="institution-type" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="banco">Banco comercial</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
+      <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other" data-other-for="institution-type" type="text" disabled></div>
+      <div class="fg"><label class="flabel">Rol en la institución</label>
+        <select class="fsel" id="institution-role" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
+      <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" data-other-for="institution-role" type="text" disabled></div>
       <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito</label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
-          <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
       <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola</label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
-          <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
       <div class="fg"><label class="flabel">Rango de edad</label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
-          <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
-          <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
+        <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
+        <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
       <div class="fg"><label class="flabel">Sexo</label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
-          <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
-    </div></div></div>`;
+        <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishGeneralQuestions()">Continuar</button>
+    </div>`;
   document.getElementById('loan-pagination').style.display='none';
-}
-
-function toggleInstitutionOther(){
-  const show =
-    document.getElementById('institution-type').value === 'otro';
-
-  document.getElementById('institution-other-group').style.display =
-    show ? 'flex' : 'none';
-}
-
-function toggleRoleOther(){
-  const show =
-    document.getElementById('institution-role').value === 'otro';
-
-  document.getElementById('role-other-group').style.display =
-    show ? 'flex' : 'none';
 }
 
 function renderLoans(){
@@ -689,7 +701,8 @@ function submitOffer(){
   show('s-offer-sent');
 }
 
-function goMkt(){tierOn=false;esgAllOn=false;esgSel={};currentPage=1;renderLoans();renderBalanceDisplay();show('s-market');}
+function goMkt(){
+  tierOn=false;esgAllOn=false;esgSel={};currentPage=1;renderLoans();renderBalanceDisplay();show('s-market');}
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
