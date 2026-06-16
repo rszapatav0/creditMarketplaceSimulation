@@ -66,6 +66,52 @@ function switchLoanTab(tab){
   renderLoans();
 }
 
+function showGeneralQuestions(){
+  document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');
+  });
+  document.getElementById('general-tab').classList.add('active');
+  document.getElementById('loan-list')
+  .innerHTML = `
+  <div class="o-form"><div>
+    <div class="fs-title">Información general</div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Nombre del participante</label><input class="finp-s" id="participant-name" type="text"></div>
+      <div class="fg"><label class="flabel">Nombre de la institución a la que pertenece</label><input class="finp-s" id="institution-name" type="text"></div>
+      <div class="fg"><label class="flabel">Tipo de institución</label><select class="fsel" id="institution-type"><option value="">Seleccionar...</option>
+          <option value="banco">Banco comercial</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
+      <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other-group" type="text"></div>
+      <div class="fg"><label class="flabel">Rol en la institución</label><select class="fsel" id="institution-role"><option value="">Seleccionar...</option>
+          <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
+      <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" type="text"></div>
+      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito</label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
+          <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola</label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
+          <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+      <div class="fg"><label class="flabel">Rango de edad</label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
+          <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
+          <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
+      <div class="fg"><label class="flabel">Sexo</label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
+          <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
+    </div></div></div>`;
+  document.getElementById('loan-pagination').style.display='none';
+}
+
+function toggleInstitutionOther(){
+  const show =
+    document.getElementById('institution-type').value === 'otro';
+
+  document.getElementById('institution-other-group').style.display =
+    show ? 'flex' : 'none';
+}
+
+function toggleRoleOther(){
+  const show =
+    document.getElementById('institution-role').value === 'otro';
+
+  document.getElementById('role-other-group').style.display =
+    show ? 'flex' : 'none';
+}
+
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
   getLoans().filter(l=>!dismissedLoans.has(l.id)&&l.testValue===activeLoanTab)
