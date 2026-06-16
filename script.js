@@ -1,6 +1,38 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={};
-let generalQuestionsCompleted = false;
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,purchases={};
 
+// ─── SINGLE SESSION STATE OBJECT ───────────────────────────────────────────────
+function defaultState(){
+  return {
+    generalQuestionsCompleted: false,
+    generalAnswers: {},
+    dismissedLoans: [],
+    interactions: {
+      notInterested: [],
+      viewed: [],
+      confirmedAccess: [],
+      canceledAccess: []
+    },
+    offers: {},
+    walletBalance: 5000,
+  };
+}
+
+function loadState(){
+  try {
+    const raw = sessionStorage.getItem('appState');
+    if(raw) return JSON.parse(raw);
+  } catch(e){}
+  return defaultState();
+}
+
+function saveState(){
+  sessionStorage.setItem('appState', JSON.stringify(state));
+}
+
+let state = loadState();
+
+
+// ─── ───────────────────────────────────────────────
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 function getLoans(){return [...LOANS_BANCO_TEST,...LOANS_BANCO,...LOANS_COOP_TEST,...LOANS_COOP,...LOANS_GRUPO_TEST,...LOANS_GRUPO];}
 
@@ -14,22 +46,21 @@ function syncPills(){
 
 // WALLET / BALANCE FUNCTIONS
 function initBalance(){
-  if(!sessionStorage.getItem('wallet_balance')){
-    sessionStorage.setItem('wallet_balance','5000');
-  }
+  if(state.walletBalance === undefined) state.walletBalance = 5000;
+  saveState();
 }
 
 function getBalance(){
-  return parseInt(sessionStorage.getItem('wallet_balance')||'0',10);
+  return state.walletBalance ?? 0;
 }
 
 function setBalance(amount){
-  sessionStorage.setItem('wallet_balance', Math.floor(amount).toString());
+  state.walletBalance = Math.floor(amount);
+  saveState();
 }
 
 function updateBalance(amount){
-  const current=getBalance();
-  setBalance(current-amount);
+  setBalance(getBalance() - amount);
   renderBalanceDisplay();
 }
 
@@ -52,11 +83,22 @@ function doLogin(){
   document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles';
   showGeneralQuestions();show('s-market');
 }
-function doLogout(){U=null;sessionStorage.removeItem('wallet_balance');dismissedLoans.clear();purchases={};document.getElementById('inp-p').value='';show('s-login');}
+
+function doLogout(){
+  U=null;
+  purchases={};
+  state = defaultState();
+  sessionStorage.removeItem('appState');
+  document.getElementById('inp-p').value='';
+  show('s-login');
+}
 
 function dismissLoan(id, event){
   event.stopPropagation();
-  dismissedLoans.add(id);
+  if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);
+  // Track interaction
+  if(!state.interactions.notInterested.includes(id)) state.interactions.notInterested.push(id);
+  saveState();
   renderLoans();
 }
 
@@ -75,7 +117,20 @@ function finishGeneralQuestions(){
   if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
     document.getElementById(missing)?.focus();return;}
-  generalQuestionsCompleted = true;
+      state.generalQuestionsCompleted = true;
+      state.generalAnswers = {
+        participantName:     document.getElementById('participant-name').value.trim(),
+        institutionName:     document.getElementById('institution-name').value.trim(),
+        institutionType:     document.getElementById('institution-type').value,
+        institutionOther:    document.getElementById('institution-other').value.trim(),
+        institutionRole:     document.getElementById('institution-role').value,
+        roleOther:           document.getElementById('role-other').value.trim(),
+        experienceYears:     document.getElementById('experience-years').value,
+        agrExperienceYears:  document.getElementById('agr-experience-years').value,
+        ageRange:            document.getElementById('age-range').value,
+        sex:                 document.getElementById('sex').value,
+      };
+  saveState();
   document.getElementById('general-tab').disabled = true;
   switchLoanTab('yes');
 }
@@ -126,8 +181,7 @@ function showGeneralQuestions(){
 
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
-  getLoans().filter(l=>!dismissedLoans.has(l.id)&&l.testValue===activeLoanTab)
-  .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
+  getLoans().filter(l=>!state.dismissedLoans.includes(l.id)&&l.testValue===activeLoanTab)   .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
   .forEach(l=>{
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
@@ -151,7 +205,10 @@ function renderLoans(){
 
 function openLoan(id){
   L=[...LOANS_BANCO_TEST,...LOANS_BANCO,...LOANS_COOP_TEST,...LOANS_COOP,...LOANS_GRUPO_TEST,...LOANS_GRUPO]
-  .find(l=>l.id===id);if(purchases[id]){confirmed=purchases[id];renderAccess();show('s-access');return;}tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');
+  .find(l=>l.id===id);
+  if(!state.interactions.viewed.includes(id)) state.interactions.viewed.push(id);
+  saveState();
+  if(purchases[id]){confirmed=purchases[id];renderAccess();show('s-access');return;}tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');
 }
 
 function renderDetail(){
@@ -283,8 +340,11 @@ function confirmAccess(){
   }
   const plan=esgKeys.length>0?'Premium':tierOnFinal?'Estándar':'-';
   confirmed={loan:L,total,esgKeys,plan,tierOn:tierOnFinal,loanType:L.tipo};
-  /*if(L.testValue==='no'){purchases[L.id]=confirmed;updateBalance(total);dismissedLoans.add(L.id); goMkt(); return;*/
-  if(L.testValue==='no'){purchases[L.id]=confirmed;updateBalance(total);dismissedLoans.add(L.id);
+  if(!state.interactions.confirmedAccess.includes(L.id)) state.interactions.confirmedAccess.push(L.id);
+  saveState();
+  if(L.testValue==='no'){
+    purchases[L.id]=confirmed;updateBalance(total);
+    if(!state.dismissedLoans.includes(L.id)) state.dismissedLoans.push(L.id); saveState();
     if(L.continue===false){goMkt(); return;}
   }
   document.getElementById('scard').innerHTML=`
@@ -295,7 +355,9 @@ function confirmAccess(){
 }
 
 function cancelAccess(){
-  if(L.testValue==='no'){dismissedLoans.add(L.id); goMkt();}
+  if(!state.interactions.canceledAccess.includes(L.id)) state.interactions.canceledAccess.push(L.id);
+  saveState();
+  if(L.testValue==='no'){if(!state.dismissedLoans.includes(L.id)) state.dismissedLoans.push(L.id); saveState(); goMkt();}
   else if (L.testValue==='yes'){goMkt();}
 }
 
@@ -313,7 +375,7 @@ function renderProducersSection(l){
   if(l.prod&&l.prod.length>0){
     l.prod.forEach(p=>{
       const row=document.createElement('tr');
-      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td><td><input class="finp-s" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" type="number" step="0.1" placeholder="ej. 14.5"></td><td><input class="finp-s" type="number" placeholder="ej. 6"></td>`;
+      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td><td><input class="finp-s" id="pmonto-${p.cod}" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" id="ptasa-${p.cod}" type="number" step="0.1" placeholder="ej. 14.5"></td><td><input class="finp-s" id="pplazo-${p.cod}" type="number" placeholder="ej. 6"></td>`;
       tbody.appendChild(row);
     });
   }
@@ -707,7 +769,36 @@ function submitOffer(){
     <div class="srow"><span class="sr-l">Aval Confianza SA-FGR</span><span class="sr-v">${v('of-aval-conf')}</span></div>
     <div class="srow"><span class="sr-l">Vigencia</span><span class="sr-v">${v('of-vigencia')}</span></div>
     <div class="srow"><span class="sr-l">Estado</span><span class="sr-v" style="color:var(--blue)">Enviada · Pendiente respuesta</span></div>`;
-  dismissedLoans.add(l.id);
+  if(!state.dismissedLoans.includes(l.id)) state.dismissedLoans.push(l.id);
+    const producerOffers = {};
+    if(l.paqueteFlexible && l.prod && l.prod.length > 0){
+      l.prod.forEach(p => {
+        const monto = document.getElementById('pmonto-' + p.cod);
+        const tasa  = document.getElementById('ptasa-'  + p.cod);
+        const plazo = document.getElementById('pplazo-' + p.cod);
+        producerOffers[p.cod] = {
+          monto: monto ? parseFloat(monto.value) || null : null,
+          tasa:  tasa  ? parseFloat(tasa.value)  || null : null,
+          plazo: plazo ? parseFloat(plazo.value) || null : null,
+        };});}
+    state.offers[l.id] = {
+      monto: parseFloat(v('of-monto')) || null,
+      tasa: v('of-tasa') || null,
+      plazo: v('of-plazo') || null,
+      periodicidad: v('of-periodo') || null,
+      amortizacion: v('of-cuota') || null,
+      moneda: v('of-moneda') || null,
+      garantia: v('of-garantia') || null,
+      periodogracia: v('of-gracia') || null,
+      comision: v('of-comision') || null,
+      seguro: v('of-seguro') || null,
+      avalconfianza: v('of-aval-conf') || null,
+      vigencia: v('of-vigencia') || null,
+      etapaevaluacion: v('of-etapa') || null,
+      condiciones: v('of-notas') || null,
+      producerOffers: Object.keys(producerOffers).length > 0 ? producerOffers : null
+    };
+    saveState();
   show('s-offer-sent');
 }
 
@@ -760,6 +851,8 @@ function prevPage(){
     showPage(currentPage);
   }
 }
+
+JSON.stringify(state)
 
 document.getElementById('inp-p').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('inp-u').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
