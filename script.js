@@ -191,8 +191,8 @@ function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');
   });
   document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.querySelector('[data-tab="yes"]').disabled = true;
+  document.querySelector('[data-tab="no"]').disabled  = true;
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -395,8 +395,7 @@ function confirmAccess(){
     total=calcTotal();
     tierOnFinal=tierOn;
   }
-  const plan=esgKeys.length>0?'Premium':tierOnFinal?'Estándar':'-';
-  confirmed={loan:L,total,esgKeys,plan,tierOn:tierOnFinal,loanType:L.tipo};
+  confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
   if(!state.interactions.confirmedAccess.includes(L.id)) state.interactions.confirmedAccess.push(L.id);
   saveState();
   if(L.testValue==='no'){
@@ -647,7 +646,7 @@ cell.innerHTML = confirmed.tierOn
 }
 
 function renderAccess(){
-  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
   const isB=l.tipo==='banco';
   let h='';
@@ -732,7 +731,7 @@ function renderAccess(){
 }
 
 function topInfoAccess(){
-  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
   const isB=loanType==='banco';
   let h='';
