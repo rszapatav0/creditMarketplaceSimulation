@@ -158,9 +158,11 @@ function finishGeneralQuestions(){
         ageRange:            document.getElementById('age-range').value,
         sex:                 document.getElementById('sex').value,
       };
-  saveState();
-  document.getElementById('general-tab').disabled = true;
-  switchLoanTab('yes');
+    saveState();
+    document.getElementById('general-tab').disabled       = true;
+    document.querySelector('[data-tab="yes"]').disabled   = false;
+    document.querySelector('[data-tab="no"]').disabled    = false;
+    switchLoanTab('yes');
 }
 
 function toggleOther(select){
@@ -176,6 +178,8 @@ function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');
   });
   document.getElementById('general-tab').classList.add('active');
+  document.querySelector('[data-tab="yes"]').disabled = true;
+  document.querySelector('[data-tab="no"]').disabled  = true;
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
