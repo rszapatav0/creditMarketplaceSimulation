@@ -112,6 +112,11 @@ function doLogin(){
   showGeneralQuestions();show('s-market');
 }
 
+function endSession(){
+  // Future: await fetch('/api/sessions', { method:'POST', body: JSON.stringify(state) })
+  doLogout();
+}
+
 function doLogout(){
   U=null;
   purchases={};
@@ -232,6 +237,16 @@ function renderLoans(){
       <button class="btn-dismiss" onclick="dismissLoan('${l.id}', event)" title="No me interesa">No me interesa</button>
     </div>`;
   });
+  if(activeLoanTab === 'no'){
+    const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
+    if(remaining.length === 0){
+      list.innerHTML = `
+        <div class="btn-row" style="margin-top:2rem">
+          <button class="btn-p" onclick="endSession()">Enviar →</button>
+        </div>`;
+      document.getElementById('loan-pagination').style.display = 'none';
+      return;
+    }}
   initPagination();
 }
 
