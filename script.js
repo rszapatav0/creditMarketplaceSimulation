@@ -102,17 +102,16 @@ function renderDetail(){
 
 function toggleTier(){
   tierOn=!tierOn;
-  if(!tierOn){ESG.forEach(e=>esgSel[e.id]=false);esgAllOn=false;}
   renderDetail();
 }
 function toggleEsg(id){
   esgSel[id]=!esgSel[id];
-  if(esgSel[id]) tierOn=true;esgAllOn=ESG.every(e=>esgSel[e.id]);
+  esgAllOn=ESG.every(e=>esgSel[e.id]);
   renderDetail();
 }
 function toggleEsgAll(){
   esgAllOn=!esgAllOn;
-  if(esgAllOn){tierOn=true;ESG.forEach(e=>esgSel[e.id]=true);
+  if(esgAllOn){ESG.forEach(e=>esgSel[e.id]=true);
   }else{ESG.forEach(e=>esgSel[e.id]=false);}
   renderDetail();
 }
@@ -237,6 +236,7 @@ function prodEsgMetrics(p){
 
 // ── Row expand logic ──────────────────────────────────────────────────────
 let _openProd=null;
+
 function toggleProd(cod){
   const eRow=document.getElementById('pexp-'+cod);
   const dRow=document.getElementById('prow-'+cod);
@@ -386,9 +386,12 @@ const profileHtmlProductiva = `
   <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div>
   </div></div>`;
   
-cell.innerHTML=`<div class="px-wrap">
+cell.innerHTML = confirmed.tierOn
+  ? `<div class="px-wrap">
   <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor - ${p.nombre}</div></div>
-    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${esgHtml}</div></div>`;
+    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${esgHtml}</div></div>`
+  : `<div class="px-wrap">
+  <div class="px-right">${esgHtml}</div></div>`;
 }
 
 function renderAccess(){
@@ -436,6 +439,7 @@ function renderAccess(){
         <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
         <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
       </div></div></div>`;}
+    }
 
     if(l.prod && l.prod.length>0){
       h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
@@ -459,11 +463,11 @@ function renderAccess(){
         </table>
       </div></div>`;
     }
-  }
   
   h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button><button class="btn-offer" onclick="goMkt()">Explorar más créditos</button></div>`;
   document.getElementById('access-inner').innerHTML=h;
 }
+
 
 function topInfoAccess(){
   const {loan:l,esgKeys,tierOn,loanType}=confirmed;
