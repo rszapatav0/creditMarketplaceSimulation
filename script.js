@@ -151,8 +151,7 @@ function renderCart(){
 function confirmAccess(){
   const esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
   const total=calcTotal();
-  const plan=esgKeys.length>0?'Premium':tierOn?'Estándar':'—';
-  confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
+  confirmed={loan:L,total,esgKeys,tierOn,loanType:L.tipo};
   purchases[L.id]=confirmed;
   updateBalance(total);
   if(L.testValue==='no'){dismissedLoans.add(L.id); goMkt(); return;}
@@ -393,7 +392,7 @@ cell.innerHTML=`<div class="px-wrap">
 }
 
 function renderAccess(){
-  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
   const isB=l.tipo==='banco';
   let h='';
@@ -402,7 +401,7 @@ function renderAccess(){
   const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
 
   const hasFundamentals = tierOn;
   const hasEsg = esgKeys.length > 0;
@@ -439,7 +438,7 @@ function renderAccess(){
       </div></div></div>`;}
 
     if(l.prod && l.prod.length>0){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title"Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
@@ -461,12 +460,13 @@ function renderAccess(){
       </div></div>`;
     }
   }
-
+  
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button><button class="btn-offer" onclick="goMkt()">Explorar más créditos</button></div>`;
   document.getElementById('access-inner').innerHTML=h;
 }
 
 function topInfoAccess(){
-  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
   const isB=loanType==='banco';
   let h='';
