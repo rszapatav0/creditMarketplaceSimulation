@@ -31,6 +31,8 @@ function saveState(){
 }
 
 let state = loadState();
+let tempDismissedLoans = new Set();
+let activeLoanTab = 'yes';
 
 
 // ─── ───────────────────────────────────────────────
@@ -128,14 +130,20 @@ function doLogout(){
 
 function dismissLoan(id, event){
   event.stopPropagation();
+  const loan = getLoans().find(l => l.id === id);
+  if(loan?.testValue === 'yes'){
+    tempDismissedLoans.add(id);
+    renderLoans();
+    return;
+  }
   if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);
-  // Track interaction
   if(!state.interactions.notInterested.includes(id)) state.interactions.notInterested.push(id);
   saveState();
   renderLoans();
 }
 
 function switchLoanTab(tab){
+ if(activeLoanTab === 'yes' && tab !== 'yes'){tempDismissedLoans.clear();}
   activeLoanTab=tab;
   currentPage=1;
   document.querySelectorAll('.loan-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
@@ -183,8 +191,8 @@ function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');
   });
   document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = true;
-  document.querySelector('[data-tab="no"]').disabled  = true;
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -218,7 +226,9 @@ function showGeneralQuestions(){
 
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
-  getLoans().filter(l=>!state.dismissedLoans.includes(l.id)&&l.testValue===activeLoanTab)   .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
+  getLoans()
+  .filter(l=>!state.dismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab)
+    .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
   .forEach(l=>{
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
@@ -646,7 +656,7 @@ function renderAccess(){
   const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button><button class="btn-s" onclick="goMkt()">Explorar más créditos</button></div>`;
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
 
   const hasFundamentals = tierOn;
   const hasEsg = esgKeys.length > 0;
@@ -717,6 +727,7 @@ function renderAccess(){
         </div></div></div>`;
     }
 
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button><button class="btn-offer" onclick="goMkt()">Explorar más créditos</button></div>`;
   document.getElementById('access-inner').innerHTML=h;
 }
 
@@ -816,7 +827,8 @@ function submitOffer(){
     <div class="srow"><span class="sr-l">Aval Confianza SA-FGR</span><span class="sr-v">${v('of-aval-conf')}</span></div>
     <div class="srow"><span class="sr-l">Vigencia</span><span class="sr-v">${v('of-vigencia')}</span></div>
     <div class="srow"><span class="sr-l">Estado</span><span class="sr-v" style="color:var(--blue)">Enviada · Pendiente respuesta</span></div>`;
-  if(!state.dismissedLoans.includes(l.id)) state.dismissedLoans.push(l.id);
+  if(l.testValue === 'yes'){tempDismissedLoans.add(l.id);} else {
+    if(!state.dismissedLoans.includes(l.id)){state.dismissedLoans.push(l.id);}}
     const producerOffers = {};
     if(l.paqueteFlexible && l.prod && l.prod.length > 0){
       l.prod.forEach(p => {
