@@ -179,12 +179,12 @@ const LOANS_BANCO=[
   {id:'b2',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     fundamentales:true,priceFundamentales:'100',
-    aclimatar:true,whisp:true,croppie:true,priceTools:'150',
+    aclimatar:true,whisp:true,croppie:true,priceTools:'150',continue:false,
   },
   {id:'b6',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     fundamentales:true,priceFundamentales:'100',
-    aclimatar:false,whisp:false,croppie:false,priceTools:null,
+    aclimatar:false,whisp:false,croppie:false,priceTools:null,continue:true,
   },
 ];
 
@@ -192,7 +192,7 @@ const LOANS_COOP=[
   {id:'c2',tipo:'coop',testValue:'no',fechaDesembolso:'2024-11-04',name:'',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
     fundamentales:true,priceFundamentales:'100',
-    aclimatar:false,whisp:false,croppie:true,priceTools:'50',
+    aclimatar:false,whisp:false,croppie:true,priceTools:'50',continue:true,
   },
 ];
 
@@ -200,6 +200,6 @@ const LOANS_GRUPO=[
   {id:'g2',tipo:'grupo',testValue:'no',fechaDesembolso:'2024-11-05',name:'',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
     fundamentales:false,priceFundamentales:null,
-    aclimatar:true,whisp:false,croppie:true,priceTools:'150',
+    aclimatar:true,whisp:false,croppie:true,priceTools:'150',continue:false,
   },
 ];
