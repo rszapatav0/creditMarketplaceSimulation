@@ -226,8 +226,7 @@ function confirmAccess(){
   const plan=esgKeys.length>0?'Premium':tierOnFinal?'Estándar':'-';
   confirmed={loan:L,total,esgKeys,plan,tierOn:tierOnFinal,loanType:L.tipo};
   purchases[L.id]=confirmed;
-  updateBalance(total);
-  if(L.testValue==='no'){dismissedLoans.add(L.id); goMkt(); return;}
+  if(L.testValue==='no'){updateBalance(total);dismissedLoans.add(L.id); goMkt(); return;}
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
