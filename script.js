@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,purchases={};
+let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=10,purchases={};
 
 // ─── SINGLE SESSION STATE OBJECT ───────────────────────────────────────────────
 function defaultState(){
