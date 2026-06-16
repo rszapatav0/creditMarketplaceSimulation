@@ -3,6 +3,7 @@ let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage
 // ─── SINGLE SESSION STATE OBJECT ───────────────────────────────────────────────
 function defaultState(){
   return {
+    sessionGroup: null,
     generalQuestionsCompleted: false,
     generalAnswers: {},
     dismissedLoans: [],
@@ -34,7 +35,31 @@ let state = loadState();
 
 // ─── ───────────────────────────────────────────────
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
-function getLoans(){return [...LOANS_BANCO_TEST,...LOANS_BANCO,...LOANS_COOP_TEST,...LOANS_COOP,...LOANS_GRUPO_TEST,...LOANS_GRUPO];}
+
+function assignSessionGroup(){
+  const grupoIds = [...new Set(
+    [...LOANS_BANCO, ...LOANS_COOP, ...LOANS_GRUPO]
+      .map(l => l.grupoId)
+      .filter(id => id != null)
+  )].sort((a,b)=>a-b); 
+  if(!grupoIds.length) return null;
+  // Current rule: derive group from login-time minute (easily swappable)
+  const index = new Date().getMinutes() % grupoIds.length;
+  return grupoIds[index];
+}
+
+function getLoans(){
+  const g = state.sessionGroup;
+  const filterNo = l => l.grupoId == null || l.grupoId === g;
+  return [
+    ...LOANS_BANCO_TEST,
+    ...LOANS_BANCO.filter(filterNo),
+    ...LOANS_COOP_TEST,
+    ...LOANS_COOP.filter(filterNo),
+    ...LOANS_GRUPO_TEST,
+    ...LOANS_GRUPO.filter(filterNo),
+  ];
+}
 
 function syncPills(){
   [['tb-u','tb-r'],['tb-u2','tb-r2'],['tb-u3','tb-r3'],['tb-u4','tb-r4'],['tb-u5','tb-r5']].forEach(([uid,rid])=>{
@@ -79,7 +104,10 @@ function doLogin(){
   const found=USERS.find(x=>x.email===u&&x.pass===p);
   if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
   err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
-  U=found;syncPills();initBalance();renderBalanceDisplay();
+  U=found;
+  state.sessionGroup = assignSessionGroup();
+  saveState();
+  syncPills();initBalance();renderBalanceDisplay();
   document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles';
   showGeneralQuestions();show('s-market');
 }

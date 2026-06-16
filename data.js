@@ -97,7 +97,7 @@ const CROPPIE_CONFIG = {
 
 // ── Credits list: demo ──────────────────────────────────────────────────────
 const LOANS_BANCO_TEST=[
-  {id:'b1',tipo:'banco',testValue:'yes',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A. Test',region:'El Paraíso, Honduras',
+  {id:'tb1',tipo:'banco',testValue:'yes',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A. Test',region:'El Paraíso, Honduras',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',mercados:'Alemania, Países Bajos',
@@ -126,7 +126,7 @@ const LOANS_BANCO_TEST=[
 ];
 
 const LOANS_COOP_TEST=[
-  {id:'c1',tipo:'coop',testValue:'yes',fechaDesembolso:'2024-11-01',name:'Ramiro Rosales Aguilar Test',region:'Ocotepeque, Honduras',
+  {id:'tc1',tipo:'coop',testValue:'yes',fechaDesembolso:'2024-11-01',name:'Ramiro Rosales Aguilar Test',region:'Ocotepeque, Honduras',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'2',volumenTotal:'111',
     contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
@@ -143,7 +143,7 @@ const LOANS_COOP_TEST=[
 ];
 
 const LOANS_GRUPO_TEST=[
-  {id:'g1',tipo:'grupo',testValue:'yes',fechaDesembolso:'2024-11-03',name:'Grupo Productores La Esperanza Test',region:'El Paraíso, Honduras',
+  {id:'tg1',tipo:'grupo',testValue:'yes',fechaDesembolso:'2024-11-03',name:'Grupo Productores La Esperanza Test',region:'El Paraíso, Honduras',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
     destinos:'Cosecha, insumos, infraestructura',areaProd:'3.1',volumenTotal:'111',
     contrato:null,smartContract:true,volContrato:null,
@@ -176,12 +176,12 @@ const LOANS_GRUPO_TEST=[
 
 // ── Credits list: DCE ──────────────────────────────────────────────────────
 const LOANS_BANCO=[
-  {id:'b2',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'',
+  {id:'b1',grupoId:1,tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'g1',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     fundamentales:true,priceFundamentales:'100',
     aclimatar:true,whisp:true,croppie:true,priceTools:'150',continue:false,
   },
-  {id:'b6',tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'Exportadora El Paraíso S.A.',
+  {id:'b2',grupoId:2,tipo:'banco',testValue:'no',fechaDesembolso:'2024-11-01',name:'g2',
     acopio:'2,400,000',productores:'680,000',nProd:38,paqueteFlexible: true,
     fundamentales:true,priceFundamentales:'100',
     aclimatar:false,whisp:false,croppie:false,priceTools:null,continue:true,
@@ -189,7 +189,12 @@ const LOANS_BANCO=[
 ];
 
 const LOANS_COOP=[
-  {id:'c2',tipo:'coop',testValue:'no',fechaDesembolso:'2024-11-04',name:'',
+  {id:'c1',grupoId:1,tipo:'coop',testValue:'no',fechaDesembolso:'2024-11-04',name:'g1',
+    acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
+    fundamentales:true,priceFundamentales:'100',
+    aclimatar:false,whisp:false,croppie:true,priceTools:'50',continue:true,
+  },
+  {id:'c2',grupoId:3,tipo:'coop',testValue:'no',fechaDesembolso:'2024-11-04',name:'g2',
     acopio:null,productores:'45,000',nProd:1,paqueteFlexible: false,
     fundamentales:true,priceFundamentales:'100',
     aclimatar:false,whisp:false,croppie:true,priceTools:'50',continue:true,
@@ -197,7 +202,12 @@ const LOANS_COOP=[
 ];
 
 const LOANS_GRUPO=[
-  {id:'g2',tipo:'grupo',testValue:'no',fechaDesembolso:'2024-11-05',name:'',
+  {id:'g1',grupoId:2,tipo:'grupo',testValue:'no',fechaDesembolso:'2024-11-05',name:'g2',
+    acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
+    fundamentales:false,priceFundamentales:null,
+    aclimatar:true,whisp:false,croppie:true,priceTools:'150',continue:false,
+  },
+  {id:'g2',grupoId:4,tipo:'grupo',testValue:'no',fechaDesembolso:'2024-11-05',name:'g3',
     acopio:null,productores:'105,000',nProd:3,paqueteFlexible:true,
     fundamentales:false,priceFundamentales:null,
     aclimatar:true,whisp:false,croppie:true,priceTools:'150',continue:false,
