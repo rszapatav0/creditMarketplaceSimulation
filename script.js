@@ -150,7 +150,7 @@ function renderDetail(){
   if(L.testValue==='no'){
     const fundOn=L.fundamentales===true;
     const fundPriceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="tier-price"></span>`:'';
-    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span>${fundPriceHtml}</div><button class="toggle${fundOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${fundOn?'1':'.45'}"></button></div></div>`;
+    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span></div><button class="toggle${fundOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${fundOn?'1':'.45'}"></button></div></div>`;
 
     const toolsDef=[
       {key:'aclimatar',label:'aCLIMAtar'},
@@ -171,9 +171,9 @@ function renderDetail(){
     renderCartFixed(fundOn,toolsOn);
     return;
   }
-  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${precioFundamentales}</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
+  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
-  const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="esg-cost">+L.${e.cost}</span></div>`).join('');
+  const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span></div>`).join('');
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
   document.getElementById('dmain').innerHTML=h;
   renderCart();
