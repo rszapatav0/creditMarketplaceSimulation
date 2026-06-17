@@ -6,7 +6,7 @@
 <title>DIG-IN · Mercado de Crédito Agrícola · Honduras</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+**{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f7f8fa;--white:#fff;--surface:#f0f2f5;--surface2:#e8eaee;
   --border:#e2e5ea;--border2:#d0d4db;
@@ -34,7 +34,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .subs-text strong{font-weight:500;display:block;margin-bottom:2px}
 .login-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.75rem 1.5rem;width:100%;max-width:420px;display:flex;flex-direction:column;gap:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .flabel{font-size:10px;color:var(--text2);font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:5px}
-.finput{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
+.finput{width:93%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
 .finput:focus{border-color:var(--accent);background:var(--white)}
 .finput.err{border-color:var(--red);background:var(--red-lt)}
 .login-err{font-size:11px;color:var(--red);display:none;padding:8px 10px;background:var(--red-lt);border-radius:6px;border:1px solid var(--red-bd)}
@@ -42,8 +42,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .btn-p{background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--font);cursor:pointer;transition:opacity .2s;padding:11px 20px}
 .btn-p:hover{opacity:.88}
 .btn-p:disabled{background:var(--surface2);color:var(--text3);cursor:not-allowed;opacity:1}
+.btn-c{background:var(--red);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--font);cursor:pointer;transition:opacity .2s;padding:11px 20px;margin-top:10px}
+.btn-c:hover{opacity:.88}
 .btn-s{background:var(--white);color:var(--text2);border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--font);cursor:pointer;transition:border-color .15s,color .15s;padding:9px 20px}
-.btn-s:hover{border-color:var(--accent);color:var(--accent)}
+.btn-s:hover{border-color:var(--accent);color:var(--accent)}´
 .cred-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;width:100%;max-width:420px}
 .cred-title{font-size:10px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:.6rem}
 .cred-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
@@ -238,21 +240,21 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .px-esg-hdr{font-size:10px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase;padding-bottom:.35rem;border-bottom:1px solid var(--border);margin-bottom:.1rem}
 .px-card{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:.6rem .85rem}
 .px-card-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
-.px-card-name{font-size:12px;color:var(--text2);font-weight:600;text-align:center;margin-bottom:4px;}
+.px-card-name{font-size:10px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase;padding-bottom:.35rem;border-bottom:1px solid var(--border);margin-bottom:4px;}
 .px-card-val{font-size:11px;font-weight:500;text-align:right}
-.px-card-src{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:3px}
+.px-card-src{font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:10px;margin-bottom:3px}
 .px-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
 .px-fill{height:3px;background:var(--accent);border-radius:2px}
 .px-card-interp{font-size:10px;color:var(--text2);font-style:italic;margin-top:3px}
-.px-grid2{  display:grid;grid-template-columns:150px 1fr 150px 1fr;gap:0;}
-.px-grid2-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:600;text-align:left;background:rgba(0,0,0,.03);border-bottom:1px solid var(--border);}
-.px-grid2-label{padding:6px 8px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border);}
-.px-grid2-value{padding:6px 8px;font-size:10px;border-bottom:1px solid var(--border);}
+.px-grid2{display:grid;grid-template-columns:150px 1fr 150px 1fr;gap:0;}
+.px-grid2-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:500;text-align:left;background:var(--bg);border-bottom:1px solid var(--border);text-transform:uppercase;}
+.px-grid2-label{padding:6px 8px;font-size:10px;font-weight:500;border-bottom:.5px solid var(--border);background:var(--bg);}
+.px-grid2-value{padding:8px 10px;color:var(--text);font-size:10px;border-bottom:1px solid var(--border);font-family:var(--font);}
 .px-grid{display:grid;grid-template-columns:150px 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:4px 0;}
-.px-grid-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:600;text-align:left;background:rgba(0,0,0,.03);border-bottom:1px solid var(--border);}
+.px-grid-title{grid-column:1 / -1;padding:6px 8px;font-size:10px;font-weight:500;text-align:left;background:var(--bg);border-bottom:1px solid var(--border);text-transform:uppercase;}
 .px-grid-label{padding:6px 8px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border);}
 .px-grid-value{padding:6px 8px;font-size:10px;border-bottom:1px solid var(--border);}
-.px-grid-detail{margin-left:8px;font-style:italic;color:var(--text2);font-weight:400;}
+.px-grid-detail{margin-left:8px;color:var(--text2);font-weight:400;}
 .px-grid:last-child .px-grid-label,.px-grid:last-child .px-grid-value{border-bottom:none;}
 .px-status{display:inline-block;min-width:150px;text-align:center;padding:4px 8px;border-radius:6px;font-weight:600;}
 .px-status.low{background:#f3faf3;color:#2e7d32;border:1px solid #c8e6c9;}
@@ -284,22 +286,17 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .op-v{font-size:13px;font-weight:500;color:var(--blue)}
 .o-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:.5rem}
 .offer-sent-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:1.5rem;padding:2rem;text-align:center}
+#financial-flex-fields{display: contents;margin-bottom:20px}
+.financial-spacer{height:12px;}
 </style>
 </head>
 <body>
 
 <!-- S1: LOGIN -->
 <div id="s-login" class="screen active">
-  <div class="brand-tag">DIG-IN · Honduras</div>
-  <div class="brand-h1">Mercado de <b>Crédito Agrícola</b></div>
-  <div class="brand-sub">Infraestructura Digital de Inclusión Financiera - Sector Café</div>
-  <div class="subs-banner">
-    <div class="subs-icon">ℹ</div>
-    <div class="subs-text">
-      <strong>Suscripción base incluida — L. 500/mes</strong>
-      Su membresía activa le da acceso al listado completo de créditos. El detalle de cada crédito y las métricas ESG se adquieren por separado según lo que necesite consultar.
-    </div>
-  </div>
+  <div class="brand-tag">Confianza SA-FGR</div>
+  <div class="brand-h1"><b>Marketplace de Garantías</b> · Central de <b>C</b>rédito <b>V</b>erde</div>
+  <div class="brand-sub">Infraestructura Digital de Inclusión Financiera · Sector Café</div>
   <div class="login-card">
     <div><label class="flabel">Usuario</label><input class="finput" id="inp-u" type="text" placeholder="usuario@institucion.hn" autocomplete="off"></div>
     <div><label class="flabel">Contraseña</label><input class="finput" id="inp-p" type="password" placeholder="••••••••"></div>
@@ -308,21 +305,21 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
   </div>
   <div class="cred-box">
     <div class="cred-title">Credenciales de demostración</div>
-    <div class="cred-row"><span class="cred-role">Banco Comercial</span><span class="cred-vals">usuario: <span>banco@bancafe.hn</span><br>contraseña: <span>banco2024</span></span></div>
+    <div class="cred-row"><span class="cred-role">Banco Comercial</span><span class="cred-vals">usuario: <span>banco@lafise.hn</span><br>contraseña: <span>banco2024</span></span></div>
     <div class="cred-row"><span class="cred-role">Cooperativa</span><span class="cred-vals">usuario: <span>gestor@cofemarcala.hn</span><br>contraseña: <span>coop2024</span></span></div>
-    <div class="cred-row"><span class="cred-role">Microfinanciera</span><span class="cred-vals">usuario: <span>analista@fise.hn</span><br>contraseña: <span>imf2024</span></span></div>
+    <div class="cred-row"><span class="cred-role">Microfinanciera</span><span class="cred-vals">usuario: <span>oficial@odef.hn</span><br>contraseña: <span>imf2024</span></span></div>
   </div>
 </div>
 
 <!-- S2: MARKETPLACE -->
 <div id="s-market" class="screen">
-  <div class="topbar"><div class="tb-logo">DIG-IN · Honduras</div><div class="tb-right"><div class="tb-user" id="tb-u"></div><div class="rpill" id="tb-r"></div><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
-  <div class="pi"><div class="pg-label">Oportunidades disponibles</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
+  <div class="topbar"><div class="tb-logo">Confianza SA-FGR</div><div class="tb-right"><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
+  <div class="pi"><div class="pg-label">Consulta de preaprobaciones</div><div class="pg-title" id="mkt-title"></div><div class="loan-list" id="loan-list"></div><div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div></div>
 </div>
 
 <!-- S3: CHECKOUT -->
 <div id="s-detail" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u2"></div><div class="rpill" id="tb-r2"></div><div class="wallet-display"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="wallet-display"></div></div></div>
   <div style="max-width:1020px;margin:0 auto">
     <div class="dlayout">
       <div class="dmain" id="dmain"></div>
@@ -332,7 +329,8 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
         <hr class="cdiv">
         <div class="ctotal"><div class="ct-l">Total</div><div class="ct-v"><small>L. </small><span id="cart-num">0</span></div></div>
         <button class="btn-p" style="width:100%" id="cart-cta" onclick="confirmAccess()">Confirmar acceso →</button>
-        <div class="cart-note">La suscripción base (L. 500/mes) ya está activa en su cuenta.<br>Este cobro es por el acceso específico a este crédito.</div>
+        <button class="btn-c" style="width:100%" id="cart-cancel" onclick="cancelAccess()">← Cancelar acceso</button>
+        <div class="cart-note">Al confirmar, accederá a la información seleccionada para este crédito específico.</div>
         <div class="cart-info" id="cart-info" style="display:none"></div>
       </div>
     </div>
@@ -353,13 +351,13 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 
 <!-- S5: ACCESS -->
 <div id="s-access" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u3"></div><div class="rpill" id="tb-r3"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"></div></div>
   <div class="ai" id="access-inner"></div>
 </div>
 
 <!-- S6: OFFER -->
 <div id="s-offer" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="show('s-access')">← Volver a la información</button><div class="tb-right"><div class="tb-user" id="tb-u4"></div><div class="rpill" id="tb-r4"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="show('s-access')">← Volver a la información</button><div class="tb-right"></div></div>
 <div class="oi">
   <div class="o-hdr">
     <div class="o-title">Estructurar oferta de crédito</div>
@@ -370,10 +368,13 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
     <div>
       <div class="fs-title">Condiciones financieras principales</div>
       <div class="frow">
-          <div class="fg"><label class="flabel">Monto ofertado (L.)</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
+        <div id="financial-flex-fields">
+          <div class="fg"><label class="flabel">Monto ofertado</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
           <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1" placeholder="ej. 14.5"></div>
-          <div class="fg"><label class="flabel">Plazo (meses)</label>
-            <select class="fsel" id="of-plazo"><option value="">Seleccionar...</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
+          <div class="fg"><label class="flabel">Plazo (meses)</label><input class="finp-s" id="of-plazo" type="number" step="1" placeholder="ej. 5"></div>
+        </div></div>
+        <div class="financial-spacer"></div>
+      <div class="frow">
           <div class="fg"><label class="flabel">Periodicidad de pago</label>
             <select class="fsel" id="of-periodo"><option value="">Seleccionar...</option><option>Mensual</option><option>Bimestral</option><option>Trimestral</option><option>Al vencimiento</option></select></div>
           <div class="fg"><label class="flabel">Tipo de amortización</label>
@@ -394,8 +395,6 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
             <select class="fsel" id="of-seguro"><option>No requerido</option><option>Seguro de cosecha</option><option>Seguro de vida</option><option>Seguro de cosecha + vida</option></select></div>
           <div class="fg"><label class="flabel">Requiere aval de Confianza SA-FGR</label>
             <select class="fsel" id="of-aval-conf"><option>Sí, requerido</option><option>No requerido</option><option>Opcional / a negociar</option></select></div>
-          <div class="fg"><label class="flabel">Destino del crédito</label>
-            <select class="fsel" id="of-destino"><option value="">Seleccionar...</option><option>Capital de trabajo para acopio</option><option>Insumos agrícolas</option><option>Infraestructura de beneficiado</option><option>Cosecha y post-cosecha</option><option>Múltiple (acopio + productores)</option></select></div>
         </div>
       </div>
       <div>
@@ -416,9 +415,9 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
             <tr>
               <th>Código</th>
               <th>Nombre</th>
-              <th>Monto solicitado (L.)</th>
+              <th>Monto solicitado</th>
               <th>Plazo solicitado (meses)</th>
-              <th>Monto ofertado (L.)</th>
+              <th>Monto ofertado</th>
               <th>Tasa de interés anual (%)</th>
               <th>Plazo ofertado (meses)</th>
             </tr>
@@ -437,40 +436,42 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 
 <!-- S7: OFFER SENT -->
 <div id="s-offer-sent" class="screen">
-  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"><div class="tb-user" id="tb-u5"></div><div class="rpill" id="tb-r5"></div></div></div>
+  <div class="topbar"><button class="tb-back" onclick="goMkt()">← Volver al mercado</button><div class="tb-right"></div></div>
   <div class="offer-sent-wrap">
     <div class="sicon blue">✉</div>
-    <div class="stitle">Oferta enviada al intermediario</div>
-    <div class="ssub">La propuesta ha sido transmitida a través del sistema DIG-IN. El encargado recibirá una notificación y podrá evaluar y responder la oferta desde su portal.</div>
+    <div class="stitle">Oferta enviada</div>
+    <div class="ssub">La propuesta ha sido transmitida a través del sistema DIG-IN. La persona encargada recibirá una notificación y podrá evaluar y responder la oferta desde su portal.</div>
     <div class="scard" id="offer-sent-card"></div>
     <div class="btn-row">
       <button class="btn-p" onclick="goMkt()">Explorar más créditos</button>
-      <button class="btn-s" onclick="goAccess()">Ver información del crédito</button>
     </div>
   </div>
 </div>
 
+
 <script>
 const USERS=[
-  /* {email:'banco@bancafe.hn',pass:'banco2024',role:'banco',name:'BanCafé — Analista de Crédito'},
-  {email:'gestor@cofemarcala.hn',pass:'coop2024',role:'coop',name:'Coop. Cafetalera Marcala'},
-  {email:'analista@fise.hn',pass:'imf2024',role:'imf',name:'FISE — Oficial de Cartera'}, */
-  {email:'1',pass:'1',role:'banco',name:'BanCafé — Analista de Crédito'},
+/*  {email:'1',pass:'1',role:'banco',name:'Banco LAFISE - Analista de Crédito'},
   {email:'2',pass:'2',role:'coop',name:'Coop. Cafetalera Marcala'},
-  {email:'3',pass:'3',role:'imf',name:'FISE — Oficial de Cartera'},
+  {email:'3',pass:'3',role:'imf',name:'ODEF Financiera - Oficial de Cartera'},*/
+  {email:'banco@lafise.hn',pass:'banco2024',role:'banco',name:'Banco LAFISE - Analista de Crédito'},
+  {email:'gestor@cofemarcala.hn',pass:'coop2024',role:'coop',name:'Coop. Cafetalera Marcala'},
+  {email:'oficial@odef.hn',pass:'imf2024',role:'imf',name:'ODEF Financiera - Oficial de Cartera'},
 ];
 
 
 // ── Metrics and tools ──────────────────────────────────────────────────────
+const precioFundamentales=100;
+
 const ESG=[
-  {id:'e1',label:'aCLIMAtar',cost:80},
-  {id:'e2',label:'Whisp - Open Foris',cost:70},
-  {id:'e4',label:'Croppie',cost:80},
+  {id:'e1',label:'aCLIMAtar',cost:50},
+  {id:'e2',label:'Whisp - Open Foris',cost:50},
+  {id:'e4',label:'Croppie',cost:50},
 ];
 
 const ACLIMATAR_CONFIG = {
   n:   'aCLIMAtar',
-  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Fundación Mundial del Cacao (WCF), Rikolto, Fundación Hanns R. Neumann Stiftung',
+  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Fundación Mundial del Cacao (WCF), Rikolto, Fundación Hanns R. Neumann Stiftung.',
   aptitudClimActualClass: {
     low:'low',medium:'medium',high:'high',uncertain:'uncertain',limitations:'limitations',unsuitable:'unsuitable',unknown:'unknown'},
   aptitudClimActualLabel: {
@@ -529,7 +530,7 @@ const ACLIMATAR_CONFIG = {
 
 const WHISP_CONFIG = {
   n:   'Whisp - Open Foris',
-  src: 'Organización de las Naciones Unidas para la Alimentación y la Agricultura - 2025 OpenForis',
+  src: 'Organización de las Naciones Unidas para la Alimentación y la Agricultura - 2025 OpenForis.',
   riskClass: {
     low:'low',high:'high',uncertain:'uncertain',unknown:'unknown'},
   riskLabel: {
@@ -543,89 +544,492 @@ const WHISP_CONFIG = {
 
 const CROPPIE_CONFIG = {
   n:   'Croppie',
-  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Tecnicafé',
+  src: 'Alianza Bioversity Internacional y CIAT, Producers Direct, Tecnicafé.',
 };
 
 
 // ── Credits list ──────────────────────────────────────────────────────
 const LOANS_BANCO=[
-  {id:'b1',name:'Exportadora El Paraíso S.A.',region:'El Paraíso, Honduras',tipo:'banco',paqueteFlexible: true,
-   acopio:'L. 2,400,000',productores:'L. 680,000',nProd:38,plazo:'6 meses',precio:320,smartContract:true,
-   anios:12,volExport:'1,840 qq',mercados:'Alemania, Países Bajos',
-   garantias:'Garantía prendaria sobre café en bodega · Aval solidario · Carta de compromiso Supremo Hamburg GmbH',
-   prod:[
-    {cod:'HN-0041',nombre:'Martínez Flores, J.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',aval:'A',
-      department:'Santa Bárbara', municipality:'San Nicolás', aldea:'Las Marías', areaProd:'2.4 mz', geo:'14.21°N 86.83°W',carnet:'IHCAFE-2021-0041',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-      propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'42 qq / 3 ciclos',histIngresos:'1000 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
-     esg:[
-      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'unsuitable', estimationDate:'2024-11-01',
-        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
-        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
-     ]},
-    {cod:'HN-0052',nombre:'López Aguilar, R.',monto:'L. 22,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
-      department:'Lempira', municipality:'Lempira', aldea:'Las Marías', areaProd:'1.3 mz', geo:'14.18°N 86.91°W',carnet:'IHCAFE-2020-0052',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-      propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'55 qq / 4 ciclos',histIngresos:'2000 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
-     esg:[
-      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'medium', estimationDate:'2024-11-01',
-        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
-        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'high', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
-     ]},
-   ]},
-];
+  {id:'tb1',tipo:'banco',fechaDesembolso:'2026-06-01',name:'Exportadora El Paraíso',region:'El Paraíso, Honduras',
+    acopio:'1,200,000',productores:'220,000',nProd:10,paqueteFlexible: true,
+    destinos:'Insumos, Cosecha, Renovación',areaProd:'20.7',volumenTotal:'511',
+    plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'800',mercados:'Alemania, Países Bajos',
+    prod:[
+      {cod:'HN-tb1-001',nombre:'Martínez Flores, J.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'2.4 mz', geo:'14.21°N 86.83°W',carnet:'IHCAFE-2021-0041',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'42 qq / 3 ciclos',histIngresos:'1000 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'unsuitable', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'22', production:'110', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-002',nombre:'López Aguilar, R.',monto:'L. 22,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'1.3 mz', geo:'14.18°N 86.91°W',carnet:'IHCAFE-2020-0052',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'55 qq / 4 ciclos',histIngresos:'2000 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'high', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'22', production:'110', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-003',nombre:'García Hernández, M.',monto:'L. 20,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'2.1 mz', geo:'14.20°N 86.85°W',carnet:'IHCAFE-2021-0043',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'48 qq / 3 ciclos',histIngresos:'1500 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'3000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'24', production:'115', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-004',nombre:'Ramírez Cruz, E.',monto:'L. 25,000',plazo:'7 meses',destino:'Cosecha',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'1.8 mz', geo:'14.19°N 86.87°W',carnet:'IHCAFE-2019-0064',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'52 qq / 4 ciclos',histIngresos:'2200 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'high', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'high', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'20', production:'98', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-005',nombre:'Castillo Mejía, P.',monto:'L. 17,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'1.5 mz', geo:'14.22°N 86.88°W',carnet:'IHCAFE-2022-0070',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'38 qq / 2 ciclos',histIngresos:'1200 HNL / 2 ciclos',otherIncome:'Sí', amountOtherIncome:'2500 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'medium', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'25', production:'120', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-006',nombre:'Rodríguez Funes, C.',monto:'L. 28,000',plazo:'8 meses',destino:'Renovación',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'3.0 mz', geo:'14.23°N 86.84°W',carnet:'IHCAFE-2018-0082',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'68 qq / 5 ciclos',histIngresos:'3500 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'6000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'high', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'27', production:'145', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-007',nombre:'Morales Pineda, A.',monto:'L. 19,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'1.2 mz', geo:'14.17°N 86.90°W',carnet:'IHCAFE-2021-0091',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'30 qq / 3 ciclos',histIngresos:'900 HNL / 3 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'unknown', sequia:'unsuitable', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'high', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'18', production:'85', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-008',nombre:'Santos Rivera, D.',monto:'L. 24,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'2.7 mz', geo:'14.24°N 86.86°W',carnet:'IHCAFE-2020-0105',variedad:'IHCAFE 90',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'60 qq / 4 ciclos',histIngresos:'2800 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'4500 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'low', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'26', production:'135', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-009',nombre:'Vásquez Romero, H.',monto:'L. 21,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'1.9 mz', geo:'14.18°N 86.84°W',carnet:'IHCAFE-2019-0113',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'46 qq / 4 ciclos',histIngresos:'1800 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'medium', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'23', production:'112', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb1-010',nombre:'Pérez Mendoza, S.',monto:'L. 26,000',plazo:'7 meses',destino:'Renovación',aval:'A',
+        department:'El Paraíso', municipality:'Danlí', aldea:'Las Marías', areaProd:'2.8 mz', geo:'14.21°N 86.89°W',carnet:'IHCAFE-2018-0124',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'72 qq / 5 ciclos',histIngresos:'4000 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'7000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'high', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'28', production:'155', estimationDate:'2026-05-15'},
+      ]},
+      ]},
+  {id:'tb2',tipo:'banco',fechaDesembolso:'2026-06-02',name:'Beneficio Río Frío',region:'Santa Bárbara, Honduras',
+    acopio:'2,400,000',productores:'254,000',nProd:12,paqueteFlexible:false,
+    destinos:'Insumos, Cosecha, Renovación',areaProd:'24.9',volumenTotal:'602',
+    plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'950',mercados:'Alemania, Países Bajos',
+    prod:[
+      {cod:'HN-tb2-001',nombre:'Gómez Mejía, L.',monto:'L. 19,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'El Porvenir', areaProd:'1.8 mz', geo:'14.93°N 88.28°W',carnet:'IHCAFE-2021-0201',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'40 qq / 3 ciclos',histIngresos:'1200 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'3000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'21', production:'100', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-002',nombre:'Hernández Ruiz, M.',monto:'L. 24,000',plazo:'7 meses',destino:'Cosecha',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'Los Laureles', areaProd:'2.2 mz', geo:'14.94°N 88.26°W',carnet:'IHCAFE-2020-0188',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'55 qq / 4 ciclos',histIngresos:'2000 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'high', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de árboles de sombra, Cosecha de agua',
+          practicasRecomendadas:'Uso de biochar en vivero, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'23', production:'118', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-003',nombre:'Castro Aguilar, J.',monto:'L. 21,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'San Juan', areaProd:'1.6 mz', geo:'14.92°N 88.29°W',carnet:'IHCAFE-2019-0172',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'38 qq / 3 ciclos',histIngresos:'1100 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'2500 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra',
+          practicasRecomendadas:'Injerto, Renovación de cafetales, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'20', production:'95', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-004',nombre:'López Pineda, R.',monto:'L. 26,000',plazo:'8 meses',destino:'Renovación',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'El Cedral', areaProd:'2.5 mz', geo:'14.95°N 88.27°W',carnet:'IHCAFE-2018-0150',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'65 qq / 5 ciclos',histIngresos:'3200 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'6000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de cafetales, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'26', production:'140', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-005',nombre:'Mejía Santos, D.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'La Esperanza', areaProd:'1.4 mz', geo:'14.91°N 88.30°W',carnet:'IHCAFE-2022-0210',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'35 qq / 2 ciclos',histIngresos:'900 HNL / 2 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'unknown', sequia:'unsuitable', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua',
+          practicasRecomendadas:'Fertilización orgánica'},
+        {id:'e2', risk:'high', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'18', production:'80', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-006',nombre:'Rivera Castro, P.',monto:'L. 23,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'El Roble', areaProd:'2.0 mz', geo:'14.96°N 88.25°W',carnet:'IHCAFE-2020-0199',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'50 qq / 4 ciclos',histIngresos:'2100 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'4000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de árboles de sombra',
+          practicasRecomendadas:'Injerto, Conservación de suelos, Fertilización orgánica'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'22', production:'110', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-007',nombre:'Vásquez Flores, A.',monto:'L. 20,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'El Paraíso Alto', areaProd:'1.7 mz', geo:'14.90°N 88.31°W',carnet:'IHCAFE-2019-0166',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'42 qq / 3 ciclos',histIngresos:'1300 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'2800 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Cosecha de agua',
+          practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'21', production:'105', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-008',nombre:'Ordoñez Mendoza, C.',monto:'L. 27,000',plazo:'8 meses',destino:'Renovación',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'Las Flores', areaProd:'2.6 mz', geo:'14.97°N 88.24°W',carnet:'IHCAFE-2018-0142',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'70 qq / 5 ciclos',histIngresos:'3500 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'6500 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'high', gradienteClim:'high', calor:'medium', sequia:'high', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de cafetales, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'28', production:'150', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-009',nombre:'Flores Reyes, J.',monto:'L. 22,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'El Carmen', areaProd:'2.1 mz', geo:'14.93°N 88.27°W',carnet:'IHCAFE-2020-0138',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'48 qq / 4 ciclos',histIngresos:'1800 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Conservación de suelos',
+          practicasRecomendadas:'Injerto, Fertilización orgánica'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'24', production:'120', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-010',nombre:'Méndez Aguilar, S.',monto:'L. 25,000',plazo:'7 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'La Unión', areaProd:'2.3 mz', geo:'14.98°N 88.23°W',carnet:'IHCAFE-2017-0120',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'60 qq / 4 ciclos',histIngresos:'2500 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de árboles de sombra, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Conservación de suelos, Fertilización orgánica'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'25', production:'135', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-011',nombre:'Pineda Castillo, R.',monto:'L. 21,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'El Naranjo', areaProd:'1.9 mz', geo:'14.92°N 88.32°W',carnet:'IHCAFE-2021-0115',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'44 qq / 3 ciclos',histIngresos:'1400 HNL / 3 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Cosecha de agua, Renovación de cafetales',
+          practicasRecomendadas:'Injerto, Fertilización orgánica'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'22', production:'108', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb2-012',nombre:'Santos Mejía, E.',monto:'L. 28,000',plazo:'8 meses',destino:'Renovación',aval:'A',
+        department:'Santa Bárbara', municipality:'San Nicolás', aldea:'El Sauce', areaProd:'2.8 mz', geo:'14.95°N 88.29°W',carnet:'IHCAFE-2018-0109',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'75 qq / 5 ciclos',histIngresos:'4000 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'7000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'high', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de cafetales, Aumentar la cobertura de sombra',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'29', production:'160', estimationDate:'2026-05-15'},
+      ]},
+  ]},
+  {id:'tb3',tipo:'banco',fechaDesembolso:'2026-06-03',name:'Beneficio Rosales',region:'Santa Bárbara, Honduras',
+    acopio:'1,800,000',productores:'198,000',nProd:9,paqueteFlexible:true,
+    destinos:'Insumos, Cosecha, Renovación',areaProd:'17.5',volumenTotal:'454',
+    plazoAcopio:'6',anios:12,volExport:'1,840',contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'600',mercados:'Alemania, Países Bajos',
+    prod:[
+      {cod:'HN-tb3-001',nombre:'Mendoza López, J.',monto:'L. 20,000',plazo:'6 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'La Cuchilla', areaProd:'1.6 mz', geo:'14.87°N 88.35°W',carnet:'IHCAFE-2021-0301',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'42 qq / 3 ciclos',histIngresos:'1300 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'2500 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Fertilización orgánica'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'22', production:'105', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-002',nombre:'Castro Mejía, R.',monto:'L. 24,000',plazo:'7 meses',destino:'Cosecha',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'El Carmen', areaProd:'2.1 mz', geo:'14.88°N 88.33°W',carnet:'IHCAFE-2020-0288',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'55 qq / 4 ciclos',histIngresos:'2100 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'high', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de cafetales, Cosecha de agua',
+          practicasRecomendadas:'Uso de biochar en vivero, Conservación de suelos'},
+        {id:'e2', risk:'medium', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'24', production:'120', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-003',nombre:'Hernández Cruz, M.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'Los Pinos', areaProd:'1.3 mz', geo:'14.86°N 88.36°W',carnet:'IHCAFE-2022-0315',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'35 qq / 3 ciclos',histIngresos:'1000 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'2000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra',
+          practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'20', production:'92', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-004',nombre:'Pineda Flores, A.',monto:'L. 27,000',plazo:'8 meses',destino:'Renovación',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'La Esperanza', areaProd:'2.7 mz', geo:'14.89°N 88.34°W',carnet:'IHCAFE-2019-0270',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'70 qq / 5 ciclos',histIngresos:'3800 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'6000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de árboles de sombra, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'28', production:'150', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-005',nombre:'Mejía Santos, D.',monto:'L. 21,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'El Roble', areaProd:'1.8 mz', geo:'14.85°N 88.32°W',carnet:'IHCAFE-2021-0266',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'48 qq / 4 ciclos',histIngresos:'1700 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'unknown', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua',
+          practicasRecomendadas:'Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'high', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'19', production:'88', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-006',nombre:'García Rivera, P.',monto:'L. 23,000',plazo:'7 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'El Paraíso', areaProd:'2.0 mz', geo:'14.90°N 88.31°W',carnet:'IHCAFE-2020-0255',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'52 qq / 4 ciclos',histIngresos:'2200 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'3500 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Cosecha de agua',
+          practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'23', production:'115', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-007',nombre:'Ortega Mendoza, S.',monto:'L. 19,000',plazo:'5 meses',destino:'Insumos',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'Las Flores', areaProd:'1.5 mz', geo:'14.87°N 88.37°W',carnet:'IHCAFE-2018-0239',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'40 qq / 3 ciclos',histIngresos:'1200 HNL / 3 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra',
+          practicasRecomendadas:'Injerto, Fertilización orgánica'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'21', production:'98', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-008',nombre:'Ramírez López, C.',monto:'L. 25,000',plazo:'7 meses',destino:'Renovación',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'El Cedral', areaProd:'2.4 mz', geo:'14.88°N 88.30°W',carnet:'IHCAFE-2019-0222',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'62 qq / 5 ciclos',histIngresos:'3000 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'5500 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'high', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de cafetales, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Uso de biochar en vivero, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'27', production:'145', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tb3-009',nombre:'Flores Aguilar, J.',monto:'L. 22,000',plazo:'6 meses',destino:'Cosecha',aval:'A',
+        department:'Santa Bárbara', municipality:'La Arada', aldea:'La Cuchilla Centro', areaProd:'2.1 mz', geo:'14.86°N 88.33°W',carnet:'IHCAFE-2022-0208',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+        propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'50 qq / 4 ciclos',histIngresos:'1800 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua',
+          practicasRecomendadas:'Injerto, Conservación de suelos, Fertilización orgánica'},
+        {id:'e2', risk:'medium', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'24', production:'120', estimationDate:'2026-05-15'},
+      ]},
+    ]},
+  ];
 
 const LOANS_COOP=[
-  {id:'c1',name:'Ramiro Rosales Aguilar',region:'Ocotepeque, Honduras',tipo:'coop',paqueteFlexible: false,
-   acopio:null,productores:'L. 45,000',nProd:1,plazo:'5 meses',precio:270,smartContract:true,
-   parcela:'2.4 ha · Finca El Aguacate',contrato:'Supremo Hamburg GmbH',volContrato:'38 qq',
-   geo:'14.41°N 89.22°W',eu:'Sí',aval:'A',hist:'3 ciclos · 34 qq promedio',
-   carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-   prod:[{cod:'OC-0033',nombre:'Rosales Aguilar, R.',monto:'L. 45,000',plazo:'5 meses',destino:'Cosecha + insumos',aval:'A',
-    department:'Santa Bárbara', municipality:'Arada', aldea:'La Esperanza', areaProd:'3.1 mz', geo:'14.41°N 89.22°W',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+  {id:'tc1',tipo:'coop',fechaDesembolso:'2026-06-01',name:'Rosales Aguilar, Ramiro',region:'Santa Bárbara, Honduras',
+    acopio:null,productores:'15,000',nProd:1,paqueteFlexible: false,
+    destinos:'Cosecha, insumos',areaProd:'3.1',volumenTotal:'38',
+    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'38',
+   prod:[
+    {cod:'HN-tc1-001',nombre:'Rosales Aguilar, Ramiro',monto:'L. 15,000',plazo:'5 meses',destino:'Cosecha, insumos',aval:'A',
+    department:'Santa Bárbara', municipality:'Arada', aldea:'El Palmo', areaProd:'3.1 mz', geo:'14.41°N 89.22°W',carnet:'IHCAFE-2020-0033',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'38 qq / 3 ciclos',histIngresos:'1300 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
     esg:[
-      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'uncertain', sequia: 'limitations', estimationDate:'2024-11-01',
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'unknown', sequia: 'low', estimationDate:'2026-05-15',
         practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
         practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
+      {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+      {id:'e4', yield:'22', production:'110', estimationDate:'2026-05-15'},
+    ]}]},
+  {id:'tc2',tipo:'coop',fechaDesembolso:'2026-06-01',name:'Hernández López, María',region:'Santa Bárbara, Honduras',
+    acopio:null,productores:'7,500',nProd:1,paqueteFlexible:false,
+    destinos:'Insumos, Cosecha',areaProd:'2.7',volumenTotal:'52',
+    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'52',
+  prod:[
+    {cod:'HN-tc2-001',nombre:'Hernández López, María',monto:'L. 7,500',plazo:'6 meses',destino:'Insumos, Cosecha',aval:'A',
+    department:'Santa Bárbara', municipality:'La Arada', aldea:'El Cedral', areaProd:'2.7 mz', geo:'14.45°N 89.18°W',carnet:'IHCAFE-2021-0048',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+    propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'52 qq / 4 ciclos',histIngresos:'2100 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'6000 HNL',
+    esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Fertilización orgánica, Conservación de suelos, Cosecha de agua'},
+      {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+      {id:'e4', yield:'24', production:'120', estimationDate:'2026-05-15'},
+    ]}]},
+  {id:'tc3',tipo:'coop',fechaDesembolso:'2026-06-02',name:'Pérez Mendoza, José',region:'Santa Bárbara, Honduras',
+    acopio:null,productores:'5,000',nProd:1,paqueteFlexible:false,
+    destinos:'Cosecha, Renovación', areaProd:'3.0',volumenTotal:'47',
+    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'47',
+  prod:[
+    {cod:'HN-tc3-001',nombre:'Pérez Mendoza, J.',monto:'L. 5,000',plazo:'6 meses',destino:'Cosecha, Renovación',aval:'A',
+    department:'Santa Bárbara', municipality:'La Arada', aldea:'La Cuchilla Centro', areaProd:'3.0 mz', geo:'14.47°N 89.20°W',carnet:'IHCAFE-2019-0061',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+    propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'47 qq / 4 ciclos',histIngresos:'1900 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'4500 HNL',
+    esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+        practicasMuyRecomendadas:'Renovación de cafetales, Aumentar la cobertura de sombra, Cosecha de agua',
+        practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos, Uso de biochar en vivero'},
+      {id:'e2', risk:'high', estimationDate:'2026-05-15'},
+      {id:'e4', yield:'23', production:'115', estimationDate:'2026-05-15'},
     ]}]},
 ];
 
 const LOANS_GRUPO=[
-  {id:'g1',name:'Grupo Productores La Esperanza',region:'El Paraíso, Honduras',tipo:'grupo',paqueteFlexible:true,
-   acopio:null,productores:'L. 105,000',nProd:3,plazo:'5.3 meses',precio:285,smartContract:true,
-   destinos:'Cosecha, insumos, infraestructura',variedades:'Catuaí rojo, Lempira, IHCAFE-90',
-   volumenTotal:'111 qq',promedioHist:'37 qq / 3 ciclos',
-   organizacion:'Asociación local no formalizada',asistenciaTecnica:'IHCAFE regional',accesoMercado:'Intermediario local + exportadora',
-   prod:[
-    {cod:'EP-0101',nombre:'García Méndez, L.',monto:'L. 35,000',plazo:'5 meses',destino:'Cosecha',aval:'A',
-      department:'Yoro', municipality:'Yoro', aldea:'San Rafael', areaProd:'0.5 mz', geo:'14.20°N 86.85°W',carnet:'IHCAFE-2021-0101',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'40 qq / 3 ciclos',histIngresos:'1500 HNL / 3 ciclos',otherIncome:'Sí', amountOtherIncome:'3200 HNL',
-     parcela:'2.1 ha · Finca El Roble',volContrato:'40 qq',contrato:'Exportadora Centroamérica S.A.',
-     esg:[
-      {id:'e1', aptitudClimActual:'uncertain', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'low', sequia: 'high', estimationDate:'2024-11-01',
-        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
-        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
-     ]},
-    {cod:'EP-0102',nombre:'Pineda López, M.',monto:'L. 30,000',plazo:'6 meses',destino:'Insumos',aval:'A',
-      department:'Yoro', municipality:'Yorito', aldea:'San Carlos', areaProd:'0.4 mz', geo:'14.18°N 86.88°W',carnet:'IHCAFE-2020-0102',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
-     propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'36 qq / 4 ciclos',histIngresos:'1200 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
-     parcela:'1.9 ha · Finca La Reforma',volContrato:'36 qq',contrato:'Exportadora Centroamérica S.A.',
-     esg:[
-      {id:'e1', aptitudClimActual:'limitations', aptitudClimFutura:'medium', gradienteClim: 'high', calor: 'high', sequia: 'high', estimationDate:'2024-11-01',
-        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de árboles de sombra',
-        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Renovación de cafetales, Fertilización orgánica, Conservación de suelos'},
-      {id:'e2', risk:'low', estimationDate:'2024-11-01'},
-      {id:'e4', yield:'22', production:'110', estimationDate:'2024-11-01'},
-     ]},
-   ]},
-];
+  {id:'tg1',tipo:'grupo',fechaDesembolso:'2026-06-01',name:'Grupo de productores - La Arada',region:'Santa Bárbara, Honduras',
+    acopio:null,productores:'58,500',nProd:3,paqueteFlexible:true,
+    destinos:'Cosecha, Renovación', areaProd:'8.7',volumenTotal:'141',
+    contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'141',
+  prod:[
+    {cod:'HN-tg1-001',nombre:'Pérez Mendoza, J.',monto:'L. 18,000',plazo:'6 meses',destino:'Cosecha, Renovación',aval:'A',
+    department:'Santa Bárbara', municipality:'La Arada', aldea:'La Cuchilla Centro', areaProd:'3.0 mz', geo:'14.47°N 89.20°W',carnet:'IHCAFE-2019-0061',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+    propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'47 qq / 4 ciclos',histIngresos:'1900 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'4500 HNL',
+    esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+        practicasMuyRecomendadas:'Renovación de cafetales, Aumentar la cobertura de sombra, Cosecha de agua',
+        practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos, Uso de biochar en vivero'},
+      {id:'e2', risk:'medium', estimationDate:'2026-05-15'},
+      {id:'e4', yield:'23', production:'115', estimationDate:'2026-05-15'},
+    ]},
+    {cod:'HN-tg1-002',nombre:'Castro López, M.',monto:'L. 19,000',plazo:'5 meses',destino:'Cosecha',aval:'A',
+    department:'Santa Bárbara', municipality:'La Arada', aldea:'El Cedral', areaProd:'2.5 mz', geo:'14.49°N 89.17°W',carnet:'IHCAFE-2020-0099',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+    propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'44 qq / 3 ciclos',histIngresos:'1700 HNL / 3 ciclos',otherIncome:'No', amountOtherIncome:'',
+    esg:[
+      {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+        practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua',
+        practicasRecomendadas:'Fertilización orgánica, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+      {id:'e4', yield:'21', production:'108', estimationDate:'2026-05-15'},
+    ]},
+    {cod:'HN-tg1-003',nombre:'Hernández Ruiz, S.',monto:'L. 21,500',plazo:'7 meses',destino:'Renovación',aval:'A',
+    department:'Santa Bárbara', municipality:'La Arada', aldea:'Los Pinos', areaProd:'3.2 mz', geo:'14.46°N 89.21°W',carnet:'IHCAFE-2018-0127',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+    propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'50 qq / 4 ciclos',histIngresos:'2100 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+    esg:[
+      {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+        practicasMuyRecomendadas:'Renovación de cafetales, Cosecha de agua',
+        practicasRecomendadas:'Injerto, Uso de biochar en vivero, Conservación de suelos'},
+      {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+      {id:'e4', yield:'25', production:'122', estimationDate:'2026-05-15'},
+    ]},
+  ]},
+    {id:'tg2',tipo:'grupo',fechaDesembolso:'2026-06-02',name:'Cooperativa El Níspero Verde',region:'Lempira, Honduras',
+      acopio:null,productores:'190,000',nProd:5,paqueteFlexible:false,
+      destinos:'Cosecha, Insumos, Renovación',
+      areaProd:'13.8',volumenTotal:'224',
+      contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'224',
+    prod:[
+      {cod:'HN-tg2-001',nombre:'Martínez Pineda, R.',monto:'L. 8,000',plazo:'6 meses',destino:'Cosecha, Insumos',aval:'A',
+      department:'Lempira', municipality:'El Níspero', aldea:'San Juan', areaProd:'2.9 mz', geo:'14.56°N 88.62°W',carnet:'IHCAFE-2021-0410',variedad:'Lempira',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+      propertyDocument:'Sí', tenancyTipe:'Propiedad',histAcopio:'52 qq / 4 ciclos',histIngresos:'2200 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'5000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua, Renovación de cafetales',
+          practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'24', production:'118', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tg2-002',nombre:'Hernández Cruz, M.',monto:'L. 18,000',plazo:'5 meses',destino:'Insumos, Cosecha',aval:'A',
+      department:'Lempira', municipality:'El Níspero', aldea:'El Rosario', areaProd:'2.6 mz', geo:'14.58°N 88.60°W',carnet:'IHCAFE-2020-0388',variedad:'Catuaí rojo',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
+      propertyDocument:'No', tenancyTipe:'Arriendo',histAcopio:'45 qq / 3 ciclos',histIngresos:'1800 HNL / 3 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'high', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de cafetales, Cosecha de agua',
+          practicasRecomendadas:'Uso de biochar en vivero, Conservación de suelos'},
+        {id:'e2', risk:'medium', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'22', production:'110', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tg2-003',nombre:'Flores Aguilar, J.',monto:'L. 15,000',plazo:'7 meses',destino:'Renovación',
+      aval:'A', department:'Lempira', municipality:'El Níspero', aldea:'La Laguna', areaProd:'2.9 mz',
+      geo:'14.57°N 88.61°W',carnet:'IHCAFE-2019-0422',variedad:'Parainema',riesgo:'Sin reporte negativo',
+      confianza:'Aval otorgado', propertyDocument:'Sí', tenancyTipe:'Propiedad',
+      histAcopio:'42 qq / 4 ciclos',histIngresos:'2000 HNL / 4 ciclos',otherIncome:'Sí', amountOtherIncome:'4000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'medium', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Renovación de cafetales, Aumentar la cobertura de sombra',
+          practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos, Uso de biochar en vivero'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'26', production:'130', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tg2-004',nombre:'Castro Mendoza, L.',monto:'L. 20,000',plazo:'8 meses',destino:'Renovación',
+      aval:'A', department:'Lempira', municipality:'El Níspero', aldea:'El Paraíso', areaProd:'3.4 mz',
+      geo:'14.59°N 88.63°W',carnet:'IHCAFE-2018-0441',variedad:'Lempira',riesgo:'Sin reporte negativo',
+      confianza:'Aval otorgado', propertyDocument:'Sí', tenancyTipe:'Propiedad',
+      histAcopio:'60 qq / 5 ciclos',histIngresos:'2800 HNL / 5 ciclos',otherIncome:'Sí', amountOtherIncome:'6000 HNL',
+      esg:[
+        {id:'e1', aptitudClimActual:'medium', aptitudClimFutura:'high', gradienteClim:'high', calor:'medium', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Cosecha de agua, Renovación de cafetales, Aumentar la cobertura de sombra',
+          practicasRecomendadas:'Injerto, Conservación de suelos, Fertilización orgánica'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'28', production:'145', estimationDate:'2026-05-15'},
+      ]},
+      {cod:'HN-tg2-005',nombre:'Ramírez López, S.',monto:'L. 11,000',plazo:'6 meses',destino:'Cosecha',
+      aval:'A', department:'Lempira', municipality:'El Níspero', aldea:'Los Pinos',
+      areaProd:'2.0 mz', geo:'14.55°N 88.64°W',carnet:'IHCAFE-2022-0405',variedad:'Catuaí rojo',
+      riesgo:'Sin reporte negativo',confianza:'Aval otorgado', propertyDocument:'No', tenancyTipe:'Arriendo',
+      histAcopio:'50 qq / 4 ciclos',histIngresos:'2100 HNL / 4 ciclos',otherIncome:'No', amountOtherIncome:'',
+      esg:[
+        {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
+          practicasMuyRecomendadas:'Aumentar la cobertura de sombra, Cosecha de agua',
+          practicasRecomendadas:'Fertilización orgánica, Conservación de suelos'},
+        {id:'e2', risk:'low', estimationDate:'2026-05-15'},
+        {id:'e4', yield:'23', production:'112', estimationDate:'2026-05-15'},
+      ]},
+    ]},
+  ];
+
 
 let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=5,dismissedLoans=new Set(),purchases={};
 
@@ -690,21 +1094,22 @@ function dismissLoan(id, event){
 
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
-  getLoans().filter(l=>!dismissedLoans.has(l.id)).forEach(l=>{
+  getLoans().filter(l=>!dismissedLoans.has(l.id))
+  .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
+  .forEach(l=>{
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
-    const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio ?? 0}</div></div>`;
+    const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
     const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-    const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
+    const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
     const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-    const smartB=l.smartContract?`<span class="badge smart">Smart Contract</span>`:'';
     const badgeClass=isG?'grupo':l.tipo;
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
     list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
       <div>
-        <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span>${smartB}<span class="loan-name">${l.name}</span></div>
-        <div class="loan-region">${l.region} · Plazo: ${l.plazo}</div>
-        <div class="loan-meta">${mA}${mP}${mX}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
+        <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span><span class="loan-name">${l.name}</span></div>
+        <div class="loan-region">${l.region}</div>
+        <div class="loan-meta">${mX}${mP}${mA}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
       </div>
       <div class="larr">›</div>
       <button class="btn-dismiss" onclick="dismissLoan('${l.id}', event)" title="No me interesa">No me interesa</button>
@@ -718,9 +1123,9 @@ function openLoan(id){L=[...LOANS_BANCO,...LOANS_COOP,...LOANS_GRUPO].find(l=>l.
 function renderDetail(){
   const isB=L.tipo==='banco';
   const isG=L.tipo==='grupo';
-  let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region} · Plazo: ${L.plazo}`;
+  let h=`<div class="dhdr"><div class="dname">${L.name}</div><div class="dsub">${L.region}`;
   h+=`</div></div>`;
-  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${L.precio} por crédito</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
+  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-price">L. ${precioFundamentales}</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
   const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="esg-cost">+L.${e.cost}</span></div>`).join('');
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
@@ -730,25 +1135,25 @@ function renderDetail(){
 
 function toggleTier(){
   tierOn=!tierOn;
-  if(!tierOn){ESG.forEach(e=>esgSel[e.id]=false);esgAllOn=false;}
   renderDetail();
 }
 function toggleEsg(id){
   esgSel[id]=!esgSel[id];
-  if(esgSel[id]) tierOn=true;esgAllOn=ESG.every(e=>esgSel[e.id]);
+  esgAllOn=ESG.every(e=>esgSel[e.id]);
   renderDetail();
 }
 function toggleEsgAll(){
   esgAllOn=!esgAllOn;
-  if(esgAllOn){tierOn=true;ESG.forEach(e=>esgSel[e.id]=true);
+  if(esgAllOn){ESG.forEach(e=>esgSel[e.id]=true);
   }else{ESG.forEach(e=>esgSel[e.id]=false);}
   renderDetail();
 }
 
 function calcTotal(){
   let t=0;
-  if(tierOn)t+=L.precio;
-  Object.values(esgSel).forEach(v=>{if(v)t+=80;});
+  if(tierOn)t+=precioFundamentales;
+  ESG.forEach(e => {
+    if(esgSel[e.id]) t += e.cost;});
   return t;
 }
 
@@ -756,10 +1161,10 @@ function renderCart(){
   const esgKeys=Object.keys(esgSel).filter(k=>esgSel[k]);
   let h='';
   if(tierOn||esgKeys.length>0){
-    if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${L.precio}</span></div>`;
+    if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${precioFundamentales}</span></div>`;
     if(esgKeys.length>0){
-      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span><span class="cl-v">L. ${esgKeys.length*80}</span></div>`;
-      esgKeys.forEach(k=>{const e=ESG.find(x=>x.id===k);h+=`<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L.80</span></div>`;});
+      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span></div>`;
+      esgKeys.forEach(k=>{const e=ESG.find(x=>x.id===k);h+=`<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L. ${e.cost}</span></div>`;});
     }
   } else {
     h=`<div style="font-size:12px;color:var(--text3);padding:8px 0">Active los ítems que desea adquirir.</div>`;
@@ -769,25 +1174,29 @@ function renderCart(){
   document.getElementById('cart-num').textContent=total.toLocaleString('es-HN');
   const cta=document.getElementById('cart-cta');
   const ci=document.getElementById('cart-info');
+  const cancelBtn=document.getElementById('cart-cancel');
   cta.disabled=total===0;
   cta.textContent=total===0?'Seleccione al menos un ítem':'Confirmar acceso →';
-  if(total>0){ci.style.display='block';ci.textContent='Al confirmar, accederá a la información seleccionada para este crédito específico. La suscripción base (L. 500/mes) cubre el acceso al listado y está activa en su cuenta.';}
-  else{ci.style.display='none';}
+  cancelBtn.style.display=total===0?'none':'block';
 }
 
 function confirmAccess(){
   const esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
   const total=calcTotal();
-  const plan=esgKeys.length>0?'Premium':tierOn?'Estándar':'—';
-  confirmed={loan:L,total,esgKeys,plan,tierOn,loanType:L.tipo};
+  confirmed={loan:L,total,esgKeys,tierOn,loanType:L.tipo};
   purchases[L.id]=confirmed;
   updateBalance(total);
+  if(L.testValue==='no'){dismissedLoans.add(L.id); goMkt(); return;}
   document.getElementById('scard').innerHTML=`
-    <div class="srow"><span class="sr-l">Institución</span><span class="sr-v">${U.name}</span></div>
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
     <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
   show('s-success');
+}
+
+function cancelAccess(){
+  dismissedLoans.add(L.id);
+  goMkt();
 }
 
 function goAccess(){renderAccess();show('s-access');}
@@ -810,6 +1219,10 @@ function renderProducersSection(l){
   }
 }
 
+function renderFinancialSection(l){
+  const sec = document.getElementById('financial-flex-fields');
+  sec.style.display = l.paqueteFlexible ? 'none' : '';
+}
 
 // ── Per-producer ESG (uses embedded data) ──────────────────────────────────
 function prodEsgMetrics(p){
@@ -856,6 +1269,7 @@ function prodEsgMetrics(p){
 
 // ── Row expand logic ──────────────────────────────────────────────────────
 let _openProd=null;
+
 function toggleProd(cod){
   const eRow=document.getElementById('pexp-'+cod);
   const dRow=document.getElementById('prow-'+cod);
@@ -960,7 +1374,7 @@ function fillProd(cod, includeEsg=true){
         <div class="px-card-src">${m.src}</div></div>`;}
       }).join('');
     esgHtml = `<div class="px-esg">
-      <div class="px-esg-hdr">Herramientas de análisis climático — ${p.nombre}</div>
+      <div class="px-esg-hdr">Herramientas de análisis climático - ${p.nombre}</div>
       ${cards}
     </div>`;
   }
@@ -972,13 +1386,14 @@ function fillProd(cod, includeEsg=true){
 const profileHtml = `
   <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información general</span></div>
   <div class="px-grid2">
-  <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '—'}</div>
-  <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '—'}</div>
-  <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '—'}</div>
-  <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '—'}</div>
-  <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '—'}</div>
-  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '—'}</div></div>
-  </div>`;
+  <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '-'}</div>
+  <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '-'}</div>
+  <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '-'}</div>
+  <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '-'}</div>
+  <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '-'}</div>
+  <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza}</div>
+  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
+  </div></div>`;
 
 const profileHtmlFinca = `
   <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información de la finca</span></div>
@@ -990,7 +1405,8 @@ const profileHtmlFinca = `
   <div class="px-grid2-label">Cuenta con documentos de propiedad</div><div class="px-grid2-value">${p.propertyDocument || '—'}</div>
   <div class="px-grid2-label">Tipo de tenencia</div><div class="px-grid2-value">${p.tenancyTipe || '—'}</div>
   <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
-  <div class="px-grid2-label">Variedades de café</div><div class="px-grid2-value">${p.variedad || '—'}</div></div>
+  <div class="px-grid2-label">Variedades de café</div><div class="px-grid2-value">${p.variedad || '—'}</div>
+  </div>
   <div class="px-farm-map">${buildMap(p)}</div>
   </div>`;
 
@@ -1000,105 +1416,102 @@ const profileHtmlProductiva = `
   <div class="px-grid2-label">Promedio histórico de acopio</div><div class="px-grid2-value">${p.histAcopio || '—'}</div>
   <div class="px-grid2-label">Promedio histórico de ingresos</div><div class="px-grid2-value">${p.histIngresos || '—'}</div>
   <div class="px-grid2-label">Otros ingresos</div><div class="px-grid2-value">${p.otherIncome || '—'}</div>
-  <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div></div>
-  </div>`;
+  <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div>
+  </div></div>`;
   
-cell.innerHTML=`<div class="px-wrap">
-  <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor</div></div>
-    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${esgHtml}</div></div>`;
+cell.innerHTML = confirmed.tierOn
+  ? `<div class="px-wrap">
+  <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor - ${p.nombre}</div></div>
+    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${esgHtml}</div></div>`
+  : `<div class="px-wrap">
+  <div class="px-right">${esgHtml}</div></div>`;
 }
 
 function renderAccess(){
-  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
   const isB=l.tipo==='banco';
   let h='';
-  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio ?? 0}</div></div>`;
+  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
+  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region} · Plazo: ${l.plazo}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-offer" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
 
   const hasFundamentals = tierOn;
   const hasEsg = esgKeys.length > 0;
   const hasAccess = hasFundamentals || hasEsg;
 
   if(hasFundamentals){
-    if(isG){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div><div class="sc-sub">Perfil colectivo · ${l.nProd} productores vinculados</div></div></div>
+    h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div></div></div>
       <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Monto total solicitado</div><div class="ic-v mv-g">${l.productores}</div><div class="ic-src">Solicitud agregada DIG-IN</div></div>
-        <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v">${l.nProd}</div><div class="ic-src">Registro del grupo</div></div>
-        <div class="ic"><div class="ic-l">Plazo referencia</div><div class="ic-v">${l.plazo}</div><div class="ic-src">Promedio ponderado del grupo</div></div>
-        ${l.volumenTotal?`<div class="ic"><div class="ic-l">Volumen total estimado</div><div class="ic-v">${l.volumenTotal}</div><div class="ic-src">Declaración del grupo / IHCAFE</div></div>`:''}
-        ${l.variedades?`<div class="ic"><div class="ic-l">Variedades cultivadas</div><div class="ic-v" style="font-size:12px">${l.variedades}</div><div class="ic-src">Fichas técnicas IHCAFE</div></div>`:''}
-        ${l.destinos?`<div class="ic"><div class="ic-l">Destinos del crédito</div><div class="ic-v" style="font-size:12px">${l.destinos}</div><div class="ic-src">Solicitud del grupo</div></div>`:''}
+        <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
+        <div class="ic"><div class="ic-l">Destino de los créditos</div><div class="ic-v">${l.destinos}</div></div>
+        <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
+        <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
+        <div class="ic"><div class="ic-l">Área productiva de café, total del grupo de productores</div><div class="ic-v">${l.areaProd} Manzanas</div></div>
+        <div class="ic"><div class="ic-l">Volumen anual comercializado, total del grupo de productores</div><div class="ic-v">${l.volumenTotal} quintales de café verde</div></div>
       </div></div></div>`;
-    } else if(isB){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador</div><div class="sc-sub">Perfil operativo y garantías del crédito de acopio</div></div></div>
+    if(isB){
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador - ${l.name}</div></div></div>
       <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div><div class="ic-src">Registro Mercantil Honduras</div></div>
-        <div class="ic"><div class="ic-l">Volumen histórico exportado</div><div class="ic-v">${l.volExport}</div><div class="ic-src">TraceFoodChain / IHCAFE 2024</div></div>
-        <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div><div class="ic-src">Certificados de exportación SAG</div></div>
-        <div class="ic"><div class="ic-l">Garantías del crédito</div><div class="ic-v" style="font-size:12px">${l.garantias}</div><div class="ic-src">Declaración del intermediario</div></div>
+      <div class="ic"><div class="ic-l">Monto crédito de acopio</div><div class="ic-v mv-g">L. ${l.acopio}</div></div>
+      <div class="ic"><div class="ic-l">Plazo crédito de acopio</div><div class="ic-v">${l.plazoAcopio} meses</div></div>
+      <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div></div>
+        <div class="ic"><div class="ic-l">Volumen histórico comercializado, promedio anual</div><div class="ic-v">${l.volExport} quintales de café verde</div></div>
+        <div class="ic"><div class="ic-l">Contrato de exportación</div><div class="ic-v">${l.contrato}</div></div>
+        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+        <div class="ic"><div class="ic-l">Volumen contrato de exportación</div><div class="ic-v">${l.volContrato} quintales de café verde</div></div>
+        <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div></div>
       </div></div></div>`;
     } else {
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-o">◈</div><div><div class="sc-title">Perfil del productor y contrato inteligente</div><div class="sc-sub">Datos productivos, trazabilidad y respaldo contractual</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información de comercialización</div></div></div>
       <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Parcela</div><div class="ic-v">${l.parcela}</div><div class="ic-src">Georreferenciación IHCAFE / TraceFoodChain</div></div>
-        <div class="ic"><div class="ic-l">Carnet IHCAFE</div><div class="ic-v">${l.carnet}</div><div class="ic-src">Sistema carnetización IHCAFE 2024</div></div>
-        <div class="ic"><div class="ic-l">Variedad cultivada</div><div class="ic-v">${l.variedad}</div><div class="ic-src">Ficha técnica IHCAFE</div></div>
-        <div class="ic"><div class="ic-l">Historial con la cooperativa</div><div class="ic-v">${l.hist}</div><div class="ic-src">Registros de acopio TraceFoodChain</div></div>
-        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.contrato}</span></div><div class="ic-src">Blockchain DIG-IN / Permarobotics</div></div>
-        <div class="ic"><div class="ic-l">Volumen comprometido</div><div class="ic-v">${l.volContrato}</div><div class="ic-src">Smart contract verificado en cadena</div></div>
-        <div class="ic"><div class="ic-l">Geolocalización</div><div class="ic-v" style="font-family:var(--mono);font-size:12px">${l.geo}</div><div class="ic-src">App CartoCafé / IHCAFE</div></div>
-        <div class="ic"><div class="ic-l">Verificación EUDR</div><div class="ic-v"><span class="tag ${l.eu==='Sí'?'eu':'pend'}">${l.eu==='Sí'?'✓ Verificado (deforestación)':'⏳ En revisión'}</span></div><div class="ic-src">EU Deforestation Regulation Portal</div></div>
-        <div class="ic"><div class="ic-l">Central de riesgos</div><div class="ic-v" style="font-size:12px">${l.riesgo}</div><div class="ic-src">CNBS Honduras / Buró de Crédito</div></div>
-        <div class="ic"><div class="ic-l">Aval Confianza SA-FGR</div><div class="ic-v"><span class="tag ${l.confianza==='Aval otorgado'?'yes':'pend'}">${l.confianza}</span></div><div class="ic-src">Confianza SA-FGR · FDG Honduras</div></div>
-      </div></div></div>`;
+        <div class="ic"><div class="ic-l">Contrato de comercialización</div><div class="ic-v">${l.contrato || '-'}</div></div>
+        <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+        <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
+      </div></div></div>`;}
     }
 
-    const riesgoTag=p=>`<span class="tag ${p.riesgo.includes('negativo')?'eu':p.riesgo.includes('mora antigua')?'pend':'pend'}">${p.riesgo.includes('Sin reporte negativo')?'✓ Limpio':p.riesgo}</span>`;
-    const confTag=p=>`<span class="tag ${p.confianza==='Aval otorgado'?'yes':p.confianza.includes('condición')?'pend':'pend'}">${p.confianza}</span>`;
-
     if(l.prod && l.prod.length>0){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Créditos a productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''} · haga clic en una fila para ver mapa y herramientas de análisis climático individuales</div></div></div>
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
       <div class="sc-body" style="padding:0;overflow-x:auto">
         <table class="ptable">
           <thead><tr>
-            <th style="width:15%">Código</th><th style="width:28%">Productor</th>
-            <th style="width:12%">Monto</th><th style="width:10%">Plazo</th>
-            <th style="width:28%">Destino</th><th style="width:7%">Aval</th>
+            <th style="width:15%">Código</th><th style="width:25%">Productor</th>
+            <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
+            <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
           </tr>
-          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para desplegar los fundamentales de la finca y las herramientas de análisis climático individuales del productor</td></tr>
+          <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
           </thead>
           <tbody>${l.prod.map(p=>`
             <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
               <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
-              <td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td>
-              <td>${p.destino}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+              <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
+              <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
             </tr>
             <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
           </tbody>
         </table>
       </div></div>`;
     }
-  }
-
+  
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button><button class="btn-offer" onclick="goMkt()">Explorar más créditos</button></div>`;
   document.getElementById('access-inner').innerHTML=h;
 }
 
+
 function topInfoAccess(){
-  const {loan:l,esgKeys,plan,tierOn,loanType}=confirmed;
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
   const isG=l.tipo==='grupo';
   const isB=loanType==='banco';
   let h='';
-  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-b">${l.acopio ?? 0}</div></div>`;
+  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-m">${l.nProd}</div></div>`
+  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region} · Plazo: ${l.plazo}</div></div></div><div class="ameta">${mA}${mP}${mX}${mF}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div><div class="loan-region">${l.region}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
   
   document.getElementById('top-info').innerHTML = h;
 }
@@ -1116,6 +1529,7 @@ function goOffer(){
     el.removeEventListener(ev,updatePreview);el.addEventListener(ev,updatePreview);
   });
   renderProducersSection(l);
+  renderFinancialSection(l);
   updatePreview();topInfoAccess();
   show('s-offer');
 }
@@ -1172,7 +1586,7 @@ function updatePreview(){
 function submitOffer(){
   const v=id=>{const el=document.getElementById(id);return el?el.value:'';};
   const monto=parseFloat(v('of-monto'))||0,tasa=parseFloat(v('of-tasa'))||0,plazo=v('of-plazo');
-  if(!monto||!tasa||!plazo){alert('Complete al menos el monto, la tasa y el plazo para enviar la oferta.');return;}
+  /*if(!monto||!tasa||!plazo){alert('Complete al menos el monto, la tasa y el plazo para enviar la oferta.');return;}*/
   const l=confirmed.loan;const sym=v('of-moneda').startsWith('L')?'L.':'$';
   document.getElementById('offer-sent-card').innerHTML=`
     <div class="srow"><span class="sr-l">Destinatario</span><span class="sr-v">${l.name}</span></div>
