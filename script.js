@@ -819,9 +819,11 @@ function submitOffer(){
   document.getElementById('offer-sent-card').innerHTML=`
     <div class="srow"><span class="sr-l">Destinatario</span><span class="sr-v">${l.name}</span></div>
     <div class="srow"><span class="sr-l">Institución oferente</span><span class="sr-v">${U.name}</span></div>
+  ${!l.paqueteFlexible ? `
     <div class="srow"><span class="sr-l">Monto ofertado</span><span class="sr-v">${sym} ${monto.toLocaleString('es-HN')}</span></div>
     <div class="srow"><span class="sr-l">Tasa anual</span><span class="sr-v">${tasa}%</span></div>
     <div class="srow"><span class="sr-l">Plazo</span><span class="sr-v">${plazo} meses</span></div>
+  ` : ''}
     <div class="srow"><span class="sr-l">Periodicidad</span><span class="sr-v">${v('of-periodo')||'No especificado'}</span></div>
     <div class="srow"><span class="sr-l">Aval Confianza SA-FGR</span><span class="sr-v">${v('of-aval-conf')}</span></div>
     <div class="srow"><span class="sr-l">Vigencia</span><span class="sr-v">${v('of-vigencia')}</span></div>
