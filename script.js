@@ -266,8 +266,8 @@ function renderLoans(){
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
     const esgFund = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Fundamentales</div><div class="mi-val mv-m">${l.fundamentales ? 'Sí' : 'No'}</div></div>` : '';
     const esgAcli = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.aclimatar ? 'Sí' : 'No'}</div></div>` : '';
-    const esgCrop = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.croppie ? 'Sí' : 'No'}</div></div>` : '';
-    const esgWhis = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.whisp ? 'Sí' : 'No'}</div></div>` : '';
+    const esgCrop = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Croppie</div><div class="mi-val mv-m">${l.croppie ? 'Sí' : 'No'}</div></div>` : '';
+    const esgWhis = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Whisp</div><div class="mi-val mv-m">${l.whisp ? 'Sí' : 'No'}</div></div>` : '';
     const esgPric = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Precio total por productor</div><div class="mi-val mv-g">${l.priceFundamentales} Lempiras</div></div>` : '';
     
     const isNo = l.testValue === 'no';
@@ -332,9 +332,11 @@ function renderDetail(){
     renderCartFixed(fundOn,toolsOn);
     return;
   }
-  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span></div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
+  h+=
+  `<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-count">L. ${precioFundamentales} por productor</span>
+  </div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
   const nEsg=Object.values(esgSel).filter(Boolean).length;
-  const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span></div>`).join('');
+  const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="tier-count">L. ${e.cost} por productor</span></div>`).join('');
   h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
   document.getElementById('dmain').innerHTML=h;
   renderCart();
@@ -384,11 +386,12 @@ function toggleEsgAll(){
   renderDetail();
 }
 
-function calcTotal(){
-  let t=0;
-  if(tierOn)t+=precioFundamentales;
+function calcTotal(L){
+  let t = 0;
+  const n = Number(L?.nProd) || 1;
+  if(tierOn){t+=(precioFundamentales || 0) * n;}
   ESG.forEach(e => {
-    if(esgSel[e.id]) t += e.cost;});
+    if(esgSel[e.id]){ t += (e.cost || 0) * n;}});
   return t;
 }
 
@@ -399,13 +402,17 @@ function renderCart(){
     if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${precioFundamentales}</span></div>`;
     if(esgKeys.length>0){
       h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span></div>`;
-      esgKeys.forEach(k=>{const e=ESG.find(x=>x.id===k);h+=`<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L. ${e.cost}</span></div>`;});
-    }
+      esgKeys.forEach(k=>{
+        const e = ESG.find(x => x.id === k);
+        const n = Number(L?.nProd) || 1;
+        const cost = (e.cost || 0) * n;
+        h += `<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L. ${cost.toLocaleString('es-HN')}</span></div>`;});
+      }
   } else {
     h=`<div style="font-size:12px;color:var(--text3);padding:8px 0">Active los ítems que desea adquirir.</div>`;
   }
   document.getElementById('cart-lines').innerHTML=h;
-  const total=calcTotal();
+  const total=calcTotal(L);
   document.getElementById('cart-num').textContent=total.toLocaleString('es-HN');
   const cta=document.getElementById('cart-cta');
   const ci=document.getElementById('cart-info');
@@ -418,11 +425,12 @@ function renderCart(){
 function confirmAccess(id,event){
   if(event) event.stopPropagation();
   if(id){L = getLoans().find(l => l.id === id);}
+  const n = Number(L.nProd) || 1;
   if(L.testValue === 'no'){
     const fundOn = L.fundamentales === true;
     const toolsOn=(L.aclimatar===true)||(L.whisp===true)||(L.croppie===true);
-    const fp=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?Number(String(L.priceFundamentales).replace(/,/g,'')):0;
-    const tp=(L.priceTools!==null&&L.priceTools!==undefined)?Number(String(L.priceTools).replace(/,/g,'')):0;
+    const fp = (L.priceFundamentales != null)? Number(String(L.priceFundamentales).replace(/,/g,'')) * n : 0;
+    const tp = (L.priceTools != null) ? Number(String(L.priceTools).replace(/,/g,'')) * n : 0;
     const total = (fundOn ? fp : 0) + (toolsOn ? tp : 0);
     const esgKeys = ['aclimatar','whisp','croppie'] .filter(k => L[k] === true);
     const tierOnFinal = fundOn;
@@ -444,7 +452,7 @@ function confirmAccess(id,event){
   }
   
   let esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
-  let total = calcTotal();
+  let total = calcTotal(L);
   let tierOnFinal = tierOn;
   confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
   if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
