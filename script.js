@@ -155,9 +155,9 @@ function finishGeneralQuestions(){
   if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
   if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
   const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
-  if(missing){
+  /*if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
-    document.getElementById(missing)?.focus();return;}
+    document.getElementById(missing)?.focus();return;}*/
       state.generalQuestionsCompleted = true;
       state.generalAnswers = {
         participantName:     document.getElementById('participant-name').value.trim(),
@@ -170,9 +170,12 @@ function finishGeneralQuestions(){
         agrExperienceYears:  document.getElementById('agr-experience-years').value,
         ageRange:            document.getElementById('age-range').value,
         sex:                 document.getElementById('sex').value,
+        interestCoop:        document.getElementById('interest-coop').value,
+        interestGrupo:       document.getElementById('interest-grupo').value,
+        interestBanco:       document.getElementById('interest-banco').value,
       };
     saveState();
-    document.getElementById('general-tab').disabled       = true;
+    //document.getElementById('general-tab').disabled       = true;
     document.querySelector('[data-tab="yes"]').disabled   = false;
     document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
@@ -218,10 +221,33 @@ function showGeneralQuestions(){
       <div class="fg"><label class="flabel">Sexo</label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
         <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
     </div></div></div>
+  <div class="o-form"><div>
+    <div class="fs-title">Oportunidades de crédito de interés</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, ¿está interesado(a) en visualizar oportunidades de crédito para productores individuales?</label>
+        <div class="fhelp">Estas oportunidades están caracterizadas por tener un único productor de café asociado, con montos de préstamo entre 1,000 y 20,000 Lempiras.</div>
+        <select class="fsel" id="interest-coop" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, ¿está interesado(a) en visualizar oportunidades de crédito para grupos de productores?</label>
+        <div class="fhelp">Estas oportunidades están caracterizadas por tener entre 2 y 10 productores de café asociados, con montos de préstamo totales entre 10,000 y 100,000 Lempiras.</div>
+        <select class="fsel" id="interest-grupo" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, ¿está interesado(a) en visualizar oportunidades de crédito para grupos de productores asociados a un crédito de acopio?</label>
+        <div class="fhelp">Estas oportunidades están caracterizadas por tener entre 2 y 10 productores de café asociados, con montos de préstamo totales entre 10,000 y 100,000 Lempiras, y estar asociadas a un crédito de acopio. Esto implica que el responsable del crédito de acopio respalda el préstamo con un aval para los productores asociados.</div>
+        <select class="fsel" id="interest-banco" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+    </div></div></div>
     <div class="btn-row">
       <button class="btn-p" onclick="finishGeneralQuestions()">Continuar</button>
     </div>`;
   document.getElementById('loan-pagination').style.display='none';
+}
+
+function toggleLoanCard(event, card, id){
+  event.stopPropagation();
+  if(!state.interactions.viewed.includes(id)){state.interactions.viewed.push(id);}
+  saveState();
+  card.classList.toggle('expanded');
 }
 
 function renderLoans(){
@@ -238,14 +264,21 @@ function renderLoans(){
     const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
     const badgeClass=isG?'grupo':l.tipo;
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
-    list.innerHTML+=`<div class="lcard" onclick="openLoan('${l.id}')">
-      <div>
-        <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span><span class="loan-name">${l.name}</span></div>
-        <div class="loan-meta">${mX}${mP}${mA}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
-      </div>
-      <div class="larr">›</div>
-      <button class="btn-dismiss" onclick="dismissLoan('${l.id}', event)" title="No me interesa">No me interesa</button>
-    </div>`;
+    const esgFund = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Fundamentales</div><div class="mi-val mv-m">${l.fundamentales ? 'Sí' : 'No'}</div></div>` : '';
+    const esgAcli = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.aclimatar ? 'Sí' : 'No'}</div></div>` : '';
+    const esgCrop = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.croppie ? 'Sí' : 'No'}</div></div>` : '';
+    const esgWhis = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.whisp ? 'Sí' : 'No'}</div></div>` : '';
+    const esgPric = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Precio total por productor</div><div class="mi-val mv-g">${l.priceFundamentales} Lempiras</div></div>` : '';
+    
+    const isNo = l.testValue === 'no';
+    list.innerHTML += `
+    <div class="lcard ${isNo ? 'expandable' : ''}"${isNo ? `onclick="toggleLoanCard(event,this,'${l.id}')"` : `onclick="openLoan('${l.id}')"`}><div>
+    <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span><span class="loan-name">${l.name}</span></div>
+    <div class="loan-meta">${mX}${mP}${mA}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
+    ${isNo? `<div class="loan-extra"><div class="loan-meta">${esgFund}${esgAcli}${esgCrop}${esgWhis}${esgPric}</div>
+      <div class="loan-actions"><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button><button class="btn-confirm" onclick="confirmAccess('${l.id}',event)">Confirmar acceso →</button></div>` : ''}</div>
+    ${!isNo? `<button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)" title="No me interesa">No me interesa</button>` : ''}</div>`;
+
   });
   if(activeLoanTab === 'no'){
     const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
@@ -380,35 +413,44 @@ function renderCart(){
   cancelBtn.style.display=total===0?'none':'block';
 }
 
-function confirmAccess(){
-  let esgKeys, total, tierOnFinal;
-  if(L.testValue==='no'){
-    const fundOn=L.fundamentales===true;
+function confirmAccess(id,event){
+  if(event) event.stopPropagation();
+  if(id){L = getLoans().find(l => l.id === id);}
+  if(L.testValue === 'no'){
+    const fundOn = L.fundamentales === true;
     const toolsOn=(L.aclimatar===true)||(L.whisp===true)||(L.croppie===true);
     const fp=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?Number(String(L.priceFundamentales).replace(/,/g,'')):0;
     const tp=(L.priceTools!==null&&L.priceTools!==undefined)?Number(String(L.priceTools).replace(/,/g,'')):0;
-    total=(fundOn?fp:0)+(toolsOn?tp:0);
-    esgKeys=['aclimatar','whisp','croppie'].filter(k=>L[k]===true);
-    tierOnFinal=fundOn;
-  } else {
-    esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
-    total=calcTotal();
-    tierOnFinal=tierOn;
+    const total = (fundOn ? fp : 0) + (toolsOn ? tp : 0);
+    const esgKeys = ['aclimatar','whisp','croppie'] .filter(k => L[k] === true);
+    const tierOnFinal = fundOn;
+    confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
+    if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
+    purchases[L.id] = confirmed;
+    updateBalance(total);
+    saveState();
+    if(L.continue === false){
+      if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);saveState();renderLoans();return;}
+    document.getElementById('scard').innerHTML=`
+    <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
+    <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
+    <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
+    show('s-success');
+    return;
   }
+  
+  let esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
+  let total = calcTotal();
+  let tierOnFinal = tierOn;
   confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
-  if(!state.interactions.confirmedAccess.includes(L.id)) state.interactions.confirmedAccess.push(L.id);
+  if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
   saveState();
-  if(L.testValue==='no'){
-    purchases[L.id]=confirmed;updateBalance(total);
-    if(!state.dismissedLoans.includes(L.id)) state.dismissedLoans.push(L.id); saveState();
-    if(L.continue===false){goMkt(); return;}
-  }
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
     <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
-  show('s-success');
-}
+    show('s-success');
+  }
 
 function cancelAccess(){
   if(!state.interactions.canceledAccess.includes(L.id)) state.interactions.canceledAccess.push(L.id);
