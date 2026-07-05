@@ -431,6 +431,8 @@ function confirmAccess(id,event){
     saveState();
     if(L.continue === false){
       if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);saveState();renderLoans();return;}
+    const btnMkt = document.getElementById('btn-mkt');
+    btnMkt.style.display = 'none';
     document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
@@ -445,6 +447,8 @@ function confirmAccess(id,event){
   confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
   if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
   saveState();
+  const btnMkt = document.getElementById('btn-mkt');
+  btnMkt.style.display = 'inline-block';
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
     <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
@@ -768,7 +772,8 @@ function renderAccess(){
         </div></div></div>`;
     }
 
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button><button class="btn-offer" onclick="goMkt()">Explorar más créditos</button></div>`;
+  h += `<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button>
+  ${l.testValue === 'yes' ? `<button class="btn-offer" onclick="goMkt()">Explorar más créditos</button>` : ''}</div>`;
   document.getElementById('access-inner').innerHTML=h;
 }
 
