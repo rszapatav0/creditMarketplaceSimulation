@@ -272,10 +272,12 @@ function renderLoans(){
     
     const isNo = l.testValue === 'no';
     list.innerHTML += `
-    <div class="lcard ${isNo ? 'expandable' : ''}"${isNo ? `onclick="toggleLoanCard(event,this,'${l.id}')"` : `onclick="openLoan('${l.id}')"`}><div>
+    <div class="lcard ${isNo?'expandable':''}"${isNo?`onclick="toggleLoanCard(event,this,'${l.id}')"`:`onclick="openLoan('${l.id}')"`}><div>
     <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span><span class="loan-name">${l.name}</span></div>
     <div class="loan-meta">${mX}${mP}${mA}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
-    ${isNo? `<div class="loan-extra"><div class="loan-meta">${esgFund}${esgAcli}${esgCrop}${esgWhis}${esgPric}</div>
+    ${isNo? `<div class="loan-extra">
+      <div class="loan-extra-title">Información incluida</div>
+      <div class="loan-meta">${esgFund}${esgAcli}${esgCrop}${esgWhis}${esgPric}</div>
       <div class="loan-actions"><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button><button class="btn-confirm" onclick="confirmAccess('${l.id}',event)">Confirmar acceso →</button></div>` : ''}</div>
     ${!isNo? `<button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)" title="No me interesa">No me interesa</button>` : ''}</div>`;
 
