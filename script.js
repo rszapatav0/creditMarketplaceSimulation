@@ -268,7 +268,7 @@ function renderLoans(){
     const esgAcli = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.aclimatar ? 'Sí' : 'No'}</div></div>` : '';
     const esgCrop = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Croppie</div><div class="mi-val mv-m">${l.croppie ? 'Sí' : 'No'}</div></div>` : '';
     const esgWhis = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Whisp</div><div class="mi-val mv-m">${l.whisp ? 'Sí' : 'No'}</div></div>` : '';
-    const esgPric = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Precio total por productor</div><div class="mi-val mv-g">${l.priceFundamentales} Lempiras</div></div>` : '';
+    const esgPric = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Precio total por productor</div><div class="mi-val mv-g">${l.priceTotal} Lempiras</div></div>` : '';
     
     const isNo = l.testValue === 'no';
     list.innerHTML += `
