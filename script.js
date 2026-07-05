@@ -245,9 +245,10 @@ function showGeneralQuestions(){
 
 function toggleLoanCard(event, card, id){
   event.stopPropagation();
-  if(!state.interactions.viewed.includes(id)){state.interactions.viewed.push(id);}
-  saveState();
-  card.classList.toggle('expanded');
+  if(!state.interactions.viewed.includes(id)){state.interactions.viewed.push(id);saveState();}
+  const wasExpanded = card.classList.contains('expanded');
+  document.querySelectorAll('.lcard.expanded').forEach(c => {c.classList.remove('expanded');});
+  if(!wasExpanded){card.classList.add('expanded');}
 }
 
 function renderLoans(){
