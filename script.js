@@ -705,11 +705,13 @@ const profileHtml = `
   <div class="px-grid2">
   <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '-'}</div>
   <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '-'}</div>
+  <div class="px-grid2-label">Evaluación en central crediticia</div><div class="px-grid2-value">${p.riesgo || '-'}</div>
+  <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza || '-'}</div>
+  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
+  <div class="px-grid2-label">Tiempo de comercialización con el intermediario</div><div class="px-grid2-value">${p.tiempoic || '-'}</div>
   <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '-'}</div>
   <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '-'}</div>
   <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '-'}</div>
-  <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza}</div>
-  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
   </div></div>`;
 
 const profileHtmlFinca = `
@@ -719,10 +721,10 @@ const profileHtmlFinca = `
   <div class="px-grid2-label">Municipio</div><div class="px-grid2-value">${p.municipality || '—'}</div>
   <div class="px-grid2-label">Aldea</div><div class="px-grid2-value">${p.aldea || '—'}</div>
   <div class="px-grid2-label">Geolocalización</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</div>
+  <div class="px-grid2-label">Área total de la finca</div><div class="px-grid2-value">${p.areaTot || '—'}</div>
+  <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
   <div class="px-grid2-label">Número de empleados</div><div class="px-grid2-value">${p.numEmpleados || '—'}</div>
   <div class="px-grid2-label">Cuenta con documentos de propiedad</div><div class="px-grid2-value">${p.propertyDocument || '—'}</div>
-  <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
-  <div class="px-grid2-label">Variedades de café</div><div class="px-grid2-value">${p.variedad || '—'}</div>
   </div>
   <div class="px-farm-map">${buildMap(p)}</div>
   </div>`;
@@ -732,14 +734,35 @@ const profileHtmlProductiva = `
   <div class="px-grid2">
   <div class="px-grid2-label">Promedio histórico de acopio</div><div class="px-grid2-value">${p.histAcopio || '—'}</div>
   <div class="px-grid2-label">Promedio histórico de ingresos</div><div class="px-grid2-value">${p.histIngresos || '—'}</div>
+  <div class="px-grid2-label">Cantidad comercializada 2025</div><div class="px-grid2-value">${p.acopio2025 || '—'}</div>
+  <div class="px-grid2-label">Ingresos por ventas 2025</div><div class="px-grid2-value">${p.ingresos2025 || '—'}</div>
+  <div class="px-grid2-label">Cantidad comercializada 2024</div><div class="px-grid2-value">${p.acopio2024 || '—'}</div>
+  <div class="px-grid2-label">Ingresos por ventas 2024</div><div class="px-grid2-value">${p.ingresos2024 || '—'}</div>
+  <div class="px-grid2-label">Cantidad comercializada 2023</div><div class="px-grid2-value">${p.acopio2023 || '—'}</div>
+  <div class="px-grid2-label">Ingresos por ventas 2023</div><div class="px-grid2-value">${p.ingresos2023 || '—'}</div>
   <div class="px-grid2-label">Otros ingresos</div><div class="px-grid2-value">${p.otherIncome || '—'}</div>
-  <div class="px-grid2-label">Cantidad de otros ingresos</div><div class="px-grid2-value">${p.amountOtherIncome || '—'}</div>
   </div></div>`;
-  
+
+const profileHtmlCartera = `
+  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Histórico de carteras con el Intermediario comercial</span></div>
+  <div class="px-grid2">
+  <div class="px-grid2-label">Monto de crédito desembolsado 2025</div><div class="px-grid2-value">${p.montoCredito2025 || '—'}</div>
+  <div class="px-grid2-label">Plazo crédito desembolsado 2025</div><div class="px-grid2-value">${p.plazoCredito2025 || '—'}</div>
+  <div class="px-grid2-label">¿Pagó crédito desembolsado 2025?</div><div class="px-grid2-value">${p.pagoCredito2025 || '—'}</div></div>
+  <div class="px-grid2">
+  <div class="px-grid2-label">Monto de crédito desembolsado 2024</div><div class="px-grid2-value">${p.montoCredito2024 || '—'}</div>
+  <div class="px-grid2-label">Plazo crédito desembolsado 2024</div><div class="px-grid2-value">${p.plazoCredito2024 || '—'}</div>
+  <div class="px-grid2-label">¿Pagó crédito desembolsado 2024?</div><div class="px-grid2-value">${p.pagoCredito2024 || '—'}</div></div>
+  <div class="px-grid2">
+  <div class="px-grid2-label">Monto de crédito desembolsado 2023</div><div class="px-grid2-value">${p.montoCredito2023 || '—'}</div>
+  <div class="px-grid2-label">Plazo crédito desembolsado 2023</div><div class="px-grid2-value">${p.plazoCredito2023 || '—'}</div>
+  <div class="px-grid2-label">¿Pagó crédito desembolsado 2023?</div><div class="px-grid2-value">${p.pagoCredito2023 || '—'}</div>
+  </div></div>`;
+
 cell.innerHTML = confirmed.tierOn
   ? `<div class="px-wrap">
   <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor - ${p.nombre}</div></div>
-    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${esgHtml}</div></div>`
+    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${profileHtmlCartera}${esgHtml}</div></div>`
   : `<div class="px-wrap">
   <div class="px-right">${esgHtml}</div></div>`;
 }
@@ -799,8 +822,8 @@ function renderAccess(){
           <table class="ptable">
             <thead><tr>
               <th style="width:15%">Código</th><th style="width:25%">Productor</th>
-              <th style="width:31%">Destino</th><th style="width:12%">Monto</th>
-              <th style="width:10%">Plazo</th><th style="width:7%">Aval</th>
+              <th style="width:29%">Destino</th><th style="width:12%">Monto</th>
+              <th style="width:10%">Plazo</th><th style="width:9%">Aval IC</th>
             </tr>
             <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
             </thead>
