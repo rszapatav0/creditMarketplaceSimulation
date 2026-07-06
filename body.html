@@ -35,6 +35,7 @@
     <div class="loan-tabs" id="loan-tabs">
       <button class="loan-tab active" id="general-tab" onclick="showGeneralQuestions()">Preguntas sociodemográficas</button>
       <button class="loan-tab" data-tab="yes" onclick="switchLoanTab('yes')">Créditos de demostración</button>
+      <button class="loan-tab" id="questions-tab" onclick="showAdditionalQuestions()">Preguntas adicionales</button>
       <button class="loan-tab" data-tab="no" onclick="switchLoanTab('no')">Oportunidades disponibles</button>
     </div>
     <div class="loan-subtabs" id="loan-subtabs" style="display:none">
@@ -42,6 +43,7 @@
       <button class="loan-subtab"data-type="grupo"onclick="switchLoanType('grupo')">Grupos de productores</button>
       <button class="loan-subtab"data-type="coop"onclick="switchLoanType('coop')">Productores individuales</button>
     </div>
+    <div class="loan-info" id="loan-demo-info" style="display:none">Los siguientes créditos tienen como objetivo ilustrar el flujo de interacción del Marketplace. Puede visualizarlos, explorar su información, descartarlos y estructurar ofertas sin que estas acciones afecten el saldo de la billetera, la disponibilidad de los créditos o representen una oferta real. Puede interactuar libremente con ellos durante toda la sesión. Una vez haya finalizado esta exploración, continúe con la pestaña <strong>"Preguntas adicionales"</strong>.</div>
     <div class="loan-list" id="loan-list"></div>
     <div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div>
   </div></div>

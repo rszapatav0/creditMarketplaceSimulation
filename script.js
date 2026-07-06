@@ -15,6 +15,8 @@ function defaultState(){
     },
     offers: {},
     walletBalance: walletInitial,
+    additionalQuestionsCompleted: false,
+    additionalAnswers: {},
   };
 }
 
@@ -181,7 +183,139 @@ function switchLoanTab(tab){
       .filter(l => l.testValue === 'no' && l.tipo === 'grupo')
       .forEach(l => { if(!state.dismissedLoans.includes(l.id)){state.dismissedLoans.push(l.id);}});}
   saveState();}
+  document.getElementById('loan-demo-info').style.display =tab === 'yes' ? 'block' : 'none';
   renderLoans();
+}
+
+function switchLoanType(type){
+  activeLoanType = type;
+  currentPage = 1;
+  document.querySelectorAll('.loan-subtab').forEach(b =>b.classList.toggle('active', b.dataset.type === type));
+  renderLoans();
+}
+
+function toggleOther(select){
+  const input=document.querySelector(`[data-other-for="${select.id}"]`);
+  if(!input) return;
+  const enabled = select.value === 'otro';
+  input.disabled = !enabled;
+  if(enabled){input.placeholder = 'Especifique...';
+  }else{input.placeholder = 'No aplica';}
+}
+
+function showAdditionalQuestions(){
+  document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
+  document.getElementById('questions-tab').classList.add('active');
+  document.getElementById('loan-demo-info').style.display = 'none';
+  document.getElementById('loan-subtabs').style.display = 'none';
+  document.getElementById('loan-list')
+  .innerHTML = `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de interés</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">¿Qué tan interesante le resultan los créditos de demostración?</label>
+        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "muy poco interesante" y 10 "muy interesante".</div> 
+        <select class="fsel" id="aq1" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+      <div class="fg full"><label class="flabel">¿Cree que estos créditos podrían resolver una necesidad que su institución tiene hoy?</label>
+        <select class="fsel" id="aq2" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+    </div></div>
+    <div class="fs-title">Bloque de valor percibido</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?</label><input class="finp-s" id="aq3" type="number" placeholder="Lempiras"></div>
+      <div class="fg full"><label class="flabel">¿Qué características debería incluir la suscripción para que ese monto sea justo para usted?</label><input class="finp-s" id="aq4" type="text"></div>
+    </div>
+    <div class="fs-title">Bloque de uso</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?</label>
+        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "no lo utilizaría" y 10 "lo utilizaría mucho".</div> 
+        <select class="fsel" id="aq5" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+      <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?</label>
+        <select class="fsel" id="aq6" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
+    </div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishAdditionalQuestions()">Continuar</button>
+    </div>`;
+}
+
+function finishAdditionalQuestions(){
+  const requiredFields2 = ['aq1','aq2','aq3','aq4','aq5','aq6'];
+  const missing = requiredFields2.find(id =>!document.getElementById(id)?.value.trim());
+  if(missing){
+    alert('Por favor complete todas las preguntas antes de continuar.');
+    document.getElementById(missing)?.focus();return;}
+  state.additionalQuestionsCompleted = true;
+  state.additionalAnswers = {
+    aq1: document.getElementById('aq1').value,
+    aq2: document.getElementById('aq2').value,
+    aq3: document.getElementById('aq3').value,
+    aq4: document.getElementById('aq4').value,
+    aq5: document.getElementById('aq5').value,
+    aq6: document.getElementById('aq6').value,
+  };
+  saveState();
+  document.getElementById('questions-tab').disabled = false;
+  document.querySelector('[data-tab="no"]').disabled = false;
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  switchLoanTab('yes');
+}
+
+function showGeneralQuestions(){
+  document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
+  document.getElementById('general-tab').classList.add('active');
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  document.getElementById('questions-tab').disabled  = false;
+  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.getElementById('loan-demo-info').style.display = 'none';
+  document.getElementById('loan-subtabs').style.display = 'none';
+  document.getElementById('loan-list')
+  .innerHTML = `
+  <div class="o-form"><div>
+    <div class="fs-title">Información general</div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Nombre del participante</label><input class="finp-s" id="participant-name" type="text"></div>
+      <div class="fg"><label class="flabel">Nombre de la institución a la que pertenece</label><input class="finp-s" id="institution-name" type="text"></div>
+      <div class="fg"><label class="flabel">Tipo de institución</label>
+        <select class="fsel" id="institution-type" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="banco">Banco comercial</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
+      <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other" data-other-for="institution-type" type="text" disabled></div>
+      <div class="fg"><label class="flabel">Rol en la institución</label>
+        <select class="fsel" id="institution-role" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
+      <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" data-other-for="institution-role" type="text" disabled></div>
+      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito</label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
+        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola</label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
+        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+      <div class="fg"><label class="flabel">Rango de edad</label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
+        <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
+        <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
+      <div class="fg"><label class="flabel">Sexo</label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
+        <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
+    </div></div>
+    <div class="fs-title">Oportunidades de crédito de interés</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, indique las oportunidades de crédito que le son de interés</label></div>
+      <div class="fg full"><label class="flabel">Productores individuales</label>
+        <div class="fhelp">Corresponden a productores individuales de café, con montos de crédito entre L. 10,000 y L. 50,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div> 
+        <select class="fsel" id="interest-coop" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+      <div class="fg full"><label class="flabel">Grupos de productores</label>
+        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma montos de crédito entre L. 10,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
+        <select class="fsel" id="interest-grupo" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+      <div class="fg full"><label class="flabel">Grupos de productores asociados a un crédito de acopio</label>
+        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma de montos de crédito entre L. 50,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Además, están vinculadas a un crédito de acopio de café (compra de café a productores) por aproximadamente L. 1,000,000. La institución encargada del acopio actúa como aval de los productores asociados y realiza la retención del pago del café en el punto de venta como mecanismo de recaudo del crédito. Su institución puede optar por gestionar únicamente el crédito para productores o ambos créditos (acopio y productores). Todos los productores cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
+        <select class="fsel" id="interest-banco" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishGeneralQuestions()">Continuar</button>
+    </div>`;
+  document.getElementById('loan-pagination').style.display='none';
 }
 
 function finishGeneralQuestions(){
@@ -209,80 +343,11 @@ function finishGeneralQuestions(){
         interestBanco:       document.getElementById('interest-banco').value,
       };
     saveState();
-    document.getElementById('general-tab').disabled       = true;
+    document.getElementById('general-tab').disabled       = false;
     document.querySelector('[data-tab="yes"]').disabled   = false;
+    document.getElementById('questions-tab').disabled     = false;
     document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
-}
-
-function switchLoanType(type){
-  activeLoanType = type;
-  currentPage = 1;
-  document.querySelectorAll('.loan-subtab').forEach(b => b.classList.toggle('active', b.dataset.type === type));
-  renderLoans();
-}
-
-function toggleOther(select){
-  const input=document.querySelector(`[data-other-for="${select.id}"]`);
-  if(!input) return;
-  const enabled = select.value === 'otro';
-  input.disabled = !enabled;
-  if(enabled){input.placeholder = 'Especifique...';
-  }else{input.placeholder = 'No aplica';}
-}
-
-function showGeneralQuestions(){
-  document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');
-  });
-  document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = true;
-  document.querySelector('[data-tab="no"]').disabled  = true;
-  document.getElementById('loan-list')
-  .innerHTML = `
-  <div class="o-form"><div>
-    <div class="fs-title">Información general</div>
-    <div class="frow">
-      <div class="fg"><label class="flabel">Nombre del participante</label><input class="finp-s" id="participant-name" type="text"></div>
-      <div class="fg"><label class="flabel">Nombre de la institución a la que pertenece</label><input class="finp-s" id="institution-name" type="text"></div>
-      <div class="fg"><label class="flabel">Tipo de institución</label>
-        <select class="fsel" id="institution-type" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="banco">Banco comercial</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
-      <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other" data-other-for="institution-type" type="text" disabled></div>
-      <div class="fg"><label class="flabel">Rol en la institución</label>
-        <select class="fsel" id="institution-role" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
-      <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" data-other-for="institution-role" type="text" disabled></div>
-      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito</label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
-        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola</label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
-        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Rango de edad</label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
-        <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
-        <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Sexo</label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
-        <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
-    </div></div></div>
-  <div class="o-form"><div>
-    <div class="fs-title">Oportunidades de crédito de interés</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, indique las oportunidades de crédito que le son de interés</label></div>
-      <div class="fg full"><label class="flabel">Productores individuales</label>
-        <div class="fhelp">Corresponden a productores individuales de café, con montos de crédito entre L. 10,000 y L. 50,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div> 
-        <select class="fsel" id="interest-coop" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
-      <div class="fg full"><label class="flabel">Grupos de productores</label>
-        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma montos de crédito entre L. 10,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
-        <select class="fsel" id="interest-grupo" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
-      <div class="fg full"><label class="flabel">Grupos de productores asociados a un crédito de acopio</label>
-        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma de montos de crédito entre L. 50,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Además, están vinculadas a un crédito de acopio de café (compra de café a productores) por aproximadamente L. 1,000,000. La institución encargada del acopio actúa como aval de los productores asociados y realiza la retención del pago del café en el punto de venta como mecanismo de recaudo del crédito. Su institución puede optar por gestionar únicamente el crédito para productores o ambos créditos (acopio y productores). Todos los productores cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
-        <select class="fsel" id="interest-banco" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishGeneralQuestions()">Continuar</button>
-    </div>`;
-  document.getElementById('loan-pagination').style.display='none';
 }
 
 function toggleLoanCard(event, card, id){
