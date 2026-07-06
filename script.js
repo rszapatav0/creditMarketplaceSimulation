@@ -189,9 +189,9 @@ function finishGeneralQuestions(){
   if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
   if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
   const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
-  /*if(missing){
+  if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
-    document.getElementById(missing)?.focus();return;}*/
+    document.getElementById(missing)?.focus();return;}
       state.generalQuestionsCompleted = true;
       state.generalAnswers = {
         participantName:     document.getElementById('participant-name').value.trim(),
@@ -209,7 +209,7 @@ function finishGeneralQuestions(){
         interestBanco:       document.getElementById('interest-banco').value,
       };
     saveState();
-    //document.getElementById('general-tab').disabled       = true;
+    document.getElementById('general-tab').disabled       = true;
     document.querySelector('[data-tab="yes"]').disabled   = false;
     document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
@@ -235,8 +235,8 @@ function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');
   });
   document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.querySelector('[data-tab="yes"]').disabled = true;
+  document.querySelector('[data-tab="no"]').disabled  = true;
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
