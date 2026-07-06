@@ -8,6 +8,8 @@ const USERS=[
 ];
 
 // ── Metrics and tools ──────────────────────────────────────────────────────
+const walletInitial=10000;
+
 const precioFundamentales=100;
 
 const ESG=[

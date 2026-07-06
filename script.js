@@ -14,7 +14,7 @@ function defaultState(){
       canceledAccess: []
     },
     offers: {},
-    walletBalance: 5000,
+    walletBalance: walletInitial,
   };
 }
 
@@ -73,7 +73,7 @@ function syncPills(){
 
 // WALLET / BALANCE FUNCTIONS
 function initBalance(){
-  if(state.walletBalance === undefined) state.walletBalance = 5000;
+  if(state.walletBalance === undefined) state.walletBalance = walletInitial;
   saveState();
 }
 
@@ -185,7 +185,7 @@ function switchLoanTab(tab){
 }
 
 function finishGeneralQuestions(){
-  const requiredFields = ['participant-name','institution-name','institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
+  const requiredFields = ['participant-name','institution-name','institution-type','institution-role','experience-years','agr-experience-years','age-range','sex','interest-coop','interest-grupo','interest-banco'];
   if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
   if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
   const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
@@ -265,16 +265,17 @@ function showGeneralQuestions(){
   <div class="o-form"><div>
     <div class="fs-title">Oportunidades de crédito de interés</div>
     <div class="frow">
-      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, ¿está interesado(a) en visualizar oportunidades de crédito para productores individuales?</label>
-        <div class="fhelp">Estas oportunidades están caracterizadas por tener un único productor de café asociado, con montos de préstamo entre 1,000 y 20,000 Lempiras.</div>
+      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, indique las oportunidades de crédito que le son de interés</label></div>
+      <div class="fg full"><label class="flabel">Productores individuales</label>
+        <div class="fhelp">Corresponden a productores individuales de café, con montos de crédito entre L. 10,000 y L. 50,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div> 
         <select class="fsel" id="interest-coop" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="yes">Sí</option><option value="no">No</option></select></div>
-      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, ¿está interesado(a) en visualizar oportunidades de crédito para grupos de productores?</label>
-        <div class="fhelp">Estas oportunidades están caracterizadas por tener entre 2 y 10 productores de café asociados, con montos de préstamo totales entre 10,000 y 100,000 Lempiras.</div>
+      <div class="fg full"><label class="flabel">Grupos de productores</label>
+        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma montos de crédito entre L. 10,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
         <select class="fsel" id="interest-grupo" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="yes">Sí</option><option value="no">No</option></select></div>
-      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, ¿está interesado(a) en visualizar oportunidades de crédito para grupos de productores asociados a un crédito de acopio?</label>
-        <div class="fhelp">Estas oportunidades están caracterizadas por tener entre 2 y 10 productores de café asociados, con montos de préstamo totales entre 10,000 y 100,000 Lempiras, y estar asociadas a un crédito de acopio. Esto implica que el responsable del crédito de acopio respalda el préstamo con un aval para los productores asociados.</div>
+      <div class="fg full"><label class="flabel">Grupos de productores asociados a un crédito de acopio</label>
+        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma de montos de crédito entre L. 50,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Además, están vinculadas a un crédito de acopio de café (compra de café a productores) por aproximadamente L. 1,000,000. La institución encargada del acopio actúa como aval de los productores asociados y realiza la retención del pago del café en el punto de venta como mecanismo de recaudo del crédito. Su institución puede optar por gestionar únicamente el crédito para productores o ambos créditos (acopio y productores). Todos los productores cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
         <select class="fsel" id="interest-banco" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="yes">Sí</option><option value="no">No</option></select></div>
     </div></div></div>
