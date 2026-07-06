@@ -301,8 +301,8 @@ function renderLoans(){
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
     const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
-    const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-    const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
+    const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores} Lempiras</div></div>`
+    const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0} Lempiras</div></div>`;
     const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
     const badgeClass=isG?'grupo':l.tipo;
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
@@ -310,7 +310,7 @@ function renderLoans(){
     const esgAcli = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.aclimatar ? 'Sí' : 'No'}</div></div>` : '';
     const esgCrop = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Croppie</div><div class="mi-val mv-m">${l.croppie ? 'Sí' : 'No'}</div></div>` : '';
     const esgWhis = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Whisp</div><div class="mi-val mv-m">${l.whisp ? 'Sí' : 'No'}</div></div>` : '';
-    const esgPric = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Precio total por productor</div><div class="mi-val mv-g">${l.priceTotal} Lempiras</div></div>` : '';
+    const esgPric = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Precio total</div><div class="mi-val mv-g">${l.priceTotal} Lempiras por productor</div></div>` : '';
     
     const isNo = l.testValue === 'no';
     list.innerHTML += `
@@ -319,6 +319,7 @@ function renderLoans(){
     <div class="loan-meta">${mX}${mP}${mA}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
     ${isNo? `<div class="loan-extra">
       <div class="loan-extra-title">Información incluida</div>
+      <div class="loan-extra-help">El crédito dispone de la siguiente información: </div>
       <div class="loan-meta">${esgFund}${esgAcli}${esgCrop}${esgWhis}${esgPric}</div>
       <div class="loan-actions"><button class="btn-confirm" onclick="confirmAccess('${l.id}',event)">Confirmar acceso →</button><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button></div>` : ''}</div>
     ${!isNo? `<button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)" title="No me interesa">No me interesa</button>` : ''}</div>`;
@@ -718,8 +719,8 @@ const profileHtmlFinca = `
   <div class="px-grid2-label">Municipio</div><div class="px-grid2-value">${p.municipality || '—'}</div>
   <div class="px-grid2-label">Aldea</div><div class="px-grid2-value">${p.aldea || '—'}</div>
   <div class="px-grid2-label">Geolocalización</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</div>
+  <div class="px-grid2-label">Número de empleados</div><div class="px-grid2-value">${p.numEmpleados || '—'}</div>
   <div class="px-grid2-label">Cuenta con documentos de propiedad</div><div class="px-grid2-value">${p.propertyDocument || '—'}</div>
-  <div class="px-grid2-label">Tipo de tenencia</div><div class="px-grid2-value">${p.tenancyTipe || '—'}</div>
   <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
   <div class="px-grid2-label">Variedades de café</div><div class="px-grid2-value">${p.variedad || '—'}</div>
   </div>
