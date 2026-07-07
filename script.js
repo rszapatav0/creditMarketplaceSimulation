@@ -150,6 +150,7 @@ function switchLoanTab(tab){
   currentPage=1;
   document.querySelectorAll('.loan-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   document.getElementById('loan-demo-info').style.display =tab === 'yes' ? 'block' : 'none';
+  document.getElementById('loan-card-info').style.display =tab === 'no' ? 'block' : 'none';
   renderLoans();
 }
 
@@ -197,6 +198,7 @@ function showAdditionalQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('questions-tab').classList.add('active');
   document.getElementById('loan-demo-info').style.display = 'none';
+  document.getElementById('loan-card-info').style.display = 'none';
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -259,6 +261,7 @@ function showGeneralQuestions(){
   document.getElementById('questions-tab').disabled  = false;
   document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-demo-info').style.display = 'none';
+  document.getElementById('loan-card-info').style.display = 'none';
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
