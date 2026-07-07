@@ -175,18 +175,28 @@ function switchSession(session){
         </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.</div>
       <div class="btn-row"><button class="btn-p" id="continue-session" onclick="nextSession()">Continuar →</button></div>`;
     return;
-  } else{renderLoans();}
+  } else if(session === 'endSessions'){
+    document.getElementById('loan-list').innerHTML = `
+      <div class="loan-info" id="loan-end-sessions">
+        <strong>Finalizar sesiones</strong><br>
+        Ha completado todas las sesiones disponibles. Agradecemos su participación y sus aportes a este ejercicio.</div>
+      <div class="btn-row" id="end-session-button" style="margin-top:2rem"><button class="btn-p" onclick="endSession()">Enviar →</button></div>`;
+    return;
+  } else {renderLoans();}
 }
 
 function updateSessionTabs(){
+  const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
   document.querySelectorAll('.loan-subtab').forEach(btn => {
     const session = btn.dataset.type;
-    // All available by the moment
-    btn.disabled = false;
+    if(session === 'instructions'){btn.disabled = false;return;}
+    if(session === 'endSessions'){
+      btn.disabled = remaining.length !== 0;return;}
     // To do: update session tabs based on available sessions
-    // btn.disabled = !sessionAvailable(session);
+    btn.disabled = false;
   });
 }
+
 
 function nextSession(){
   const tabs = [...document.querySelectorAll('.loan-subtab')];
@@ -409,15 +419,11 @@ function renderLoans(){
   });
   if(activeLoanTab === 'no'){
     const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
-    if(remaining.length === 0){
-      list.innerHTML = `
-        <div class="btn-row" style="margin-top:2rem">
-          <button class="btn-p" onclick="endSession()">Enviar →</button>
-        </div>`;
-      document.getElementById('loan-pagination').style.display = 'none';
-      return;
-    }}
+    const endTab = document.querySelector('.loan-subtab[data-type="endSessions"]');
+    if(endTab){endTab.disabled = remaining.length !== 0;}
+    if(remaining.length === 0){switchSession('endSessions');document.getElementById('loan-pagination').style.display = 'none';return;}
   initPagination();
+  }
 }
 
 function openLoan(id){
