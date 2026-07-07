@@ -112,7 +112,7 @@ function doLogin(){
   state.sessionGroup = assignSessionGroup();
   saveState();
   syncPills();initBalance();renderBalanceDisplay();
-  document.getElementById('mkt-title').textContent='Oportunidades de crédito disponibles';
+  document.getElementById('mkt-title').innerHTML = `<div class="brand-h1"><b>Marketplace de Garantías</b> · Central de <b>C</b>rédito <b>V</b>erde</div>`;
   showGeneralQuestions();show('s-market');
 }
 
