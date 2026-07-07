@@ -153,9 +153,9 @@ function switchLoanTab(tab){
   document.getElementById('loan-demo-info').style.display =tab === 'yes' ? 'block' : 'none';
   document.getElementById('loan-subtabs').style.display = tab === 'no' ? 'flex' : 'none';
   if(tab === 'no'){
-    activeSession = '1';
+    activeSession = 'instructions';
     updateSessionTabs();
-    document.querySelectorAll('.loan-subtab').forEach(b =>b.classList.toggle('active', b.dataset.type === 'instructions'));}
+    switchSession('instructions'); return;}
   renderLoans();
 }
 
@@ -172,7 +172,8 @@ function switchSession(session){
           <li>Para cada oportunidad, primero visualizará información general del crédito. Al desplegar la tarjeta podrá consultar la disponibilidad de información adicional. Evalúe si le interesa acceder a ella considerando los criterios de su institución y sus propias preferencias.</li>
           <li>En la esquina superior derecha encontrará el saldo disponible de su billetera. Este es el presupuesto total con el que contará para todas las sesiones y no podrá superar ese monto.</li>
           <li>El precio mostrado corresponde al costo de acceso a la información <strong>por productor</strong>, no por crédito. El valor a descontar del saldo disponible se ponderará por el número de productores asociados a la oportunidad de crédito.</li>
-        </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.</div>`;
+        </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.</div>
+      <div class="btn-row"><button class="btn-p" id="continue-session" onclick="nextSession()">Continuar →</button></div>`;
     return;
   } else{renderLoans();}
 }
@@ -180,9 +181,18 @@ function switchSession(session){
 function updateSessionTabs(){
   document.querySelectorAll('.loan-subtab').forEach(btn => {
     const session = btn.dataset.type;
+    // All available by the moment
     btn.disabled = false;
+    // To do: update session tabs based on available sessions
     // btn.disabled = !sessionAvailable(session);
   });
+}
+
+function nextSession(){
+  const tabs = [...document.querySelectorAll('.loan-subtab')];
+  const currentIndex = tabs.findIndex(btn => btn.dataset.type === activeSession);
+  const nextTab = tabs.slice(currentIndex + 1).find(btn => !btn.disabled);
+  if(nextTab){switchSession(nextTab.dataset.type);}
 }
 
 function finishGeneralQuestions(){
@@ -259,7 +269,7 @@ function showAdditionalQuestions(){
         <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
     </div></div>
     <div class="btn-row">
-      <button class="btn-p" onclick="finishAdditionalQuestions()">Continuar</button>
+      <button class="btn-p" onclick="finishAdditionalQuestions()">Continuar →</button>
     </div>`;
 }
 
@@ -319,7 +329,7 @@ function showGeneralQuestions(){
         <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
     </div></div></div>
     <div class="btn-row">
-      <button class="btn-p" onclick="finishGeneralQuestions()">Continuar</button>
+      <button class="btn-p" onclick="finishGeneralQuestions()">Continuar →</button>
     </div>`;
   document.getElementById('loan-pagination').style.display='none';
 }
