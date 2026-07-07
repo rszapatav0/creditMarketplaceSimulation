@@ -263,7 +263,7 @@ function showAdditionalQuestions(){
     </div></div>
     <div class="fs-title">Bloque de valor percibido</div>
     <div class="frow">
-      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?</label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
+      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
       <div class="fg full"><label class="flabel">¿Qué características debería incluir la suscripción para que ese monto sea justo para usted?</label><input class="finp-s" id="aq4" type="text"></div>
     </div>
     <div class="fs-title">Bloque de uso</div>
@@ -282,7 +282,7 @@ function showAdditionalQuestions(){
 }
 
 function finishAdditionalQuestions(){
-  const requiredFields2 = ['aq1','aq2','aq3','aq5','aq6'];
+  const requiredFields2 = ['aq3'];
   const missing = requiredFields2.find(id =>!document.getElementById(id)?.value.trim());
   if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
@@ -317,24 +317,24 @@ function showGeneralQuestions(){
   <div class="o-form"><div>
     <div class="fs-title">Información general</div>
     <div class="frow">
-      <div class="fg"><label class="flabel">Nombre del participante</label><input class="finp-s" id="participant-name" type="text"></div>
-      <div class="fg"><label class="flabel">Nombre de la institución a la que pertenece</label><input class="finp-s" id="institution-name" type="text"></div>
-      <div class="fg"><label class="flabel">Tipo de institución</label>
+      <div class="fg"><label class="flabel">Nombre del participante<span class="required">*</span></label><input class="finp-s" id="participant-name" type="text"></div>
+      <div class="fg"><label class="flabel">Nombre de la institución a la que pertenece<span class="required">*</span></label><input class="finp-s" id="institution-name" type="text"></div>
+      <div class="fg"><label class="flabel">Tipo de institución<span class="required">*</span></label>
         <select class="fsel" id="institution-type" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="banco">Banco comercial</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
       <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other" data-other-for="institution-type" type="text" disabled></div>
-      <div class="fg"><label class="flabel">Rol en la institución</label>
+      <div class="fg"><label class="flabel">Rol en la institución<span class="required">*</span></label>
         <select class="fsel" id="institution-role" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
       <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" data-other-for="institution-role" type="text" disabled></div>
-      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito</label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
+      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito<span class="required">*</span></label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
         <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola</label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
+      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola<span class="required">*</span></label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
         <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Rango de edad</label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
+      <div class="fg"><label class="flabel">Rango de edad<span class="required">*</span></label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
         <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
         <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Sexo</label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
+      <div class="fg"><label class="flabel">Sexo<span class="required">*</span></label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
         <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
     </div></div></div>
     <div class="btn-row">

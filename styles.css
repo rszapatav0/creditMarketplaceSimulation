@@ -123,6 +123,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .dhdr{margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .dname{font-size:16px;font-weight:500;margin-bottom:.25rem}
 .dsub{font-size:12px;color:var(--text2)}
+.required {font-size: 0.75em;vertical-align: super;color:var(--red);}
 
 /* TIERS */
 .tier{border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
