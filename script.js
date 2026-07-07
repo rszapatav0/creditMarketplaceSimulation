@@ -145,53 +145,42 @@ function dismissLoan(id, event){
 }
 
 function switchLoanTab(tab){
-  if(activeLoanTab === 'yes' && tab !== 'yes'){tempDismissedLoans.clear();}
-  activeLoanTab = tab;
-  currentPage = 1;
-  document.querySelectorAll('.loan-tab').forEach(b =>b.classList.toggle('active', b.dataset.tab === tab));
-  const subtabs = document.getElementById('loan-subtabs');
-  if(tab === 'no'){
-    const rules = [
-      { type: 'banco', answer: 'interestBanco' },
-      { type: 'coop',  answer: 'interestCoop' },
-      { type: 'grupo', answer: 'interestGrupo' }
-    ];
-    rules.forEach(r => {
-      const btn = document.querySelector(`.loan-subtab[data-type="${r.type}"]`);btn.hidden = false;});
-    rules.forEach(r => {
-      const btn = document.querySelector(`.loan-subtab[data-type="${r.type}"]`);
-      const value = state.generalAnswers?.[r.answer];
-      if(value === 'no'){btn.hidden = true;}});
-    const firstVisible = rules.find(r => {
-      const btn = document.querySelector(`.loan-subtab[data-type="${r.type}"]`);return !btn.hidden;});
-    if(firstVisible){subtabs.style.display = 'flex';activeLoanType = firstVisible.type;
-    }else{subtabs.style.display = 'none';activeLoanType = null;}
-    document.querySelectorAll('.loan-subtab').forEach(b => b.classList.toggle('active', b.dataset.type === activeLoanType));
-  }else{subtabs.style.display = 'none'; activeLoanType = null;}
-
-  if(tab === 'no'){
-    if(state.generalAnswers.interestBanco === 'no'){
-      getLoans()
-      .filter(l => l.testValue === 'no' && l.tipo === 'banco')
-      .forEach(l => {if(!state.dismissedLoans.includes(l.id)){state.dismissedLoans.push(l.id);}});}
-    if(state.generalAnswers.interestCoop === 'no'){
-      getLoans()
-      .filter(l => l.testValue === 'no' && l.tipo === 'coop')
-      .forEach(l => {if(!state.dismissedLoans.includes(l.id)){state.dismissedLoans.push(l.id);}});}
-    if(state.generalAnswers.interestGrupo === 'no'){
-      getLoans()
-      .filter(l => l.testValue === 'no' && l.tipo === 'grupo')
-      .forEach(l => { if(!state.dismissedLoans.includes(l.id)){state.dismissedLoans.push(l.id);}});}
-  saveState();}
-  document.getElementById('loan-demo-info').style.display =tab === 'yes' ? 'block' : 'none';
+ if(activeLoanTab === 'yes' && tab !== 'yes'){tempDismissedLoans.clear();}
+  activeLoanTab=tab;
+  currentPage=1;
+  document.querySelectorAll('.loan-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   renderLoans();
 }
 
-function switchLoanType(type){
-  activeLoanType = type;
-  currentPage = 1;
-  document.querySelectorAll('.loan-subtab').forEach(b =>b.classList.toggle('active', b.dataset.type === type));
-  renderLoans();
+function finishGeneralQuestions(){
+  const requiredFields = ['participant-name','institution-name','institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
+  if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
+  if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
+  const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
+  /*if(missing){
+    alert('Por favor complete todas las preguntas antes de continuar.');
+    document.getElementById(missing)?.focus();return;}*/
+      state.generalQuestionsCompleted = true;
+      state.generalAnswers = {
+        participantName:     document.getElementById('participant-name').value.trim(),
+        institutionName:     document.getElementById('institution-name').value.trim(),
+        institutionType:     document.getElementById('institution-type').value,
+        institutionOther:    document.getElementById('institution-other').value.trim(),
+        institutionRole:     document.getElementById('institution-role').value,
+        roleOther:           document.getElementById('role-other').value.trim(),
+        experienceYears:     document.getElementById('experience-years').value,
+        agrExperienceYears:  document.getElementById('agr-experience-years').value,
+        ageRange:            document.getElementById('age-range').value,
+        sex:                 document.getElementById('sex').value,
+        interestCoop:        document.getElementById('interest-coop').value,
+        interestGrupo:       document.getElementById('interest-grupo').value,
+        interestBanco:       document.getElementById('interest-banco').value,
+      };
+    saveState();
+    //document.getElementById('general-tab').disabled       = true;
+    document.querySelector('[data-tab="yes"]').disabled   = false;
+    document.querySelector('[data-tab="no"]').disabled    = false;
+    switchLoanTab('yes');
 }
 
 function toggleOther(select){
@@ -266,11 +255,8 @@ function finishAdditionalQuestions(){
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.getElementById('questions-tab').disabled  = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
-  document.getElementById('loan-demo-info').style.display = 'none';
-  document.getElementById('loan-subtabs').style.display = 'none';
+  document.querySelector('[data-tab="yes"]').disabled = true;
+  document.querySelector('[data-tab="no"]').disabled  = true;
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -361,8 +347,8 @@ function toggleLoanCard(event, card, id){
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
   getLoans()
-  .filter(l => !state.dismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab && (activeLoanTab !== 'no' || (activeLoanType !== null && l.tipo === activeLoanType)))
-  .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
+  .filter(l=>!state.dismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab)
+    .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
   .forEach(l=>{
     const isG=l.tipo==='grupo';
     const isB=l.tipo==='banco';
@@ -387,7 +373,7 @@ function renderLoans(){
       <div class="loan-extra-title">Información incluida</div>
       <div class="loan-extra-help">El crédito dispone de la siguiente información: </div>
       <div class="loan-meta">${esgFund}${esgAcli}${esgCrop}${esgWhis}${esgPric}</div>
-      <div class="loan-actions"><button class="btn-confirm" onclick="confirmAccess('${l.id}',event)">Confirmar acceso →</button><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button></div>` : ''}</div>
+      <div class="loan-actions"><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button><button class="btn-confirm" onclick="confirmAccess('${l.id}',event)">Confirmar acceso →</button></div>` : ''}</div>
     ${!isNo? `<button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)" title="No me interesa">No me interesa</button>` : ''}</div>`;
 
   });
