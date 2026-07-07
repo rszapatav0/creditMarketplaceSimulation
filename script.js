@@ -210,9 +210,9 @@ function finishGeneralQuestions(){
   if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
   if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
   const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
-  /*if(missing){
+  if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
-    document.getElementById(missing)?.focus();return;}*/
+    document.getElementById(missing)?.focus();return;}
       state.generalQuestionsCompleted = true;
       state.generalAnswers = {
         participantName:     document.getElementById('participant-name').value.trim(),
@@ -225,14 +225,12 @@ function finishGeneralQuestions(){
         agrExperienceYears:  document.getElementById('agr-experience-years').value,
         ageRange:            document.getElementById('age-range').value,
         sex:                 document.getElementById('sex').value,
-        interestCoop:        document.getElementById('interest-coop').value,
-        interestGrupo:       document.getElementById('interest-grupo').value,
-        interestBanco:       document.getElementById('interest-banco').value,
       };
     saveState();
-    //document.getElementById('general-tab').disabled       = true;
+    document.getElementById('general-tab').disabled       = true;
     document.querySelector('[data-tab="yes"]').disabled   = false;
-    document.querySelector('[data-tab="no"]').disabled    = false;
+    document.getElementById('questions-tab').disabled     = false;
+    document.querySelector('[data-tab="no"]').disabled    = true;
     switchLoanTab('yes');
 }
 
@@ -265,7 +263,7 @@ function showAdditionalQuestions(){
     </div></div>
     <div class="fs-title">Bloque de valor percibido</div>
     <div class="frow">
-      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?</label><input class="finp-s" id="aq3" type="number" placeholder="Lempiras"></div>
+      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?</label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
       <div class="fg full"><label class="flabel">¿Qué características debería incluir la suscripción para que ese monto sea justo para usted?</label><input class="finp-s" id="aq4" type="text"></div>
     </div>
     <div class="fs-title">Bloque de uso</div>
@@ -284,7 +282,7 @@ function showAdditionalQuestions(){
 }
 
 function finishAdditionalQuestions(){
-  const requiredFields2 = ['aq1','aq2','aq3','aq4','aq5','aq6'];
+  const requiredFields2 = ['aq1','aq2','aq3','aq5','aq6'];
   const missing = requiredFields2.find(id =>!document.getElementById(id)?.value.trim());
   if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
@@ -299,18 +297,19 @@ function finishAdditionalQuestions(){
     aq6: document.getElementById('aq6').value,
   };
   saveState();
-  document.getElementById('questions-tab').disabled = false;
-  document.querySelector('[data-tab="no"]').disabled = false;
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  switchLoanTab('yes');
+  document.getElementById('general-tab').disabled       = true;
+  document.querySelector('[data-tab="yes"]').disabled   = false;
+  document.getElementById('questions-tab').disabled     = true;
+  document.querySelector('[data-tab="no"]').disabled    = false;
+  switchLoanTab('no');
 }
 
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.getElementById('questions-tab').disabled  = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.querySelector('[data-tab="yes"]').disabled = true;
+  document.getElementById('questions-tab').disabled  = true;
+  document.querySelector('[data-tab="no"]').disabled  = true;
   document.getElementById('loan-demo-info').style.display = 'none';
   document.getElementById('loan-subtabs').style.display = 'none';
   document.getElementById('loan-list')
@@ -342,38 +341,6 @@ function showGeneralQuestions(){
       <button class="btn-p" onclick="finishGeneralQuestions()">Continuar →</button>
     </div>`;
   document.getElementById('loan-pagination').style.display='none';
-}
-
-function finishGeneralQuestions(){
-  const requiredFields = ['participant-name','institution-name','institution-type','institution-role','experience-years','agr-experience-years','age-range','sex','interest-coop','interest-grupo','interest-banco'];
-  if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
-  if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
-  const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
-  if(missing){
-    alert('Por favor complete todas las preguntas antes de continuar.');
-    document.getElementById(missing)?.focus();return;}
-      state.generalQuestionsCompleted = true;
-      state.generalAnswers = {
-        participantName:     document.getElementById('participant-name').value.trim(),
-        institutionName:     document.getElementById('institution-name').value.trim(),
-        institutionType:     document.getElementById('institution-type').value,
-        institutionOther:    document.getElementById('institution-other').value.trim(),
-        institutionRole:     document.getElementById('institution-role').value,
-        roleOther:           document.getElementById('role-other').value.trim(),
-        experienceYears:     document.getElementById('experience-years').value,
-        agrExperienceYears:  document.getElementById('agr-experience-years').value,
-        ageRange:            document.getElementById('age-range').value,
-        sex:                 document.getElementById('sex').value,
-        interestCoop:        document.getElementById('interest-coop').value,
-        interestGrupo:       document.getElementById('interest-grupo').value,
-        interestBanco:       document.getElementById('interest-banco').value,
-      };
-    saveState();
-    document.getElementById('general-tab').disabled       = false;
-    document.querySelector('[data-tab="yes"]').disabled   = false;
-    document.getElementById('questions-tab').disabled     = false;
-    document.querySelector('[data-tab="no"]').disabled    = false;
-    switchLoanTab('yes');
 }
 
 function toggleLoanCard(event, card, id){
