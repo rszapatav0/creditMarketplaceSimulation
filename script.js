@@ -168,12 +168,13 @@ function switchSession(session){
       <div class="loan-info" id="loan-instructions">
         <strong>Instrucciones</strong><br>
         Imagine que está utilizando el <strong>Marketplace de créditos</strong> en un día normal de trabajo. Todas las oportunidades corresponden a productores de café ubicados dentro de la zona de interés de su institución financiera.<br><ol style="margin:0; padding-left:18px;">
-          <li>Cada sesión tiene una duración aproximada de <strong>20 minutos</strong> y deberá completar un total de <strong>X sesiones</strong>.</li>
+          <li>Cada sesión tiene una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>3 sesiones</strong>.</li>
           <li>Para cada oportunidad, primero visualizará información general del crédito. Al desplegar la tarjeta podrá consultar la disponibilidad de información adicional. Evalúe si le interesa acceder a ella considerando los criterios de su institución y sus propias preferencias.</li>
           <li>En la esquina superior derecha encontrará el saldo disponible de su billetera. Este es el presupuesto total con el que contará para todas las sesiones y no podrá superar ese monto.</li>
           <li>El precio mostrado corresponde al costo de acceso a la información <strong>por productor</strong>, no por crédito. El valor a descontar del saldo disponible se ponderará por el número de productores asociados a la oportunidad de crédito.</li>
         </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.</div>
       <div class="btn-row"><button class="btn-p" id="continue-session" onclick="nextSession()">Continuar →</button></div>`;
+    document.getElementById('loan-pagination').style.display='none';
     return;
   } else if(session === 'endSessions'){
     document.getElementById('loan-list').innerHTML = `
@@ -181,6 +182,7 @@ function switchSession(session){
         <strong>Finalizar sesiones</strong><br>
         Ha completado todas las sesiones disponibles. Agradecemos su participación y sus aportes a este ejercicio.</div>
       <div class="btn-row" id="end-session-button" style="margin-top:2rem"><button class="btn-p" onclick="endSession()">Enviar →</button></div>`;
+    document.getElementById('loan-pagination').style.display='none';
     return;
   } else {renderLoans();}
 }
