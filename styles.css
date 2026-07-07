@@ -276,7 +276,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:va
 .o-hdr{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .o-title{font-size:18px;font-weight:400;margin-bottom:.25rem}
 .o-sub{font-size:12px;color:var(--text2)}
-.o-form{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.5rem;display:flex;flex-direction:column;gap:1px}
+.o-form{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.5rem;padding-top:10px;display:flex;flex-direction:column;gap:1px}
 .fs-title{font-size:14px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase;padding-bottom:1px;border-bottom:1px solid var(--border);margin-bottom:10px;margin-top:15px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .fg{display:flex;flex-direction:column;gap:4px}

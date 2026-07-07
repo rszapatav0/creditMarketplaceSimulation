@@ -149,6 +149,7 @@ function switchLoanTab(tab){
   activeLoanTab=tab;
   currentPage=1;
   document.querySelectorAll('.loan-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.getElementById('loan-demo-info').style.display =tab === 'yes' ? 'block' : 'none';
   renderLoans();
 }
 
@@ -196,7 +197,6 @@ function showAdditionalQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('questions-tab').classList.add('active');
   document.getElementById('loan-demo-info').style.display = 'none';
-  document.getElementById('loan-subtabs').style.display = 'none';
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -255,8 +255,10 @@ function finishAdditionalQuestions(){
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = true;
-  document.querySelector('[data-tab="no"]').disabled  = true;
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  document.getElementById('questions-tab').disabled  = false;
+  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.getElementById('loan-demo-info').style.display = 'none';
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -281,22 +283,6 @@ function showGeneralQuestions(){
         <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
       <div class="fg"><label class="flabel">Sexo</label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
         <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
-    </div></div>
-    <div class="fs-title">Oportunidades de crédito de interés</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">Con base en los criterios de su institución, indique las oportunidades de crédito que le son de interés</label></div>
-      <div class="fg full"><label class="flabel">Productores individuales</label>
-        <div class="fhelp">Corresponden a productores individuales de café, con montos de crédito entre L. 10,000 y L. 50,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div> 
-        <select class="fsel" id="interest-coop" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
-      <div class="fg full"><label class="flabel">Grupos de productores</label>
-        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma montos de crédito entre L. 10,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Todos cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
-        <select class="fsel" id="interest-grupo" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
-      <div class="fg full"><label class="flabel">Grupos de productores asociados a un crédito de acopio</label>
-        <div class="fhelp">Corresponden a grupos de entre 2 y 30 productores de café, con una suma de montos de crédito entre L. 50,000 y L. 100,000 destinados al financiamiento de la finca y la producción de café, y plazos de hasta un año. Además, están vinculadas a un crédito de acopio de café (compra de café a productores) por aproximadamente L. 1,000,000. La institución encargada del acopio actúa como aval de los productores asociados y realiza la retención del pago del café en el punto de venta como mecanismo de recaudo del crédito. Su institución puede optar por gestionar únicamente el crédito para productores o ambos créditos (acopio y productores). Todos los productores cuentan con una garantía preaprobada de Confianza y han sido evaluados previamente en la central de riesgo crediticio.</div>
-        <select class="fsel" id="interest-banco" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
     </div></div></div>
     <div class="btn-row">
       <button class="btn-p" onclick="finishGeneralQuestions()">Continuar</button>
