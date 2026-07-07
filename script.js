@@ -136,6 +136,7 @@ function dismissLoan(id, event){
   if(loan?.testValue === 'yes'){
     tempDismissedLoans.add(id);
     renderLoans();
+    setTimeout(() => {tempDismissedLoans.delete(id);renderLoans();}, 5000);
     return;
   }
   if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);
@@ -150,8 +151,38 @@ function switchLoanTab(tab){
   currentPage=1;
   document.querySelectorAll('.loan-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   document.getElementById('loan-demo-info').style.display =tab === 'yes' ? 'block' : 'none';
-  document.getElementById('loan-card-info').style.display =tab === 'no' ? 'block' : 'none';
+  document.getElementById('loan-subtabs').style.display = tab === 'no' ? 'flex' : 'none';
+  if(tab === 'no'){
+    activeSession = '1';
+    updateSessionTabs();
+    document.querySelectorAll('.loan-subtab').forEach(b =>b.classList.toggle('active', b.dataset.type === 'instructions'));}
   renderLoans();
+}
+
+function switchSession(session){
+  activeSession = session;
+  currentPage = 1;
+  document.querySelectorAll('.loan-subtab').forEach(b => b.classList.toggle('active', b.dataset.type === session));
+  if(session === 'instructions'){
+    document.getElementById('loan-list').innerHTML = `
+      <div class="loan-info" id="loan-instructions">
+        <strong>Instrucciones</strong><br>
+        Imagine que está utilizando el <strong>Marketplace de créditos</strong> en un día normal de trabajo. Todas las oportunidades corresponden a productores de café ubicados dentro de la zona de interés de su institución financiera.<br><ol style="margin:0; padding-left:18px;">
+          <li>Cada sesión tiene una duración aproximada de <strong>20 minutos</strong> y deberá completar un total de <strong>X sesiones</strong>.</li>
+          <li>Para cada oportunidad, primero visualizará información general del crédito. Al desplegar la tarjeta podrá consultar la disponibilidad de información adicional. Evalúe si le interesa acceder a ella considerando los criterios de su institución y sus propias preferencias.</li>
+          <li>En la esquina superior derecha encontrará el saldo disponible de su billetera. Este es el presupuesto total con el que contará para todas las sesiones y no podrá superar ese monto.</li>
+          <li>El precio mostrado corresponde al costo de acceso a la información <strong>por productor</strong>, no por crédito. El valor a descontar del saldo disponible se ponderará por el número de productores asociados a la oportunidad de crédito.</li>
+        </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.</div>`;
+    return;
+  } else{renderLoans();}
+}
+
+function updateSessionTabs(){
+  document.querySelectorAll('.loan-subtab').forEach(btn => {
+    const session = btn.dataset.type;
+    btn.disabled = false;
+    // btn.disabled = !sessionAvailable(session);
+  });
 }
 
 function finishGeneralQuestions(){
@@ -198,7 +229,7 @@ function showAdditionalQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('questions-tab').classList.add('active');
   document.getElementById('loan-demo-info').style.display = 'none';
-  document.getElementById('loan-card-info').style.display = 'none';
+  document.getElementById('loan-subtabs').style.display = 'none';
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -261,7 +292,7 @@ function showGeneralQuestions(){
   document.getElementById('questions-tab').disabled  = false;
   document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-demo-info').style.display = 'none';
-  document.getElementById('loan-card-info').style.display = 'none';
+  document.getElementById('loan-subtabs').style.display = 'none';
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -336,7 +367,7 @@ function toggleLoanCard(event, card, id){
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
   getLoans()
-  .filter(l=>!state.dismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab)
+  .filter(l=>!state.dismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab  && (activeLoanTab !== 'no' || String(l.session) === activeSession))
     .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
   .forEach(l=>{
     const isG=l.tipo==='grupo';
@@ -992,7 +1023,7 @@ function submitOffer(){
     <div class="srow"><span class="sr-l">Aval Confianza SA-FGR</span><span class="sr-v">${v('of-aval-conf')}</span></div>
     <div class="srow"><span class="sr-l">Vigencia</span><span class="sr-v">${v('of-vigencia')}</span></div>
     <div class="srow"><span class="sr-l">Estado</span><span class="sr-v" style="color:var(--blue)">Enviada · Pendiente respuesta</span></div>`;
-  if(l.testValue === 'yes'){tempDismissedLoans.add(l.id);} else {
+  if(l.testValue === 'yes'){tempDismissedLoans.add(l.id);tempDismissedLoans.delete(l.id);} else {
     if(!state.dismissedLoans.includes(l.id)){state.dismissedLoans.push(l.id);}}
     const producerOffers = {};
     if(l.paqueteFlexible && l.prod && l.prod.length > 0){
