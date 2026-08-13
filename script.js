@@ -1,4 +1,4 @@
-let U=null,L=null,tierOn=false,esgAllOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=10,purchases={};
+let U=null,L=null,tierOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=10,purchases={},yesSelections={};
 
 // ─── SINGLE SESSION STATE OBJECT ───────────────────────────────────────────────
 function defaultState(){
@@ -124,6 +124,7 @@ function endSession(){
 function doLogout(){
   U=null;
   purchases={};
+  yesSelections={};
   state = defaultState();
   sessionStorage.removeItem('appState');
   document.getElementById('inp-p').value='';
@@ -229,10 +230,10 @@ function finishGeneralQuestions(){
         sex:                 document.getElementById('sex').value,
       };
     saveState();
-    document.getElementById('general-tab').disabled       = true;
+    document.getElementById('general-tab').disabled       = false;
     document.querySelector('[data-tab="yes"]').disabled   = false;
     document.getElementById('questions-tab').disabled     = false;
-    document.querySelector('[data-tab="no"]').disabled    = true;
+    document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
 }
 
@@ -299,9 +300,9 @@ function finishAdditionalQuestions(){
     aq6: document.getElementById('aq6').value,
   };
   saveState();
-  document.getElementById('general-tab').disabled       = true;
+  document.getElementById('general-tab').disabled       = false;
   document.querySelector('[data-tab="yes"]').disabled   = false;
-  document.getElementById('questions-tab').disabled     = true;
+  document.getElementById('questions-tab').disabled     = false;
   document.querySelector('[data-tab="no"]').disabled    = false;
   switchLoanTab('no');
 }
@@ -309,9 +310,9 @@ function finishAdditionalQuestions(){
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = true;
-  document.getElementById('questions-tab').disabled  = true;
-  document.querySelector('[data-tab="no"]').disabled  = true;
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  document.getElementById('questions-tab').disabled  = false;
+  document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-demo-info').style.display = 'none';
   document.getElementById('loan-subtabs').style.display = 'none';
   document.getElementById('loan-list')
@@ -353,6 +354,48 @@ function toggleLoanCard(event, card, id){
   if(!wasExpanded){card.classList.add('expanded');}
 }
 
+// ── Metric display as a toggle/button (read-only for 'no', interactive for 'yes') ─
+function metricToggle(label, on, interactive, handler){
+  const btnAttrs = interactive ? ` onclick="${handler}"` : ' disabled style="pointer-events:none;cursor:default"';
+  return `<div class="mi"><div class="mi-lbl">${label}</div><button class="toggle${on?' on':''}"${btnAttrs}></button></div>`;
+}
+
+// ── Per-card selection state for demo credits (testValue === 'yes') ──────────
+function getYesSel(id){
+  if(!yesSelections[id]) yesSelections[id] = {tierOn:false, esgSel:{}};
+  return yesSelections[id];
+}
+
+function buildYesMetrics(l){
+  const sel = getYesSel(l.id);
+  const fundBtn = metricToggle('Fundamentales', sel.tierOn, true, `toggleYesTier('${l.id}',event)`);
+  const toolButtons = ESG.map(e=>metricToggle(e.label, !!sel.esgSel[e.id], true, `toggleYesEsg('${l.id}','${e.id}',event)`)).join('');
+  return fundBtn + toolButtons;
+}
+
+function refreshYesCardExtra(id){
+  const l = getLoans().find(x=>x.id===id);
+  if(!l) return;
+  const extra = document.getElementById('extra-'+id);
+  if(!extra) return;
+  const metaEl = extra.querySelector('.loan-meta');
+  if(metaEl) metaEl.innerHTML = buildYesMetrics(l);
+}
+
+function toggleYesTier(id, event){
+  event.stopPropagation();
+  const sel = getYesSel(id);
+  sel.tierOn = !sel.tierOn;
+  refreshYesCardExtra(id);
+}
+
+function toggleYesEsg(id, esgId, event){
+  event.stopPropagation();
+  const sel = getYesSel(id);
+  sel.esgSel[esgId] = !sel.esgSel[esgId];
+  refreshYesCardExtra(id);
+}
+
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
   getLoans()
@@ -367,23 +410,35 @@ function renderLoans(){
     const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
     const badgeClass=isG?'grupo':l.tipo;
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
-    const esgFund = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Fundamentales</div><div class="mi-val mv-m">${l.fundamentales ? 'Sí' : 'No'}</div></div>` : '';
-    const esgAcli = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">aCLIMAtar</div><div class="mi-val mv-m">${l.aclimatar ? 'Sí' : 'No'}</div></div>` : '';
-    const esgCrop = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Croppie</div><div class="mi-val mv-m">${l.croppie ? 'Sí' : 'No'}</div></div>` : '';
-    const esgWhis = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Whisp</div><div class="mi-val mv-m">${l.whisp ? 'Sí' : 'No'}</div></div>` : '';
-    const esgPric = l.testValue === 'no' ? `<div class="mi"><div class="mi-lbl">Precio total</div><div class="mi-val mv-g">${l.priceTotal} Lempiras por productor</div></div>` : '';
-    
     const isNo = l.testValue === 'no';
+    const isYes = l.testValue === 'yes';
+    const isExpandable = isNo || isYes;
+
+    let extraHelp = '';
+    let extraMetrics = '';
+    if(isNo){
+      extraHelp = 'El crédito dispone de la siguiente información: ';
+      const esgFund = metricToggle('Fundamentales', l.fundamentales===true, false);
+      const esgAcli = metricToggle('aCLIMAtar', l.aclimatar===true, false);
+      const esgCrop = metricToggle('Croppie', l.croppie===true, false);
+      const esgWhis = metricToggle('Whisp', l.whisp===true, false);
+      const esgPric = `<div class="mi"><div class="mi-lbl">Precio total</div><div class="mi-val mv-g">${l.priceTotal} Lempiras por productor</div></div>`;
+      extraMetrics = esgFund+esgAcli+esgCrop+esgWhis+esgPric;
+    } else if(isYes){
+      extraHelp = 'Seleccione la información a la que desea acceder para este crédito: ';
+      extraMetrics = buildYesMetrics(l);
+    }
+
     list.innerHTML += `
-    <div class="lcard ${isNo?'expandable':''}"${isNo?`onclick="toggleLoanCard(event,this,'${l.id}')"`:`onclick="openLoan('${l.id}')"`}><div>
+    <div class="lcard ${isExpandable?'expandable':''}" id="lcard-${l.id}" onclick="toggleLoanCard(event,this,'${l.id}')"><div>
     <div class="loan-top"><span class="badge ${badgeClass}">${badgeLabel}</span><span class="loan-name">${l.name}</span></div>
     <div class="loan-meta">${mX}${mP}${mA}${mF}<div class="mi"><div class="mi-lbl">Detalle</div><div class="lock-tag">🔒 Acceso de pago</div></div></div>
-    ${isNo? `<div class="loan-extra">
+    ${isExpandable? `<div class="loan-extra" id="extra-${l.id}">
       <div class="loan-extra-title">Información incluida</div>
-      <div class="loan-extra-help">El crédito dispone de la siguiente información: </div>
-      <div class="loan-meta">${esgFund}${esgAcli}${esgCrop}${esgWhis}${esgPric}</div>
-      <div class="loan-actions"><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button><button class="btn-confirm" onclick="confirmAccess('${l.id}',event)">Confirmar acceso →</button></div>` : ''}</div>
-    ${!isNo? `<button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)" title="No me interesa">No me interesa</button>` : ''}</div>`;
+      <div class="loan-extra-help">${extraHelp}</div>
+      <div class="loan-meta">${extraMetrics}</div>
+      <div class="loan-actions"><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button><button class="btn-confirm" onclick="${isNo?`confirmAccess('${l.id}',event)`:`confirmYesAccess('${l.id}',event)`}">Confirmar acceso →</button></div>` : ''}</div>
+    ${!isExpandable? `<button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)" title="No me interesa">No me interesa</button>` : ''}</div>`;
 
   });
   if(activeLoanTab === 'no'){
@@ -393,133 +448,6 @@ function renderLoans(){
     if(remaining.length === 0){switchSession('endSessions');document.getElementById('loan-pagination').style.display = 'none';return;}
   initPagination();
   }
-}
-
-function openLoan(id){
-  L=[...LOANS_BANCO_TEST,...LOANS_BANCO,...LOANS_COOP_TEST,...LOANS_COOP,...LOANS_GRUPO_TEST,...LOANS_GRUPO]
-  .find(l=>l.id===id);
-  if(!state.interactions.viewed.includes(id)) state.interactions.viewed.push(id);
-  saveState();
-  if(purchases[id]){confirmed=purchases[id];renderAccess();show('s-access');return;}tierOn=false;esgAllOn=false;esgSel={};renderDetail();show('s-detail');
-}
-
-function renderDetail(){
-  const isB=L.tipo==='banco';
-  const isG=L.tipo==='grupo';
-  let h=`<div class="dhdr"><div class="dname">${L.name}</div>`;
-  h+=`</div></div>`;
-  if(L.testValue==='no'){
-    const fundOn=L.fundamentales===true;
-    const fundPriceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="tier-price"></span>`:'';
-    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span></div><button class="toggle${fundOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${fundOn?'1':'.45'}"></button></div></div>`;
-
-    const toolsDef=[
-      {key:'aclimatar',label:'aCLIMAtar'},
-      {key:'whisp',label:'Whisp - Open Foris'},
-      {key:'croppie',label:'Croppie'},
-    ];
-    let nToolsOn=0;
-    const esgItems=toolsDef.map(t=>{
-      const on=L[t.key]===true;
-      if(on)nToolsOn++;
-      return `<div class="esg-item${on?' sel':''}" style="pointer-events:none;cursor:default;opacity:${on?'1':'.45'}"><div class="esg-check">${on?'✓':''}</div><span class="esg-lbl">${t.label}</span></div>`;
-    }).join('');
-    const toolsOn=nToolsOn>0;
-    const toolsPriceHtml=(L.priceTools!==null&&L.priceTools!==undefined)?`<span class="tier-price">L. ${L.priceTools}</span>`:'';
-    h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nToolsOn} seleccionadas</span><button class="toggle${toolsOn?' on':''}" disabled style="pointer-events:none;cursor:default;opacity:${toolsOn?'1':'.45'}"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
-
-    document.getElementById('dmain').innerHTML=h;
-    renderCartFixed(fundOn,toolsOn);
-    return;
-  }
-  h+=
-  `<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">01</span><span class="tier-name">Fundamentales del crédito + perfil de productores</span><span class="tier-count">L. ${precioFundamentales} por productor</span>
-  </div><button class="toggle${tierOn?' on':''}" onclick="toggleTier()"></button></div></div>`;
-  const nEsg=Object.values(esgSel).filter(Boolean).length;
-  const esgItems=ESG.map(e=>`<div class="esg-item${esgSel[e.id]?' sel':''}" onclick="toggleEsg('${e.id}')"><div class="esg-check">${esgSel[e.id]?'✓':''}</div><span class="esg-lbl">${e.label}</span><span class="tier-count">L. ${e.cost} por productor</span></div>`).join('');
-  h+=`<div class="tier"><div class="tier-hdr"><div class="tier-hdr-left"><span class="tier-num">02</span><span class="tier-name">Herramientas de análisis climático</span></div><span class="tier-count">${nEsg} seleccionadas</span><button class="toggle${esgAllOn?' on':''}" onclick="toggleEsgAll()"></button></div><div class="esg-open"><div class="esg-grid">${esgItems}</div></div></div>`;
-  document.getElementById('dmain').innerHTML=h;
-  renderCart();
-}
-
-function renderCartFixed(fundOn,toolsOn){
-  let h='';
-  let total=0;
-  const fp=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?Number(String(L.priceFundamentales).replace(/,/g,'')):0;
-  const tp=(L.priceTools!==null&&L.priceTools!==undefined)?Number(String(L.priceTools).replace(/,/g,'')):0;
-  if(fundOn||toolsOn){
-    if(fundOn){
-      const priceHtml=(L.priceFundamentales!==null&&L.priceFundamentales!==undefined)?`<span class="cl-v">L. ${L.priceFundamentales}</span>`:'';
-      h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span></div>`;
-      total+=fp;
-    }
-    if(toolsOn){
-      const priceHtml=(L.priceTools!==null&&L.priceTools!==undefined)?`<span class="cl-v">+L. ${L.priceTools}</span>`:'';
-      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span></div>`;
-      total+=tp;
-    }
-  } else {
-    h=`<div style="font-size:12px;color:var(--text3);padding:8px 0">No hay ítems seleccionados para este crédito.</div>`;
-  }
-  document.getElementById('cart-lines').innerHTML=h;
-  document.getElementById('cart-num').textContent=total.toLocaleString('es-HN');
-  const cta=document.getElementById('cart-cta');
-  const cancelBtn=document.getElementById('cart-cancel');
-  cta.disabled=total===0;
-  cta.textContent=total===0?'Sin ítems disponibles':'Confirmar acceso →';
-  cancelBtn.style.display=total===0?'none':'block';
-}
-
-function toggleTier(){
-  tierOn=!tierOn;
-  renderDetail();
-}
-function toggleEsg(id){
-  esgSel[id]=!esgSel[id];
-  esgAllOn=ESG.every(e=>esgSel[e.id]);
-  renderDetail();
-}
-function toggleEsgAll(){
-  esgAllOn=!esgAllOn;
-  if(esgAllOn){ESG.forEach(e=>esgSel[e.id]=true);
-  }else{ESG.forEach(e=>esgSel[e.id]=false);}
-  renderDetail();
-}
-
-function calcTotal(L){
-  let t = 0;
-  const n = Number(L?.nProd) || 1;
-  if(tierOn){t+=(precioFundamentales || 0) * n;}
-  ESG.forEach(e => {
-    if(esgSel[e.id]){ t += (e.cost || 0) * n;}});
-  return t;
-}
-
-function renderCart(){
-  const esgKeys=Object.keys(esgSel).filter(k=>esgSel[k]);
-  let h='';
-  if(tierOn||esgKeys.length>0){
-    if(tierOn)h+=`<div class="cline"><span class="cl-l">Fundamentales + productores</span><span class="cl-v">L. ${precioFundamentales}</span></div>`;
-    if(esgKeys.length>0){
-      h+=`<div class="cline"><span class="cl-l">Herramientas de análisis climático</span></div>`;
-      esgKeys.forEach(k=>{
-        const e = ESG.find(x => x.id === k);
-        const n = Number(L?.nProd) || 1;
-        const cost = (e.cost || 0) * n;
-        h += `<div class="cline sub"><span class="cl-l">${e.label}</span><span class="cl-v">+L. ${cost.toLocaleString('es-HN')}</span></div>`;});
-      }
-  } else {
-    h=`<div style="font-size:12px;color:var(--text3);padding:8px 0">Active los ítems que desea adquirir.</div>`;
-  }
-  document.getElementById('cart-lines').innerHTML=h;
-  const total=calcTotal(L);
-  document.getElementById('cart-num').textContent=total.toLocaleString('es-HN');
-  const cta=document.getElementById('cart-cta');
-  const ci=document.getElementById('cart-info');
-  const cancelBtn=document.getElementById('cart-cancel');
-  cta.disabled=total===0;
-  cta.textContent=total===0?'Seleccione al menos un ítem':'Confirmar acceso →';
-  cancelBtn.style.display=total===0?'none':'block';
 }
 
 function confirmAccess(id,event){
@@ -550,27 +478,29 @@ function confirmAccess(id,event){
     show('s-success');
     return;
   }
-  
+
+  // Demo credits (testValue !== 'no'): access is never charged, so no price is calculated or shown.
   let esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
-  let total = calcTotal(L);
   let tierOnFinal = tierOn;
-  confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
+  confirmed={loan:L,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
   if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
   saveState();
   const btnMkt = document.getElementById('btn-mkt');
   btnMkt.style.display = 'inline-block';
   document.getElementById('scard').innerHTML=`
     <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
-    <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
-    <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
+    <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>`;
     show('s-success');
   }
 
-function cancelAccess(){
-  if(!state.interactions.canceledAccess.includes(L.id)) state.interactions.canceledAccess.push(L.id);
-  saveState();
-  if(L.testValue==='no'){if(!state.dismissedLoans.includes(L.id)) state.dismissedLoans.push(L.id); saveState(); goMkt();}
-  else if (L.testValue==='yes'){goMkt();}
+// Syncs the per-card selection (made from the expanded card) into the shared
+// tierOn/esgSel state before delegating to confirmAccess, so the existing
+// confirmation/access logic can be reused as-is.
+function confirmYesAccess(id, event){
+  const sel = getYesSel(id);
+  tierOn = sel.tierOn;
+  esgSel = {...sel.esgSel};
+  confirmAccess(id, event);
 }
 
 function goAccess(){renderAccess();show('s-access');}
@@ -1043,7 +973,7 @@ function submitOffer(){
 }
 
 function goMkt(){
-  tierOn=false;esgAllOn=false;esgSel={};currentPage=1;renderLoans();renderBalanceDisplay();show('s-market');}
+  tierOn=false;esgSel={};currentPage=1;renderLoans();renderBalanceDisplay();show('s-market');}
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
