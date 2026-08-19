@@ -265,14 +265,13 @@ function showAdditionalQuestions(){
     <div class="fs-title">Bloque de valor percibido</div>
     <div class="frow">
       <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
-      <div class="fg full"><label class="flabel">¿Qué características debería incluir la suscripción para que ese monto sea justo para usted?</label><input class="finp-s" id="aq4" type="text"></div>
+      <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?</label><input class="finp-s" id="aq4" type="text"></div>
     </div>
     <div class="fs-title">Bloque de uso</div>
     <div class="frow">
       <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?</label>
-        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "no lo utilizaría" y 10 "lo utilizaría mucho".</div> 
         <select class="fsel" id="aq5" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+        <option value="diario">Diario</option><option value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option></select></div>
       <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?</label>
         <select class="fsel" id="aq6" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
