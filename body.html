@@ -67,45 +67,17 @@
   <div id="top-info"></div>
   <div class="o-form">
     <div>
+      <div id="financial-flex-fields">
       <div class="fs-title">Condiciones financieras principales</div>
       <div class="frow">
-        <div id="financial-flex-fields">
           <div class="fg"><label class="flabel">Monto ofertado</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
           <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1" placeholder="ej. 14.5"></div>
           <div class="fg"><label class="flabel">Plazo (meses)</label><input class="finp-s" id="of-plazo" type="number" step="1" placeholder="ej. 5"></div>
         </div></div>
         <div class="financial-spacer"></div>
-      <div class="frow">
-          <div class="fg"><label class="flabel">Periodicidad de pago</label>
-            <select class="fsel" id="of-periodo"><option value="">Seleccionar...</option><option>Mensual</option><option>Bimestral</option><option>Trimestral</option><option>Al vencimiento</option></select></div>
-          <div class="fg"><label class="flabel">Tipo de amortización</label>
-            <select class="fsel" id="of-cuota"><option value="">Seleccionar...</option><option>Capital + interés (nivelada)</option><option>Capital + interés (decreciente)</option><option>Solo interés + capital al vencimiento</option></select></div>
-          <div class="fg"><label class="flabel">Moneda</label>
-            <select class="fsel" id="of-moneda"><option>Lempiras (HNL)</option><option>Dólares (USD)</option></select></div>
-        </div>
-      </div>
-      <div>
-        <div class="fs-title">Garantías y condiciones de elegibilidad</div>
-        <div class="frow">
-          <div class="fg"><label class="flabel">Garantía requerida</label>
-            <select class="fsel" id="of-garantia"><option value="">Seleccionar...</option><option>Prendaria sobre cosecha</option><option>Prendaria sobre equipos</option><option>Hipotecaria</option><option>Aval solidario</option><option>Smart contract (contrato de exportación)</option><option>Carta de compromiso de compra</option></select></div>
-          <div class="fg"><label class="flabel">Período de gracia (meses)</label>
-            <select class="fsel" id="of-gracia"><option value="0">Sin período de gracia</option><option>1</option><option>2</option><option>3</option></select></div>
-          <div class="fg"><label class="flabel">Comisión de apertura (%)</label><input class="finp-s" id="of-comision" type="number" step="0.1" placeholder="ej. 1.5"></div>
-          <div class="fg"><label class="flabel">Seguro requerido</label>
-            <select class="fsel" id="of-seguro"><option>No requerido</option><option>Seguro de cosecha</option><option>Seguro de vida</option><option>Seguro de cosecha + vida</option></select></div>
-          <div class="fg"><label class="flabel">Requiere aval de Confianza SA-FGR</label>
-            <select class="fsel" id="of-aval-conf"><option>Sí, requerido</option><option>No requerido</option><option>Opcional / a negociar</option></select></div>
-        </div>
-      </div>
-      <div>
         <div class="fs-title">Información adicional para el intermediario</div>
         <div class="frow">
-          <div class="fg"><label class="flabel">Vigencia de la oferta</label>
-            <select class="fsel" id="of-vigencia"><option>15 días hábiles</option><option>30 días hábiles</option><option>45 días hábiles</option></select></div>
-          <div class="fg"><label class="flabel">Etapa de evaluación</label>
-            <select class="fsel" id="of-etapa"><option>Oferta preliminar — sujeta a análisis de crédito</option><option>Oferta en firme — condiciones definitivas</option><option>Carta de intención — condiciones a negociar</option></select></div>
-          <div class="fg full"><label class="flabel">Condiciones especiales / notas al intermediario</label>
+          <div class="fg full"><label class="flabel">Notas</label>
             <textarea class="fta" id="of-notas" placeholder="ej. El desembolso estará condicionado a la presentación del contrato de compra-venta con la importadora..."></textarea></div>
         </div>
       </div>
