@@ -403,7 +403,7 @@ function renderLoans(){
     const isB=l.tipo==='banco';
     const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
     const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores} Lempiras</div></div>`
-    const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0} Lempiras</div></div>`;
+    const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ?  'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
     const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
     const badgeClass=isG?'grupo':l.tipo;
     const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
@@ -662,7 +662,7 @@ const profileHtml = `
   <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '-'}</div>
   <div class="px-grid2-label">Evaluación en central crediticia</div><div class="px-grid2-value">${p.riesgo || '-'}</div>
   <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza || '-'}</div>
-  <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
+  <div class="px-grid2-label">Aval IC Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
   <div class="px-grid2-label">Tiempo de comercialización con el intermediario</div><div class="px-grid2-value">${p.tiempoic || '-'}</div>
   <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '-'}</div>
   <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '-'}</div>
@@ -729,7 +729,7 @@ function renderAccess(){
   let h='';
   const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
+  const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ? 'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
   h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
@@ -752,8 +752,6 @@ function renderAccess(){
       if(isB){
         h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador - ${l.name}</div></div></div>
         <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Monto crédito de acopio</div><div class="ic-v mv-g">L. ${l.acopio}</div></div>
-        <div class="ic"><div class="ic-l">Plazo crédito de acopio</div><div class="ic-v">${l.plazoAcopio} meses</div></div>
         <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div></div>
           <div class="ic"><div class="ic-l">Volumen histórico comercializado, promedio anual</div><div class="ic-v">${l.volExport} quintales de café verde</div></div>
           <div class="ic"><div class="ic-l">Contrato de exportación</div><div class="ic-v">${l.contrato}</div></div>
@@ -798,7 +796,7 @@ function renderAccess(){
         <div class="sc-body"><div class="ig">
           <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
           <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
-          <div class="ic"><div class="ic-l">Monto de crédito de acopio</div><div class="ic-v">L. ${l.acopio ?? 0}</div></div>
+          <div class="ic"><div class="ic-l">Aval IC</div><div class="ic-v">${l.acopio ? 'Sí' : 'No'}</div></div>
           <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
         </div></div></div>`;
     }
@@ -815,7 +813,7 @@ function topInfoAccess(){
   let h='';
   const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
   const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-  const mA=`<div class="mi"><div class="mi-lbl">Monto acopio</div><div class="mi-val mv-m">${l.acopio ?? 0}</div></div>`;
+  const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ? 'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
   const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
   h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
   
