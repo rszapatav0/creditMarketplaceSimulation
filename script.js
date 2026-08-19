@@ -469,14 +469,7 @@ function confirmAccess(id,event){
     saveState();
     if(L.continue === false){
       if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);saveState();renderLoans();return;}
-    const btnMkt = document.getElementById('btn-mkt');
-    btnMkt.style.display = 'none';
-    document.getElementById('scard').innerHTML=`
-    <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
-    <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>
-    <div class="srow"><span class="sr-l">Total cobrado</span><span class="sr-v" style="color:var(--accent)">L. ${total.toLocaleString('es-HN')}</span></div>`;
-    show('s-success');
-    return;
+    goAccess();
   }
 
   // Demo credits (testValue !== 'no'): access is never charged, so no price is calculated or shown.
@@ -485,12 +478,7 @@ function confirmAccess(id,event){
   confirmed={loan:L,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
   if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
   saveState();
-  const btnMkt = document.getElementById('btn-mkt');
-  btnMkt.style.display = 'inline-block';
-  document.getElementById('scard').innerHTML=`
-    <div class="srow"><span class="sr-l">Crédito</span><span class="sr-v">${L.name}</span></div>
-    <div class="srow"><span class="sr-l">Herramientas de análisis climático</span><span class="sr-v">${esgKeys.length} incluidas</span></div>`;
-    show('s-success');
+  goAccess();
   }
 
 // Syncs the per-card selection (made from the expanded card) into the shared
@@ -978,7 +966,7 @@ function goMkt(){
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
   const el=document.getElementById(id);
-  const flex=['s-login','s-success'];
+  const flex=['s-login'];
   el.style.display=flex.includes(id)?'flex':'block';
   el.classList.add('active');
 }
