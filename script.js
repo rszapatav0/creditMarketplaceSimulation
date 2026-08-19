@@ -209,7 +209,7 @@ function nextSession(){
 }
 
 function finishGeneralQuestions(){
-  const requiredFields = ['participant-name','institution-name','institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
+  const requiredFields = ['institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
   if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
   if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
   const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
@@ -218,8 +218,6 @@ function finishGeneralQuestions(){
     document.getElementById(missing)?.focus();return;}
       state.generalQuestionsCompleted = true;
       state.generalAnswers = {
-        participantName:     document.getElementById('participant-name').value.trim(),
-        institutionName:     document.getElementById('institution-name').value.trim(),
         institutionType:     document.getElementById('institution-type').value,
         institutionOther:    document.getElementById('institution-other').value.trim(),
         institutionRole:     document.getElementById('institution-role').value,
@@ -320,11 +318,9 @@ function showGeneralQuestions(){
   <div class="o-form"><div>
     <div class="fs-title">Información general</div>
     <div class="frow">
-      <div class="fg"><label class="flabel">Nombre del participante<span class="required">*</span></label><input class="finp-s" id="participant-name" type="text"></div>
-      <div class="fg"><label class="flabel">Nombre de la institución a la que pertenece<span class="required">*</span></label><input class="finp-s" id="institution-name" type="text"></div>
       <div class="fg"><label class="flabel">Tipo de institución<span class="required">*</span></label>
         <select class="fsel" id="institution-type" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="banco">Banco comercial</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
+        <option value="banco">Institución bancaria</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
       <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other" data-other-for="institution-type" type="text" disabled></div>
       <div class="fg"><label class="flabel">Rol en la institución<span class="required">*</span></label>
         <select class="fsel" id="institution-role" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
