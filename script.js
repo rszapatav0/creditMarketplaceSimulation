@@ -823,7 +823,7 @@ function topInfoAccess(){
 function goOffer(){
   const l=confirmed.loan;
   document.getElementById('o-sub');
-  const inputs=['of-monto','of-tasa','of-plazo','of-periodo','of-cuota','of-garantia','of-gracia','of-comision','of-seguro','of-aval-conf','of-destino','of-vigencia','of-etapa','of-notas'];
+  const inputs=['of-monto','of-tasa','of-plazo','of-notas'];
   inputs.forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
     if(el.tagName==='TEXTAREA'){el.value='';}
@@ -881,7 +881,7 @@ function exportPdf(){
 
 function updatePreview(){
   const v=id=>{const el=document.getElementById(id);return el?el.value:'';};
-  const monto=parseFloat(v('of-monto'))||0,tasa=parseFloat(v('of-tasa'))||0,plazo=v('of-plazo'),periodo=v('of-periodo'),cuota=v('of-cuota'),garantia=v('of-garantia'),moneda=v('of-moneda'),comision=parseFloat(v('of-comision'))||0,avalConf=v('of-aval-conf');
+  const monto=parseFloat(v('of-monto'))||0,tasa=parseFloat(v('of-tasa'))||0,plazo=v('of-plazo');
   const sym=moneda.startsWith('L')?'L.':'$';
   let cuotaEst='—';
   if(monto>0&&tasa>0&&plazo){const n=parseInt(plazo),r=(tasa/100)/12;const c=r>0?monto*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1):monto/n;cuotaEst=`${sym} ${Math.round(c).toLocaleString('es-HN')} / mes`;}
@@ -915,16 +915,6 @@ function submitOffer(){
       monto: parseFloat(v('of-monto')) || null,
       tasa: v('of-tasa') || null,
       plazo: v('of-plazo') || null,
-      periodicidad: v('of-periodo') || null,
-      amortizacion: v('of-cuota') || null,
-      moneda: v('of-moneda') || null,
-      garantia: v('of-garantia') || null,
-      periodogracia: v('of-gracia') || null,
-      comision: v('of-comision') || null,
-      seguro: v('of-seguro') || null,
-      avalconfianza: v('of-aval-conf') || null,
-      vigencia: v('of-vigencia') || null,
-      etapaevaluacion: v('of-etapa') || null,
       condiciones: v('of-notas') || null,
       producerOffers: Object.keys(producerOffers).length > 0 ? producerOffers : null
     };
