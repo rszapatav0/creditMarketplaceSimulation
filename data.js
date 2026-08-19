@@ -15,7 +15,6 @@ const precioFundamentales=100;
 const ESG=[
   {id:'e1',label:'aCLIMAtar',cost:50},
   {id:'e2',label:'Whisp - Open Foris',cost:50},
-  {id:'e4',label:'Croppie',cost:50},
 ];
 
 const ACLIMATAR_CONFIG = {

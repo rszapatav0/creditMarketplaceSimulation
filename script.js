@@ -416,10 +416,9 @@ function renderLoans(){
       extraHelp = 'El crédito dispone de la siguiente información: ';
       const esgFund = metricToggle('Fundamentales', l.fundamentales===true, false);
       const esgAcli = metricToggle('aCLIMAtar', l.aclimatar===true, false);
-      const esgCrop = metricToggle('Croppie', l.croppie===true, false);
       const esgWhis = metricToggle('Whisp', l.whisp===true, false);
       const esgPric = `<div class="mi"><div class="mi-lbl">Precio total</div><div class="mi-val mv-g">${l.priceTotal} Lempiras por productor</div></div>`;
-      extraMetrics = esgFund+esgAcli+esgCrop+esgWhis+esgPric;
+      extraMetrics = esgFund+esgAcli+esgWhis+esgPric;
     } else if(isYes){
       extraHelp = 'Seleccione la información a la que desea acceder para este crédito: ';
       extraMetrics = buildYesMetrics(l);
@@ -452,11 +451,11 @@ function confirmAccess(id,event){
   const n = Number(L.nProd) || 1;
   if(L.testValue === 'no'){
     const fundOn = L.fundamentales === true;
-    const toolsOn=(L.aclimatar===true)||(L.whisp===true)||(L.croppie===true);
+    const toolsOn=(L.aclimatar===true)||(L.whisp===true);
     const fp = (L.priceFundamentales != null)? Number(String(L.priceFundamentales).replace(/,/g,'')) * n : 0;
     const tp = (L.priceTools != null) ? Number(String(L.priceTools).replace(/,/g,'')) * n : 0;
     const total = (fundOn ? fp : 0) + (toolsOn ? tp : 0);
-    const esgKeys = ['aclimatar','whisp','croppie'] .filter(k => L[k] === true);
+    const esgKeys = ['aclimatar','whisp'] .filter(k => L[k] === true);
     const tierOnFinal = fundOn;
     confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
     if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
@@ -611,12 +610,6 @@ function fillProd(cod, includeEsg=true){
           console.log(`[Whisp hydration] producer=${p.cod}`, hydrated);
           return hydrated;}
 
-      if (m.id === 'e4') {
-        const hydrated = {...m,
-          n: CROPPIE_CONFIG.n,src: CROPPIE_CONFIG.src,};
-          console.log(`[Croppie hydration] producer=${p.cod}`, hydrated);
-          return hydrated;
-        }
       return m;
     });  }
   
@@ -639,16 +632,6 @@ function fillProd(cod, includeEsg=true){
         <div class="px-grid-label">Sequía</div><div class="px-grid-value"><span class="px-status ${m.sequiaClass}">${m.sequiaLabel}</span><div class="px-grid-detail">${m.sequiaInterp}</div></div>
         <div class="px-grid-label">Prácticas muy recomendadas</div><div class="px-grid-value">${m.practicasMuyRecomendadas}</div>
         <div class="px-grid-label">Prácticas recomendadas</div><div class="px-grid-value">${m.practicasRecomendadas}</div>
-        <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
-        <div class="px-card-src">${m.src}</div></div>`;}
-
-      if(m.n==='Croppie'){
-        return `
-        <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
-        <div class="px-grid">
-        <div class="px-grid-title">Estimación de producción (quintales de café verde)</div>
-        <div class="px-grid-label">Rendimiento por hectárea</div><div class="px-grid-value">${m.yield}</div>
-        <div class="px-grid-label">Producción</div><div class="px-grid-value">${m.production}</div>
         <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
         <div class="px-card-src">${m.src}</div></div>`;}
 
