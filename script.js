@@ -17,6 +17,7 @@ function defaultState(){
     walletBalance: walletInitial,
     additionalQuestionsCompleted: false,
     additionalAnswers: {},
+    sessionQuestionsCompleted: {},
   };
 }
 
@@ -191,15 +192,105 @@ function switchSession(session){
 }
 
 function updateSessionTabs(){
-  const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
   document.querySelectorAll('.loan-subtab').forEach(btn => {
     const session = btn.dataset.type;
     if(session === 'instructions'){btn.disabled = false;return;}
-    if(session === 'endSessions'){
-      btn.disabled = remaining.length !== 0;return;}
+    if(session === 'endSessions'){return;} // gating handled by updateEndSessionsAvailability()
     // To do: update session tabs based on available sessions
     btn.disabled = false;
   });
+  updateEndSessionsAvailability();
+}
+
+// ─── Session-embedded questions (moved from "Información complementaria") ──
+// Returns how many "no" (Oportunidades de crédito disponibles) cards remain
+// un-dismissed for a given session number.
+function getSessionRemaining(sessionNum){
+  return getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no' && String(l.session) === String(sessionNum)).length;
+}
+
+function allSessionQuestionsAnswered(){
+  return !!(state.sessionQuestionsCompleted && ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]));
+}
+
+// "Finalizar" only becomes enabled once every session's cards have all
+// disappeared AND all 6 questions (2 per session) have been answered.
+function updateEndSessionsAvailability(){
+  const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
+  const endTab = document.querySelector('.loan-subtab[data-type="endSessions"]');
+  if(endTab){ endTab.disabled = remaining.length !== 0 || !allSessionQuestionsAnswered(); }
+}
+
+function renderSessionQuestions(sessionNum){
+  const list = document.getElementById('loan-list');
+  const blocks = {
+    '1': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de interés</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">¿Qué tan interesante le resultan los créditos de demostración?<span class="required">*</span></label>
+        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "muy poco interesante" y 10 "muy interesante".</div> 
+        <select class="fsel" id="aq1" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+      <div class="fg full"><label class="flabel">¿Cree que estos créditos podrían resolver una necesidad que su institución tiene hoy?<span class="required">*</span></label>
+        <select class="fsel" id="aq2" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishSessionQuestions('1')">Continuar →</button>
+    </div>`,
+    '2': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de valor percibido</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
+      <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="aq4" type="text"></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishSessionQuestions('2')">Continuar →</button>
+    </div>`,
+    '3': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de uso</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?<span class="required">*</span></label>
+        <select class="fsel" id="aq5" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="diario">Diario</option><option value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option></select></div>
+      <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?<span class="required">*</span></label>
+        <select class="fsel" id="aq6" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishSessionQuestions('3')">Continuar →</button>
+    </div>`
+  };
+  list.innerHTML = blocks[sessionNum] || '';
+  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
+  (fieldsBySession[sessionNum]||[]).forEach(id=>{
+    const el = document.getElementById(id);
+    const val = state.additionalAnswers && state.additionalAnswers[id];
+    if(el && val){ el.value = val; }
+  });
+}
+
+function finishSessionQuestions(sessionNum){
+  const requiredBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'], '3':['aq5','aq6']};
+  const missing = (requiredBySession[sessionNum]||[]).find(id => !document.getElementById(id)?.value.trim());
+  if(missing){
+    alert('Por favor complete todas las preguntas antes de continuar.');
+    document.getElementById(missing)?.focus();return;}
+  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
+  if(!state.additionalAnswers) state.additionalAnswers = {};
+  (fieldsBySession[sessionNum]||[]).forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) state.additionalAnswers[id] = el.value;
+  });
+  if(!state.sessionQuestionsCompleted) state.sessionQuestionsCompleted = {};
+  state.sessionQuestionsCompleted[sessionNum] = true;
+  state.additionalQuestionsCompleted = ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]);
+  saveState();
+  updateSessionTabs();
+  nextSession();
 }
 
 
@@ -232,7 +323,6 @@ function finishGeneralQuestions(){
     saveState();
     document.getElementById('general-tab').disabled       = false;
     document.querySelector('[data-tab="yes"]').disabled   = false;
-    document.getElementById('questions-tab').disabled     = false;
     document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
 }
@@ -246,71 +336,10 @@ function toggleOther(select){
   }else{input.placeholder = 'No aplica';}
 }
 
-function showAdditionalQuestions(){
-  document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
-  document.getElementById('questions-tab').classList.add('active');
-  document.getElementById('loan-demo-info').style.display = 'none';
-  document.getElementById('loan-subtabs').style.display = 'none';
-  document.getElementById('loan-list')
-  .innerHTML = `
-  <div class="o-form"><div>
-    <div class="fs-title">Bloque de interés</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">¿Qué tan interesante le resultan los créditos de demostración?</label>
-        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "muy poco interesante" y 10 "muy interesante".</div> 
-        <select class="fsel" id="aq1" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
-      <div class="fg full"><label class="flabel">¿Cree que estos créditos podrían resolver una necesidad que su institución tiene hoy?</label>
-        <select class="fsel" id="aq2" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
-    </div></div>
-    <div class="fs-title">Bloque de valor percibido</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
-      <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?</label><input class="finp-s" id="aq4" type="text"></div>
-    </div>
-    <div class="fs-title">Bloque de uso</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?</label>
-        <select class="fsel" id="aq5" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="diario">Diario</option><option value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option></select></div>
-      <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?</label>
-        <select class="fsel" id="aq6" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
-    </div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishAdditionalQuestions()">Continuar →</button>
-    </div>`;
-}
-
-function finishAdditionalQuestions(){
-  const requiredFields2 = ['aq3'];
-  const missing = requiredFields2.find(id =>!document.getElementById(id)?.value.trim());
-  if(missing){
-    alert('Por favor complete todas las preguntas antes de continuar.');
-    document.getElementById(missing)?.focus();return;}
-  state.additionalQuestionsCompleted = true;
-  state.additionalAnswers = {
-    aq1: document.getElementById('aq1').value,
-    aq2: document.getElementById('aq2').value,
-    aq3: document.getElementById('aq3').value,
-    aq4: document.getElementById('aq4').value,
-    aq5: document.getElementById('aq5').value,
-    aq6: document.getElementById('aq6').value,
-  };
-  saveState();
-  document.getElementById('general-tab').disabled       = false;
-  document.querySelector('[data-tab="yes"]').disabled   = false;
-  document.getElementById('questions-tab').disabled     = false;
-  document.querySelector('[data-tab="no"]').disabled    = false;
-  switchLoanTab('no');
-}
-
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('general-tab').classList.add('active');
   document.querySelector('[data-tab="yes"]').disabled = false;
-  document.getElementById('questions-tab').disabled  = false;
   document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-demo-info').style.display = 'none';
   document.getElementById('loan-subtabs').style.display = 'none';
@@ -395,6 +424,17 @@ function toggleYesEsg(id, esgId, event){
 
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
+
+  // Once all cards for the active numbered session have disappeared, show
+  // that session's questions (moved here from "Información complementaria")
+  // instead of the (now empty) card list.
+  if(activeLoanTab === 'no' && ['1','2','3'].includes(activeSession) && getSessionRemaining(activeSession) === 0){
+    renderSessionQuestions(activeSession);
+    updateEndSessionsAvailability();
+    document.getElementById('loan-pagination').style.display='none';
+    return;
+  }
+
   getLoans()
   .filter(l=>!state.dismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab  && (activeLoanTab !== 'no' || String(l.session) === activeSession))
     .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
@@ -439,11 +479,8 @@ function renderLoans(){
 
   });
   if(activeLoanTab === 'no'){
-    const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
-    const endTab = document.querySelector('.loan-subtab[data-type="endSessions"]');
-    if(endTab){endTab.disabled = remaining.length !== 0;}
-    if(remaining.length === 0){switchSession('endSessions');document.getElementById('loan-pagination').style.display = 'none';return;}
-  initPagination();
+    updateEndSessionsAvailability();
+    initPagination();
   }
 }
 
@@ -653,7 +690,7 @@ function fillProd(cod, includeEsg=true){
         <div class="px-grid-label">Fecha de actualización</div><div class="px-grid-value">${m.estimationDate}</div></div>
         <div class="px-card-src">${m.src}</div></div>`;}
 
-      if(m.n==='Whisp - Open Foris'){
+      if(m.n==='Whisp'){
         return `
         <div class="px-card"><div class="px-card-top"><span class="px-card-name">${m.n}</span></div>
         <div class="px-grid">
@@ -899,7 +936,7 @@ function exportPdf(){
 function updatePreview(){
   const v=id=>{const el=document.getElementById(id);return el?el.value:'';};
   const monto=parseFloat(v('of-monto'))||0,tasa=parseFloat(v('of-tasa'))||0,plazo=v('of-plazo');
-  const sym=moneda.startsWith('L')?'L.':'$';
+  const sym='L.';
   let cuotaEst='—';
   if(monto>0&&tasa>0&&plazo){const n=parseInt(plazo),r=(tasa/100)/12;const c=r>0?monto*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1):monto/n;cuotaEst=`${sym} ${Math.round(c).toLocaleString('es-HN')} / mes`;}
 }

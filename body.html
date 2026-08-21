@@ -35,7 +35,6 @@
     <div class="loan-tabs" id="loan-tabs">
       <button class="loan-tab active" id="general-tab" onclick="showGeneralQuestions()">Información general</button>
       <button class="loan-tab" data-tab="yes" onclick="switchLoanTab('yes')">Créditos de demostración</button>
-      <button class="loan-tab" id="questions-tab" onclick="showAdditionalQuestions()">Información complementaria</button>
       <button class="loan-tab" data-tab="no" onclick="switchLoanTab('no')">Oportunidades de crédito disponibles</button>
     </div>
     <div class="loan-subtabs" id="loan-subtabs" style="display:none">
@@ -75,13 +74,6 @@
           <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1" placeholder="ej. 14.5"></div>
           <div class="fg"><label class="flabel">Plazo (meses)</label><input class="finp-s" id="of-plazo" type="number" step="1" placeholder="ej. 5"></div>
         </div></div>
-        <div class="financial-spacer"></div>
-        <div class="fs-title">Información adicional para el intermediario</div>
-        <div class="frow">
-          <div class="fg full"><label class="flabel">Notas</label>
-            <textarea class="fta" id="of-notas" placeholder="ej. El desembolso estará condicionado a la presentación del contrato de compra-venta con la importadora..."></textarea></div>
-        </div>
-      </div>
       <div id="producers-section" style="display:none">
         <div class="fs-title">Asignación por productor (paquete flexible)</div>
         <table class="ptable" id="producers-table">
@@ -100,6 +92,12 @@
           </tbody>
         </table>
       </div>
+      <div class="financial-spacer"></div>
+      <div class="fs-title">Información adicional para el intermediario</div>
+      <div class="frow">
+        <div class="fg full"><label class="flabel">Notas</label>
+          <textarea class="fta" id="of-notas" placeholder="ej. El desembolso estará condicionado a la presentación del contrato de compra-venta con la importadora..."></textarea></div>
+      </div></div>
       <div class="o-actions">
         <button class="btn-s" onclick="show('s-access')">Cancelar</button>
         <button class="btn-p" onclick="submitOffer()">Enviar oferta →</button>
