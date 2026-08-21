@@ -113,8 +113,10 @@ function doLogin(){
   state.sessionGroup = assignSessionGroup();
   saveState();
   syncPills();initBalance();renderBalanceDisplay();
-  document.getElementById('mkt-title').innerHTML = `<div class="brand-h1"><b>Marketplace de Garantías</b> · Central de <b>C</b>rédito <b>V</b>erde</div>`;
-  showGeneralQuestions();show('s-market');
+  document.getElementById('mkt-title').innerHTML =
+  `<div class="brand-h1"><b>Valoración de herramientas de trazabilidad agrícola</b></div>
+  <div class="brand-h1-sub"><b>Convirtiendo la Información en <b>Garantía</b></b></div>`;
+  showContext();show('s-market');
 }
 
 function endSession(){
@@ -334,6 +336,20 @@ function toggleOther(select){
   input.disabled = !enabled;
   if(enabled){input.placeholder = 'Especifique...';
   }else{input.placeholder = 'No aplica';}
+}
+
+function showContext(){
+  document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
+  document.getElementById('context-tab').classList.add('active');
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.getElementById('loan-demo-info').style.display = 'none';
+  document.getElementById('loan-subtabs').style.display = 'none';
+    document.getElementById('loan-list').innerHTML = `
+      <div class="loan-info" id="context-info">
+        <strong>Contexto</strong><br>Contexto del proyecto</div>
+      <div class="btn-row"><button class="btn-p" id="continue-session" onclick="showGeneralQuestions()">Continuar →</button></div>`;
+  document.getElementById('loan-pagination').style.display='none';
 }
 
 function showGeneralQuestions(){
