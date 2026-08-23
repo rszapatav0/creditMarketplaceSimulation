@@ -1,10 +1,10 @@
 const USERS=[
-  {email:'1',pass:'1',role:'banco',name:'Banco LAFISE - Analista de Crédito'},
-  {email:'2',pass:'2',role:'coop',name:'Coop. Cafetalera Marcala'},
-  {email:'3',pass:'3',role:'imf',name:'ODEF Financiera - Oficial de Cartera'},
-  {email:'banco@lafise.hn',pass:'banco2024',role:'banco',name:'Banco LAFISE - Analista de Crédito'},
-  {email:'gestor@cofemarcala.hn',pass:'coop2024',role:'coop',name:'Coop. Cafetalera Marcala'},
-  {email:'oficial@odef.hn',pass:'imf2024',role:'imf',name:'ODEF Financiera - Oficial de Cartera'},
+  {email:'1',pass:'1',role:'banco',name:'Banco LAFISE - Analista de Crédito',grupoId:1},
+  {email:'2',pass:'2',role:'coop',name:'Coop. Cafetalera Marcala',grupoId:2},
+  {email:'3',pass:'3',role:'imf',name:'ODEF Financiera - Oficial de Cartera',grupoId:3},
+  {email:'banco@lafise.hn',pass:'banco2024',role:'banco',name:'Banco LAFISE - Analista de Crédito',grupoId:4},
+  {email:'gestor@cofemarcala.hn',pass:'coop2024',role:'coop',name:'Coop. Cafetalera Marcala',grupoId:5},
+  {email:'oficial@odef.hn',pass:'imf2024',role:'imf',name:'ODEF Financiera - Oficial de Cartera',grupoId:6},
 ];
 
 // ── Metrics and tools ──────────────────────────────────────────────────────

@@ -41,16 +41,8 @@ let activeLoanTab = 'yes';
 // ─── ───────────────────────────────────────────────
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 
-function assignSessionGroup(){
-  const grupoIds = [...new Set(
-    [...LOANS_BANCO, ...LOANS_COOP, ...LOANS_GRUPO]
-      .map(l => l.grupoId)
-      .filter(id => id != null)
-  )].sort((a,b)=>a-b); 
-  if(!grupoIds.length) return null;
-  // Current rule: derive group from login-time minute (easily swappable)
-  const index = new Date().getMinutes() % grupoIds.length;
-  return grupoIds[index];
+function assignSessionGroup() {
+  return U?.grupoId ?? null;
 }
 
 function getLoans(){
@@ -64,14 +56,6 @@ function getLoans(){
     ...LOANS_GRUPO_TEST,
     ...LOANS_GRUPO.filter(filterNo),
   ];
-}
-
-function syncPills(){
-  [['tb-u','tb-r'],['tb-u2','tb-r2'],['tb-u3','tb-r3'],['tb-u4','tb-r4'],['tb-u5','tb-r5']].forEach(([uid,rid])=>{
-    const eu=document.getElementById(uid),er=document.getElementById(rid);
-    if(eu)eu.textContent=U.name;
-    if(er){er.textContent=roleName(U.role);er.className='rpill '+U.role;}
-  });
 }
 
 // WALLET / BALANCE FUNCTIONS
@@ -112,7 +96,7 @@ function doLogin(){
   U=found;
   state.sessionGroup = assignSessionGroup();
   saveState();
-  syncPills();initBalance();renderBalanceDisplay();
+  initBalance();renderBalanceDisplay();
   document.getElementById('mkt-title').innerHTML =
   `<div class="brand-h1"><b>Valoración de herramientas de trazabilidad agrícola</b></div>
   <div class="brand-h1-sub"><b>Convirtiendo la Información en <b>Garantía</b></b></div>`;
