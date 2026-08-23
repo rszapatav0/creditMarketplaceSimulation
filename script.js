@@ -4,22 +4,25 @@ let U=null,L=null,tierOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage
 function defaultState(){
   return {
     user: null,
+    institutionName: null,
     sessionGroup: null,
-    generalQuestionsCompleted: false,
-    generalAnswers: {},
-    dismissedLoans: [],
-    interactions: {
-      notInterested: [],
-      viewed: [],
-      confirmedAccess: [],
-      canceledAccess: []
-    },
-    offers: {},
     walletBalance: walletInitial,
-    additionalQuestionsCompleted: false,
-    additionalAnswers: {},
-    sessionQuestionsCompleted: {},
-    completeSessionsDate: {},
+
+    sociodemographicQuestionsCompleted: false,
+    sociodemographicQuestions: {},
+    perceptionQuestionsCompleted: false,
+    perceptionQuestions: {},
+
+    testViewed: [],
+    testConfirmedAccess: [],
+    offers: {},
+
+    WTPviewed: [],
+    WTPdismissedLoans: [],
+    WTPconfirmedAccess: [],
+    WTPnotInterested: [],
+    WTPsessionQuestionsCompleted: {},
+    WTPsessionQuestionsCompletedDate: {},
   };
 }
 
@@ -57,7 +60,7 @@ function getSessionUnlockTime(session){
   const idx = SESSION_ORDER.indexOf(session);
   if(idx <= 0) return 0;
   const prevSession = SESSION_ORDER[idx - 1];
-  const completedAt = state.completeSessionsDate && state.completeSessionsDate[prevSession];
+  const completedAt = state.WTPsessionQuestionsCompletedDate && state.WTPsessionQuestionsCompletedDate[prevSession];
   if(!completedAt) return 0;
   return completedAt + SESSION_WAIT_MS;
 }
@@ -116,10 +119,12 @@ function doLogin(){
   const u=document.getElementById('inp-u').value.trim().toLowerCase();
   const p=document.getElementById('inp-p').value;
   const err=document.getElementById('lerr');
-  const found=USERS.find(x=>x.email===u&&x.pass===p);
+  const found=USERS.find(x=>x.username===u&&x.pass===p);
   if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
   err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
   U=found;
+  state.user = u;
+  state.institutionName = U.institutionName;
   state.sessionGroup = assignSessionGroup();
   saveState();
   initBalance();renderBalanceDisplay();
@@ -197,7 +202,7 @@ function showContext(){
   stopSessionWaitTimer();
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').classList.add('active');
-  const completed = state.generalQuestionsCompleted === true;
+  const completed = state.sociodemographicQuestionsCompleted === true;
   document.getElementById('general-tab').disabled     = false;
   document.querySelector('[data-tab="yes"]').disabled = false;
   document.querySelector('[data-tab="no"]').disabled  = false;
@@ -207,11 +212,11 @@ function showContext(){
     <div class="loan-info" id="context-info"><strong>Contexto</strong><br>Contexto del proyecto</div>
     <div class="btn-row">${completed? 
       '<button class="btn-p" id="continue-session" onclick="switchLoanTab(\'yes\')">Continuar →</button>' : 
-      '<button class="btn-p" id="continue-session" onclick="showGeneralQuestions()">Continuar →</button>'}</div>`;
+      '<button class="btn-p" id="continue-session" onclick="showSociodemographicQuestions()">Continuar →</button>'}</div>`;
 }
 
 /* Second tab: General questions */
-function showGeneralQuestions(){
+function showSociodemographicQuestions(){
   stopSessionWaitTimer();
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').disabled     = false;
@@ -242,7 +247,7 @@ function showGeneralQuestions(){
         <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
     </div></div></div>
     <div class="btn-row">
-      <button class="btn-p" onclick="finishGeneralQuestions()">Continuar →</button>
+      <button class="btn-p" onclick="finishSociodemographicQuestions()">Continuar →</button>
     </div>`;
 }
 
@@ -255,7 +260,7 @@ function toggleOther(select){
   }else{input.placeholder = 'No aplica';}
 }
 
-function finishGeneralQuestions(){
+function finishSociodemographicQuestions(){
   const requiredFields = ['institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
   if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
   if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
@@ -263,8 +268,8 @@ function finishGeneralQuestions(){
   if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
     document.getElementById(missing)?.focus();return;}
-      state.generalQuestionsCompleted = true;
-      state.generalAnswers = {
+      state.sociodemographicQuestionsCompleted = true;
+      state.sociodemographicQuestions = {
         institutionType:     document.getElementById('institution-type').value,
         institutionOther:    document.getElementById('institution-other').value.trim(),
         institutionRole:     document.getElementById('institution-role').value,
@@ -347,7 +352,7 @@ function renderLoans(){
   }
 
   getLoans()
-  .filter(l=>!state.dismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab  && (activeLoanTab !== 'no' || String(l.session) === activeSession))
+  .filter(l=>!state.WTPdismissedLoans.includes(l.id) && !tempDismissedLoans.has(l.id) && l.testValue === activeLoanTab  && (activeLoanTab !== 'no' || String(l.session) === activeSession))
     .sort((a,b)=>new Date(a.fechaDesembolso)-new Date(b.fechaDesembolso)) /*change a with b to invert order*/
   .forEach(l=>{
     const isG=l.tipo==='grupo';
@@ -409,19 +414,19 @@ function confirmAccess(id,event){
     const esgKeys = ['aclimatar','whisp','croppie'] .filter(k => L[k] === true);
     const tierOnFinal = fundOn;
     confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
-    if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
+    if(!state.WTPconfirmedAccess.includes(L.id)){state.WTPconfirmedAccess.push(L.id);}
     purchases[L.id] = confirmed;
     updateBalance(total);
     saveState();
     if(L.continue === false){
-      if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);saveState();renderLoans();return;}
+      if(!state.WTPdismissedLoans.includes(id)) state.WTPdismissedLoans.push(id);saveState();renderLoans();return;}
     goAccess();
   }
 
   let esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
   let tierOnFinal = tierOn;
   confirmed={loan:L,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
-  if(!state.interactions.confirmedAccess.includes(L.id)){state.interactions.confirmedAccess.push(L.id);}
+  if(!state.testConfirmedAccess.includes(L.id)){state.testConfirmedAccess.push(L.id);}
   saveState();
   goAccess();
   }
@@ -436,7 +441,11 @@ function confirmYesAccess(id, event){
 /* Loan cards actions */
 function toggleLoanCard(event, card, id){
   event.stopPropagation();
-  if(!state.interactions.viewed.includes(id)){state.interactions.viewed.push(id);saveState();}
+  const loan = getLoans().find(l => l.id === id);
+  if(loan?.testValue === 'yes'){
+    if(!state.testViewed.includes(id)){state.testViewed.push(id);saveState();}}
+  if(loan?.testValue === 'no'){
+    if(!state.WTPviewed.includes(id)){state.WTPviewed.push(id);saveState();}}
   const wasExpanded = card.classList.contains('expanded');
   document.querySelectorAll('.lcard.expanded').forEach(c => {c.classList.remove('expanded');});
   if(!wasExpanded){card.classList.add('expanded');}
@@ -451,8 +460,8 @@ function dismissLoan(id, event){
     setTimeout(() => {tempDismissedLoans.delete(id);renderLoans();}, 5000);
     return;
   }
-  if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);
-  if(!state.interactions.notInterested.includes(id)) state.interactions.notInterested.push(id);
+  if(!state.WTPdismissedLoans.includes(id)) state.WTPdismissedLoans.push(id);
+  if(!state.WTPnotInterested.includes(id)) state.WTPnotInterested.push(id);
   saveState();
   renderLoans();
 }
@@ -546,7 +555,7 @@ function updateSessionTabs() {
   if (instructionsBtn) {instructionsBtn.disabled = false;}
   const nextSession = sessionButtons.find(btn => {const session = btn.dataset.type;
     if (session === 'instructions' || session === 'endSessions') {return false;}
-    return state.sessionQuestionsCompleted?.[session] !== true;});
+    return state.WTPsessionQuestionsCompleted?.[session] !== true;});
   sessionButtons.forEach(btn => {
     const session = btn.dataset.type;
     if (session === 'instructions' || session === 'endSessions') {return;}btn.disabled = btn !== nextSession;});
@@ -560,7 +569,7 @@ function nextSession() {
     .slice(currentIndex + 1)
     .find(btn => {
       const session = btn.dataset.type;
-      return (session !== 'instructions' && session !== 'endSessions' && state.sessionQuestionsCompleted?.[session] !== true);});
+      return (session !== 'instructions' && session !== 'endSessions' && state.WTPsessionQuestionsCompleted?.[session] !== true);});
   if (nextTab) {switchSession(nextTab.dataset.type);return;}
   const endTab = tabs.find(btn => btn.dataset.type === 'endSessions');
   if (endTab && !endTab.disabled) {switchSession('endSessions');}
@@ -569,36 +578,36 @@ function nextSession() {
 
 // ─── Complementary questions ───────────────────────────────────────────────
 function getSessionRemaining(sessionNum){
-  return getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no' && String(l.session) === String(sessionNum)).length;
+  return getLoans().filter(l => !state.WTPdismissedLoans.includes(l.id) && l.testValue === 'no' && String(l.session) === String(sessionNum)).length;
 }
 
 function allSessionQuestionsAnswered(){
-  return !!(state.sessionQuestionsCompleted && ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]));
+  return !!(state.WTPsessionQuestionsCompleted && ['1','2','3'].every(s => state.WTPsessionQuestionsCompleted[s]));
 }
 
 function updateEndSessionsAvailability(){
-  const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
+  const remaining = getLoans().filter(l => !state.WTPdismissedLoans.includes(l.id) && l.testValue === 'no');
   const endTab = document.querySelector('.loan-subtab[data-type="endSessions"]');
   if(endTab){ endTab.disabled = remaining.length !== 0 || !allSessionQuestionsAnswered(); }
 }
 
 function finishSessionQuestions(sessionNum){
-  const requiredBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'], '3':['aq5','aq6']};
+  const requiredBySession = {'1':['interestingCredits','solvesNeed'],'2':['monthlyWtp','conditionsToWtp'], '3':['frecuency','alerts']};
   const missing = (requiredBySession[sessionNum]||[]).find(id => !document.getElementById(id)?.value.trim());
   if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
     document.getElementById(missing)?.focus();return;}
-  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
-  if(!state.additionalAnswers) state.additionalAnswers = {};
+  const fieldsBySession = {'1':['interestingCredits','solvesNeed'],'2':['monthlyWtp','conditionsToWtp'],'3':['frecuency','alerts']};
+  if(!state.perceptionQuestions) state.perceptionQuestions = {};
   (fieldsBySession[sessionNum]||[]).forEach(id=>{
     const el = document.getElementById(id);
-    if(el) state.additionalAnswers[id] = el.value;
+    if(el) state.perceptionQuestions[id] = el.value;
   });
-  if(!state.sessionQuestionsCompleted) state.sessionQuestionsCompleted = {};
-  state.sessionQuestionsCompleted[sessionNum] = true;
-  state.additionalQuestionsCompleted = ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]);
-  if(!state.completeSessionsDate) state.completeSessionsDate = {};
-  state.completeSessionsDate[sessionNum] = Date.now();
+  if(!state.WTPsessionQuestionsCompleted) state.WTPsessionQuestionsCompleted = {};
+  state.WTPsessionQuestionsCompleted[sessionNum] = true;
+  state.perceptionQuestionsCompleted = ['1','2','3'].every(s => state.WTPsessionQuestionsCompleted[s]);
+  if(!state.WTPsessionQuestionsCompletedDate) state.WTPsessionQuestionsCompletedDate = {};
+  state.WTPsessionQuestionsCompletedDate[sessionNum] = Date.now();
   saveState();
   updateSessionTabs();
   nextSession();
@@ -612,11 +621,11 @@ function renderSessionQuestions(sessionNum){
     <div class="fs-title">Bloque de interés</div>
     <div class="frow">
       <div class="fg full"><label class="flabel">¿Qué tan interesante le resultan los créditos de demostración?<span class="required">*</span></label>
-        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "muy poco interesante" y 10 "muy interesante".</div> 
-        <select class="fsel" id="aq1" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+        <div class="fhelp">Responda en una escala del 1 al 5, siendo 1 "muy poco interesante" y 5 "muy interesante".</div> 
+        <select class="fsel" id="interestingCredits" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
       <div class="fg full"><label class="flabel">¿Cree que estos créditos podrían resolver una necesidad que su institución tiene hoy?<span class="required">*</span></label>
-        <select class="fsel" id="aq2" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <select class="fsel" id="solvesNeed" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="yes">Sí</option><option value="no">No</option></select></div>
     </div></div></div>
     <div class="btn-row">
@@ -626,8 +635,8 @@ function renderSessionQuestions(sessionNum){
   <div class="o-form"><div>
     <div class="fs-title">Bloque de valor percibido</div>
     <div class="frow">
-      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
-      <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="aq4" type="text"></div>
+      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="monthlyWtp" type="number" placeholder="Número de Lempiras"></div>
+      <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="conditionsToWtp" type="text"></div>
     </div></div></div>
     <div class="btn-row">
       <button class="btn-p" onclick="finishSessionQuestions('2')">Continuar →</button>
@@ -637,10 +646,10 @@ function renderSessionQuestions(sessionNum){
     <div class="fs-title">Bloque de uso</div>
     <div class="frow">
       <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?<span class="required">*</span></label>
-        <select class="fsel" id="aq5" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="diario">Diario</option><option value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option></select></div>
+        <select class="fsel" id="frecuency" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="daily">Diario</option><option value="weekly">Semanal</option><option value="biweekly">Quincenal</option><option value="monthly">Mensual</option><option value="moreThanMonthly">Cada varios meses</option><option value="notUsing">No la utilizaría</option></select></div>
       <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?<span class="required">*</span></label>
-        <select class="fsel" id="aq6" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <select class="fsel" id="alerts" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
     </div></div></div>
     <div class="btn-row">
@@ -648,10 +657,10 @@ function renderSessionQuestions(sessionNum){
     </div>`
   };
   list.innerHTML = blocks[sessionNum] || '';
-  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
+  const fieldsBySession = {'1':['interestingCredits','solvesNeed'],'2':['monthlyWtp','conditionsToWtp'],'3':['frecuency','alerts']};
   (fieldsBySession[sessionNum]||[]).forEach(id=>{
     const el = document.getElementById(id);
-    const val = state.additionalAnswers && state.additionalAnswers[id];
+    const val = state.perceptionQuestions && state.perceptionQuestions[id];
     if(el && val){ el.value = val; }
   });
 }
@@ -1080,12 +1089,12 @@ function submitOffer(){
   const l=confirmed.loan;const sym=v('of-moneda').startsWith('L')?'L.':'$';
   document.getElementById('offer-sent-card').innerHTML=`
     <div class="srow"><span class="sr-l">Destinatario</span><span class="sr-v">${l.name}</span></div>
-    <div class="srow"><span class="sr-l">Institución oferente</span><span class="sr-v">${U.name}</span></div>
+    <div class="srow"><span class="sr-l">Institución oferente</span><span class="sr-v">${U.institutionName}</span></div>
   ${!l.paqueteFlexible ? `
     <div class="srow"><span class="sr-l">Estado</span><span class="sr-v" style="color:var(--blue)">Enviada · Pendiente respuesta</span></div>` : ''}
   `;
   if(l.testValue === 'yes'){tempDismissedLoans.add(l.id);tempDismissedLoans.delete(l.id);} else {
-    if(!state.dismissedLoans.includes(l.id)){state.dismissedLoans.push(l.id);}}
+    if(!state.WTPdismissedLoans.includes(l.id)){state.WTPdismissedLoans.push(l.id);}}
     const producerOffers = {};
     if(l.paqueteFlexible && l.prod && l.prod.length > 0){
       l.prod.forEach(p => {
