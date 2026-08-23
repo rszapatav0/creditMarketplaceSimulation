@@ -38,7 +38,7 @@ let tempDismissedLoans = new Set();
 let activeLoanTab = 'yes';
 
 
-// ─── ───────────────────────────────────────────────
+// ─── Group ID ───────────────────────────────────────────────
 function roleName(r){return r==='banco'?'Banco Comercial':r==='coop'?'Cooperativa':'Microfinanciera';}
 
 function assignSessionGroup() {
@@ -58,7 +58,42 @@ function getLoans(){
   ];
 }
 
-// WALLET / BALANCE FUNCTIONS
+
+// ─── Login and logout functions ───────────────────────────────────────────────
+function doLogin(){
+  const u=document.getElementById('inp-u').value.trim().toLowerCase();
+  const p=document.getElementById('inp-p').value;
+  const err=document.getElementById('lerr');
+  const found=USERS.find(x=>x.email===u&&x.pass===p);
+  if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
+  err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
+  U=found;
+  state.sessionGroup = assignSessionGroup();
+  saveState();
+  initBalance();renderBalanceDisplay();
+  document.getElementById('mkt-title').innerHTML =
+    `<div class="brand-h1"><b>Valoración de herramientas de trazabilidad agrícola</b></div>
+    <div class="brand-h1-sub"><b>Convirtiendo la Información en <b>Garantía</b></b></div>`;
+  showContext();show('s-market');
+}
+
+function doLogout(){
+  U=null;
+  purchases={};
+  yesSelections={};
+  state = defaultState();
+  sessionStorage.removeItem('appState');
+  document.getElementById('inp-p').value='';
+  show('s-login');
+}
+
+function endSession(){
+  // Future: await fetch('/api/sessions', { method:'POST', body: JSON.stringify(state) })
+  doLogout();
+}
+
+
+// ─── Wallet ───────────────────────────────────────────────
 function initBalance(){
   if(state.walletBalance === undefined) state.walletBalance = walletInitial;
   saveState();
@@ -73,11 +108,6 @@ function setBalance(amount){
   saveState();
 }
 
-function updateBalance(amount){
-  setBalance(getBalance() - amount);
-  renderBalanceDisplay();
-}
-
 function renderBalanceDisplay(){
   const wds=document.querySelectorAll('.wallet-display');
   if(!wds.length)return;
@@ -86,53 +116,13 @@ function renderBalanceDisplay(){
   if(balance < 0){wd.classList.add('negative');}else{wd.classList.remove('negative');}});
 }
 
-function doLogin(){
-  const u=document.getElementById('inp-u').value.trim().toLowerCase();
-  const p=document.getElementById('inp-p').value;
-  const err=document.getElementById('lerr');
-  const found=USERS.find(x=>x.email===u&&x.pass===p);
-  if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
-  err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
-  U=found;
-  state.sessionGroup = assignSessionGroup();
-  saveState();
-  initBalance();renderBalanceDisplay();
-  document.getElementById('mkt-title').innerHTML =
-  `<div class="brand-h1"><b>Valoración de herramientas de trazabilidad agrícola</b></div>
-  <div class="brand-h1-sub"><b>Convirtiendo la Información en <b>Garantía</b></b></div>`;
-  showContext();show('s-market');
+function updateBalance(amount){
+  setBalance(getBalance() - amount);
+  renderBalanceDisplay();
 }
 
-function endSession(){
-  // Future: await fetch('/api/sessions', { method:'POST', body: JSON.stringify(state) })
-  doLogout();
-}
 
-function doLogout(){
-  U=null;
-  purchases={};
-  yesSelections={};
-  state = defaultState();
-  sessionStorage.removeItem('appState');
-  document.getElementById('inp-p').value='';
-  show('s-login');
-}
-
-function dismissLoan(id, event){
-  event.stopPropagation();
-  const loan = getLoans().find(l => l.id === id);
-  if(loan?.testValue === 'yes'){
-    tempDismissedLoans.add(id);
-    renderLoans();
-    setTimeout(() => {tempDismissedLoans.delete(id);renderLoans();}, 5000);
-    return;
-  }
-  if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);
-  if(!state.interactions.notInterested.includes(id)) state.interactions.notInterested.push(id);
-  saveState();
-  renderLoans();
-}
-
+// ─── Tabs: Main tabs ───────────────────────────────────────────────
 function switchLoanTab(tab){
  if(activeLoanTab === 'yes' && tab !== 'yes'){tempDismissedLoans.clear();}
   activeLoanTab=tab;
@@ -147,196 +137,19 @@ function switchLoanTab(tab){
   renderLoans();
 }
 
-function switchSession(session){
-  activeSession = session;
-  currentPage = 1;
-  document.querySelectorAll('.loan-subtab').forEach(b => b.classList.toggle('active', b.dataset.type === session));
-  if(session === 'instructions'){
-    document.getElementById('loan-list').innerHTML = `
-      <div class="loan-info" id="loan-instructions">
-        <strong>Instrucciones</strong><br>
-        Imagine que está utilizando el <strong>Marketplace de créditos</strong> en un día normal de trabajo. Todas las oportunidades corresponden a productores de café ubicados dentro de la zona de interés de su institución financiera.<br><ol style="margin:0; padding-left:18px;">
-          <li>Cada sesión tiene una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>3 sesiones</strong>.</li>
-          <li>Para cada oportunidad, primero visualizará información general del crédito. Al desplegar la tarjeta podrá consultar la información adicional disponible para ese crédito. Evalúe si le interesa acceder a ella considerando los criterios de su institución y sus propias preferencias.</li>
-          <li>En la esquina superior derecha encontrará el saldo disponible de su billetera. Este es el presupuesto total con el que contará para todas las sesiones y no podrá superar ese monto.</li>
-          <li>El precio mostrado corresponde a los posibles costos de acceso a la información <strong>por productor</strong>, no por crédito. El valor a descontar del saldo disponible se ponderará por el número de productores asociados a la oportunidad de crédito. Estos costos cambiarán de acuerdo a la institución????</li>
-        </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.
-        </ol><strong>PONER LA DESCRIPCIÓN DE VARIABLES</strong>
-        </div>
-      <div class="btn-row"><button class="btn-p" id="continue-session" onclick="nextSession()">Continuar →</button></div>`;
-    document.getElementById('loan-pagination').style.display='none';
-    return;
-  } else if(session === 'endSessions'){
-    document.getElementById('loan-list').innerHTML = `
-      <div class="loan-info" id="loan-end-sessions">
-        <strong>Finalizar sesiones</strong><br>
-        Ha completado todas las sesiones disponibles. Agradecemos su participación y sus aportes a este ejercicio.</div>
-      <div class="btn-row" id="end-session-button" style="margin-top:2rem"><button class="btn-p" onclick="endSession()">Enviar →</button></div>`;
-    document.getElementById('loan-pagination').style.display='none';
-    return;
-  } else {renderLoans();}
-  updateSessionTabs();
-}
-
-function updateSessionTabs(){
-  document.querySelectorAll('.loan-subtab').forEach(btn => {
-    const session = btn.dataset.type;
-    if(session === 'instructions'){btn.disabled = false;return;}
-    if(session === 'endSessions'){return;}
-    // To do: update session tabs based on available sessions
-    btn.disabled = state.sessionQuestionsCompleted?.[session] === true;
-  });
-  updateEndSessionsAvailability();
-}
-
-// ─── Session-embedded questions (moved from "Información complementaria") ──
-// Returns how many "no" (Oportunidades de crédito disponibles) cards remain
-// un-dismissed for a given session number.
-function getSessionRemaining(sessionNum){
-  return getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no' && String(l.session) === String(sessionNum)).length;
-}
-
-function allSessionQuestionsAnswered(){
-  return !!(state.sessionQuestionsCompleted && ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]));
-}
-
-// "Finalizar" only becomes enabled once every session's cards have all
-// disappeared AND all 6 questions (2 per session) have been answered.
-function updateEndSessionsAvailability(){
-  const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
-  const endTab = document.querySelector('.loan-subtab[data-type="endSessions"]');
-  if(endTab){ endTab.disabled = remaining.length !== 0 || !allSessionQuestionsAnswered(); }
-}
-
-function renderSessionQuestions(sessionNum){
-  const list = document.getElementById('loan-list');
-  const blocks = {
-    '1': `
-  <div class="o-form"><div>
-    <div class="fs-title">Bloque de interés</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">¿Qué tan interesante le resultan los créditos de demostración?<span class="required">*</span></label>
-        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "muy poco interesante" y 10 "muy interesante".</div> 
-        <select class="fsel" id="aq1" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
-      <div class="fg full"><label class="flabel">¿Cree que estos créditos podrían resolver una necesidad que su institución tiene hoy?<span class="required">*</span></label>
-        <select class="fsel" id="aq2" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="yes">Sí</option><option value="no">No</option></select></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('1')">Continuar →</button>
-    </div>`,
-    '2': `
-  <div class="o-form"><div>
-    <div class="fs-title">Bloque de valor percibido</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
-      <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="aq4" type="text"></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('2')">Continuar →</button>
-    </div>`,
-    '3': `
-  <div class="o-form"><div>
-    <div class="fs-title">Bloque de uso</div>
-    <div class="frow">
-      <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?<span class="required">*</span></label>
-        <select class="fsel" id="aq5" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="diario">Diario</option><option value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option></select></div>
-      <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?<span class="required">*</span></label>
-        <select class="fsel" id="aq6" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('3')">Continuar →</button>
-    </div>`
-  };
-  list.innerHTML = blocks[sessionNum] || '';
-  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
-  (fieldsBySession[sessionNum]||[]).forEach(id=>{
-    const el = document.getElementById(id);
-    const val = state.additionalAnswers && state.additionalAnswers[id];
-    if(el && val){ el.value = val; }
-  });
-}
-
-function finishSessionQuestions(sessionNum){
-  const requiredBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'], '3':['aq5','aq6']};
-  const missing = (requiredBySession[sessionNum]||[]).find(id => !document.getElementById(id)?.value.trim());
-  if(missing){
-    alert('Por favor complete todas las preguntas antes de continuar.');
-    document.getElementById(missing)?.focus();return;}
-  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
-  if(!state.additionalAnswers) state.additionalAnswers = {};
-  (fieldsBySession[sessionNum]||[]).forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) state.additionalAnswers[id] = el.value;
-  });
-  if(!state.sessionQuestionsCompleted) state.sessionQuestionsCompleted = {};
-  state.sessionQuestionsCompleted[sessionNum] = true;
-  state.additionalQuestionsCompleted = ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]);
-  saveState();
-  updateSessionTabs();
-  nextSession();
-}
-
-
-function nextSession(){
-  const tabs = [...document.querySelectorAll('.loan-subtab')];
-  const currentIndex = tabs.findIndex(btn => btn.dataset.type === activeSession);
-  const nextTab = tabs.slice(currentIndex + 1).find(btn => !btn.disabled);
-  if(nextTab){switchSession(nextTab.dataset.type);}
-}
-
-function finishGeneralQuestions(){
-  const requiredFields = ['institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
-  if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
-  if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
-  const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
-  if(missing){
-    alert('Por favor complete todas las preguntas antes de continuar.');
-    document.getElementById(missing)?.focus();return;}
-      state.generalQuestionsCompleted = true;
-      state.generalAnswers = {
-        institutionType:     document.getElementById('institution-type').value,
-        institutionOther:    document.getElementById('institution-other').value.trim(),
-        institutionRole:     document.getElementById('institution-role').value,
-        roleOther:           document.getElementById('role-other').value.trim(),
-        experienceYears:     document.getElementById('experience-years').value,
-        agrExperienceYears:  document.getElementById('agr-experience-years').value,
-        ageRange:            document.getElementById('age-range').value,
-        sex:                 document.getElementById('sex').value,
-      };
-    saveState();
-    document.getElementById('general-tab').disabled       = false;
-    document.querySelector('[data-tab="yes"]').disabled   = false;
-    document.querySelector('[data-tab="no"]').disabled    = false;
-    switchLoanTab('yes');
-}
-
-function toggleOther(select){
-  const input=document.querySelector(`[data-other-for="${select.id}"]`);
-  if(!input) return;
-  const enabled = select.value === 'otro';
-  input.disabled = !enabled;
-  if(enabled){input.placeholder = 'Especifique...';
-  }else{input.placeholder = 'No aplica';}
-}
-
+/* First tab: Context */
 function showContext(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').classList.add('active');
   document.querySelector('[data-tab="yes"]').disabled = false;
   document.querySelector('[data-tab="no"]').disabled  = false;
-  document.getElementById('loan-demo-info').style.display = 'none';
-  document.getElementById('loan-subtabs').style.display = 'none';
     document.getElementById('loan-list').innerHTML = `
       <div class="loan-info" id="context-info">
         <strong>Contexto</strong><br>Contexto del proyecto</div>
       <div class="btn-row"><button class="btn-p" id="continue-session" onclick="showGeneralQuestions()">Continuar →</button></div>`;
-  document.getElementById('loan-pagination').style.display='none';
 }
 
+/* Second tab: General questions */
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('general-tab').classList.add('active');
@@ -373,62 +186,98 @@ function showGeneralQuestions(){
   document.getElementById('loan-pagination').style.display='none';
 }
 
-function toggleLoanCard(event, card, id){
-  event.stopPropagation();
-  if(!state.interactions.viewed.includes(id)){state.interactions.viewed.push(id);saveState();}
-  const wasExpanded = card.classList.contains('expanded');
-  document.querySelectorAll('.lcard.expanded').forEach(c => {c.classList.remove('expanded');});
-  if(!wasExpanded){card.classList.add('expanded');}
+function toggleOther(select){
+  const input=document.querySelector(`[data-other-for="${select.id}"]`);
+  if(!input) return;
+  const enabled = select.value === 'otro';
+  input.disabled = !enabled;
+  if(enabled){input.placeholder = 'Especifique...';
+  }else{input.placeholder = 'No aplica';}
 }
 
-// ── Metric display as a toggle/button (read-only for 'no', interactive for 'yes') ─
-function metricToggle(label, on, interactive, handler){
-  const btnAttrs = interactive ? ` onclick="${handler}"` : ' disabled style="pointer-events:none;cursor:default"';
-  return `<div class="mi"><div class="mi-lbl">${label}</div><button class="toggle${on?' on':''}"${btnAttrs}></button></div>`;
+function finishGeneralQuestions(){
+  const requiredFields = ['institution-type','institution-role','experience-years','agr-experience-years','age-range','sex'];
+  if(document.getElementById('institution-type').value === 'otro'){requiredFields.push('institution-other');}
+  if(document.getElementById('institution-role').value === 'otro'){requiredFields.push('role-other');}
+  const missing = requiredFields.find(id =>!document.getElementById(id)?.value.trim());
+  if(missing){
+    alert('Por favor complete todas las preguntas antes de continuar.');
+    document.getElementById(missing)?.focus();return;}
+      state.generalQuestionsCompleted = true;
+      state.generalAnswers = {
+        institutionType:     document.getElementById('institution-type').value,
+        institutionOther:    document.getElementById('institution-other').value.trim(),
+        institutionRole:     document.getElementById('institution-role').value,
+        roleOther:           document.getElementById('role-other').value.trim(),
+        experienceYears:     document.getElementById('experience-years').value,
+        agrExperienceYears:  document.getElementById('agr-experience-years').value,
+        ageRange:            document.getElementById('age-range').value,
+        sex:                 document.getElementById('sex').value,
+      };
+    saveState();
+    document.getElementById('general-tab').disabled       = false;
+    document.querySelector('[data-tab="yes"]').disabled   = false;
+    document.querySelector('[data-tab="no"]').disabled    = false;
+    switchLoanTab('yes');
 }
 
-// ── Per-card selection state for demo credits (testValue === 'yes') ──────────
-function getYesSel(id){
-  if(!yesSelections[id]) yesSelections[id] = {tierOn:false, esgSel:{}};
-  return yesSelections[id];
+
+// ─── Render Market ───────────────────────────────────────────────
+function goMkt(){
+  tierOn=false;esgSel={};currentPage=1;renderLoans();renderBalanceDisplay();show('s-market');}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
+  const el=document.getElementById(id);
+  const flex=['s-login'];
+  el.style.display=flex.includes(id)?'flex':'block';
+  el.classList.add('active');
 }
 
-function buildYesMetrics(l){
-  const sel = getYesSel(l.id);
-  const fundBtn = metricToggle('Fundamentales', sel.tierOn, true, `toggleYesTier('${l.id}',event)`);
-  const toolButtons = ESG.map(e=>metricToggle(e.label, !!sel.esgSel[e.id], true, `toggleYesEsg('${l.id}','${e.id}',event)`)).join('');
-  return fundBtn + toolButtons;
+function initPagination(){
+  const cards=document.querySelectorAll('.loan-list .lcard');
+  const totalCards=cards.length;
+  const totalPages=Math.ceil(totalCards/cardsPerPage);
+  if(currentPage > totalPages){currentPage = Math.max(1, totalPages);}
+  if(totalPages>1){document.getElementById('loan-pagination').style.display='flex';showPage(currentPage);}else{document.getElementById('loan-pagination').style.display='none';}
 }
 
-function refreshYesCardExtra(id){
-  const l = getLoans().find(x=>x.id===id);
-  if(!l) return;
-  const extra = document.getElementById('extra-'+id);
-  if(!extra) return;
-  const metaEl = extra.querySelector('.loan-meta');
-  if(metaEl) metaEl.innerHTML = buildYesMetrics(l);
+function showPage(page){
+  const cards=document.querySelectorAll('.loan-list .lcard');
+  const totalCards=cards.length;
+  const totalPages=Math.ceil(totalCards/cardsPerPage);
+  const start=(page-1)*cardsPerPage;
+  const end=start+cardsPerPage;
+  cards.forEach((card,idx)=>{
+    card.style.display=idx>=start&&idx<end?'grid':'none';
+  });
+  document.getElementById('loan-page-info').textContent=`Página ${page} de ${totalPages}`;
+  document.getElementById('loan-prev').disabled=page===1;
+  document.getElementById('loan-next').disabled=page===totalPages;
 }
 
-function toggleYesTier(id, event){
-  event.stopPropagation();
-  const sel = getYesSel(id);
-  sel.tierOn = !sel.tierOn;
-  refreshYesCardExtra(id);
+function nextPage(){
+  const cards=document.querySelectorAll('.loan-list .lcard');
+  const totalCards=cards.length;
+  const totalPages=Math.ceil(totalCards/cardsPerPage);
+  if(currentPage<totalPages){
+    currentPage++;
+    showPage(currentPage);
+  }
 }
 
-function toggleYesEsg(id, esgId, event){
-  event.stopPropagation();
-  const sel = getYesSel(id);
-  sel.esgSel[esgId] = !sel.esgSel[esgId];
-  refreshYesCardExtra(id);
+function prevPage(){
+  if(currentPage>1){
+    currentPage--;
+    showPage(currentPage);
+  }
 }
 
+
+// ─── Render Loans ───────────────────────────────────────────────
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
 
-  // Once all cards for the active numbered session have disappeared, show
-  // that session's questions (moved here from "Información complementaria")
-  // instead of the (now empty) card list.
   if(activeLoanTab === 'no' && ['1','2','3'].includes(activeSession) && getSessionRemaining(activeSession) === 0){
     renderSessionQuestions(activeSession);
     updateEndSessionsAvailability();
@@ -507,7 +356,6 @@ function confirmAccess(id,event){
     goAccess();
   }
 
-  // Demo credits (testValue !== 'no'): access is never charged, so no price is calculated or shown.
   let esgKeys = ESG.filter(e => esgSel[e.id]).map(e => e.id);
   let tierOnFinal = tierOn;
   confirmed={loan:L,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};
@@ -516,9 +364,6 @@ function confirmAccess(id,event){
   goAccess();
   }
 
-// Syncs the per-card selection (made from the expanded card) into the shared
-// tierOn/esgSel state before delegating to confirmAccess, so the existing
-// confirmation/access logic can be reused as-is.
 function confirmYesAccess(id, event){
   const sel = getYesSel(id);
   tierOn = sel.tierOn;
@@ -526,6 +371,211 @@ function confirmYesAccess(id, event){
   confirmAccess(id, event);
 }
 
+/* Loan cards actions */
+function toggleLoanCard(event, card, id){
+  event.stopPropagation();
+  if(!state.interactions.viewed.includes(id)){state.interactions.viewed.push(id);saveState();}
+  const wasExpanded = card.classList.contains('expanded');
+  document.querySelectorAll('.lcard.expanded').forEach(c => {c.classList.remove('expanded');});
+  if(!wasExpanded){card.classList.add('expanded');}
+}
+
+function dismissLoan(id, event){
+  event.stopPropagation();
+  const loan = getLoans().find(l => l.id === id);
+  if(loan?.testValue === 'yes'){
+    tempDismissedLoans.add(id);
+    renderLoans();
+    setTimeout(() => {tempDismissedLoans.delete(id);renderLoans();}, 5000);
+    return;
+  }
+  if(!state.dismissedLoans.includes(id)) state.dismissedLoans.push(id);
+  if(!state.interactions.notInterested.includes(id)) state.interactions.notInterested.push(id);
+  saveState();
+  renderLoans();
+}
+
+function metricToggle(label, on, interactive, handler){
+  const btnAttrs = interactive ? ` onclick="${handler}"` : ' disabled style="pointer-events:none;cursor:default"';
+  return `<div class="mi"><div class="mi-lbl">${label}</div><button class="toggle${on?' on':''}"${btnAttrs}></button></div>`;
+}
+
+function getYesSel(id){
+  if(!yesSelections[id]) yesSelections[id] = {tierOn:false, esgSel:{}};
+  return yesSelections[id];
+}
+
+function buildYesMetrics(l){
+  const sel = getYesSel(l.id);
+  const fundBtn = metricToggle('Fundamentales', sel.tierOn, true, `toggleYesTier('${l.id}',event)`);
+  const toolButtons = ESG.map(e=>metricToggle(e.label, !!sel.esgSel[e.id], true, `toggleYesEsg('${l.id}','${e.id}',event)`)).join('');
+  return fundBtn + toolButtons;
+}
+
+function refreshYesCardExtra(id){
+  const l = getLoans().find(x=>x.id===id);
+  if(!l) return;
+  const extra = document.getElementById('extra-'+id);
+  if(!extra) return;
+  const metaEl = extra.querySelector('.loan-meta');
+  if(metaEl) metaEl.innerHTML = buildYesMetrics(l);
+}
+
+function toggleYesTier(id, event){
+  event.stopPropagation();
+  const sel = getYesSel(id);
+  sel.tierOn = !sel.tierOn;
+  refreshYesCardExtra(id);
+}
+
+function toggleYesEsg(id, esgId, event){
+  event.stopPropagation();
+  const sel = getYesSel(id);
+  sel.esgSel[esgId] = !sel.esgSel[esgId];
+  refreshYesCardExtra(id);
+}
+
+
+// ─── Tabs: WTP tabs ───────────────────────────────────────────────
+function switchSession(session){
+  activeSession = session;
+  currentPage = 1;
+  document.querySelectorAll('.loan-subtab').forEach(b => b.classList.toggle('active', b.dataset.type === session));
+  if(session === 'instructions'){
+    document.getElementById('loan-list').innerHTML = `
+      <div class="loan-info" id="loan-instructions">
+        <strong>Instrucciones</strong><br>
+        Imagine que está utilizando el <strong>Marketplace de créditos</strong> en un día normal de trabajo. Todas las oportunidades corresponden a productores de café ubicados dentro de la zona de interés de su institución financiera.<br><ol style="margin:0; padding-left:18px;">
+          <li>Cada sesión tiene una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>3 sesiones</strong>.</li>
+          <li>Para cada oportunidad, primero visualizará información general del crédito. Al desplegar la tarjeta podrá consultar la información adicional disponible para ese crédito. Evalúe si le interesa acceder a ella considerando los criterios de su institución y sus propias preferencias.</li>
+          <li>En la esquina superior derecha encontrará el saldo disponible de su billetera. Este es el presupuesto total con el que contará para todas las sesiones y no podrá superar ese monto.</li>
+          <li>El precio mostrado corresponde a los posibles costos de acceso a la información <strong>por productor</strong>, no por crédito. El valor a descontar del saldo disponible se ponderará por el número de productores asociados a la oportunidad de crédito. Estos costos cambiarán de acuerdo a la institución????</li>
+        </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.
+        </ol><strong>PONER LA DESCRIPCIÓN DE VARIABLES</strong>
+        </div>
+      <div class="btn-row"><button class="btn-p" id="continue-session" onclick="nextSession()">Continuar →</button></div>`;
+    document.getElementById('loan-pagination').style.display='none';
+    return;
+  } else if(session === 'endSessions'){
+    document.getElementById('loan-list').innerHTML = `
+      <div class="loan-info" id="loan-end-sessions">
+        <strong>Finalizar sesiones</strong><br>
+        Ha completado todas las sesiones disponibles. Agradecemos su participación y sus aportes a este ejercicio.</div>
+      <div class="btn-row" id="end-session-button" style="margin-top:2rem"><button class="btn-p" onclick="endSession()">Enviar →</button></div>`;
+    document.getElementById('loan-pagination').style.display='none';
+    return;
+  } else {renderLoans();}
+  updateSessionTabs();
+}
+
+function updateSessionTabs(){
+  document.querySelectorAll('.loan-subtab').forEach(btn => {
+    const session = btn.dataset.type;
+    if(session === 'instructions'){btn.disabled = false;return;}
+    if(session === 'endSessions'){return;}
+    // To do: update session tabs based on available sessions
+    btn.disabled = state.sessionQuestionsCompleted?.[session] === true;
+  });
+  updateEndSessionsAvailability();
+}
+
+function nextSession(){
+  const tabs = [...document.querySelectorAll('.loan-subtab')];
+  const currentIndex = tabs.findIndex(btn => btn.dataset.type === activeSession);
+  const nextTab = tabs.slice(currentIndex + 1).find(btn => !btn.disabled);
+  if(nextTab){switchSession(nextTab.dataset.type);}
+}
+
+
+// ─── Complementary questions ───────────────────────────────────────────────
+function getSessionRemaining(sessionNum){
+  return getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no' && String(l.session) === String(sessionNum)).length;
+}
+
+function allSessionQuestionsAnswered(){
+  return !!(state.sessionQuestionsCompleted && ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]));
+}
+
+function updateEndSessionsAvailability(){
+  const remaining = getLoans().filter(l => !state.dismissedLoans.includes(l.id) && l.testValue === 'no');
+  const endTab = document.querySelector('.loan-subtab[data-type="endSessions"]');
+  if(endTab){ endTab.disabled = remaining.length !== 0 || !allSessionQuestionsAnswered(); }
+}
+
+function finishSessionQuestions(sessionNum){
+  const requiredBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'], '3':['aq5','aq6']};
+  const missing = (requiredBySession[sessionNum]||[]).find(id => !document.getElementById(id)?.value.trim());
+  if(missing){
+    alert('Por favor complete todas las preguntas antes de continuar.');
+    document.getElementById(missing)?.focus();return;}
+  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
+  if(!state.additionalAnswers) state.additionalAnswers = {};
+  (fieldsBySession[sessionNum]||[]).forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) state.additionalAnswers[id] = el.value;
+  });
+  if(!state.sessionQuestionsCompleted) state.sessionQuestionsCompleted = {};
+  state.sessionQuestionsCompleted[sessionNum] = true;
+  state.additionalQuestionsCompleted = ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]);
+  saveState();
+  updateSessionTabs();
+  nextSession();
+}
+
+function renderSessionQuestions(sessionNum){
+  const list = document.getElementById('loan-list');
+  const blocks = {
+    '1': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de interés</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">¿Qué tan interesante le resultan los créditos de demostración?<span class="required">*</span></label>
+        <div class="fhelp">Responda en una escala del 1 al 10, siendo 1 "muy poco interesante" y 10 "muy interesante".</div> 
+        <select class="fsel" id="aq1" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+      <div class="fg full"><label class="flabel">¿Cree que estos créditos podrían resolver una necesidad que su institución tiene hoy?<span class="required">*</span></label>
+        <select class="fsel" id="aq2" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="yes">Sí</option><option value="no">No</option></select></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishSessionQuestions('1')">Continuar →</button>
+    </div>`,
+    '2': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de valor percibido</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="aq3" type="number" placeholder="Número de Lempiras"></div>
+      <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="aq4" type="text"></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishSessionQuestions('2')">Continuar →</button>
+    </div>`,
+    '3': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de uso</div>
+    <div class="frow">
+      <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?<span class="required">*</span></label>
+        <select class="fsel" id="aq5" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="diario">Diario</option><option value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option></select></div>
+      <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?<span class="required">*</span></label>
+        <select class="fsel" id="aq6" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+        <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
+    </div></div></div>
+    <div class="btn-row">
+      <button class="btn-p" onclick="finishSessionQuestions('3')">Continuar →</button>
+    </div>`
+  };
+  list.innerHTML = blocks[sessionNum] || '';
+  const fieldsBySession = {'1':['aq1','aq2'],'2':['aq3','aq4'],'3':['aq5','aq6']};
+  (fieldsBySession[sessionNum]||[]).forEach(id=>{
+    const el = document.getElementById(id);
+    const val = state.additionalAnswers && state.additionalAnswers[id];
+    if(el && val){ el.value = val; }
+  });
+}
+
+
+// ─── Loans detail ───────────────────────────────────────────────
 function goAccess(){renderAccess();show('s-access');}
 
 function renderProducersSection(l){
@@ -546,18 +596,108 @@ function renderProducersSection(l){
   }
 }
 
-function renderFinancialSection(l){
-  const sec = document.getElementById('financial-flex-fields');
-  sec.style.display = l.paqueteFlexible ? 'none' : '';
-}
-
-// ── Per-producer ESG (uses embedded data) ──────────────────────────────────
 function prodEsgMetrics(p){
   return p.esg||[];
 }
 
+function topInfoAccess(){
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
+  const isG=l.tipo==='grupo';
+  const isB=loanType==='banco';
+  let h='';
+  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
+  const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
+  const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ? 'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
+  const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
+  
+  document.getElementById('top-info').innerHTML = h;
+}
 
- // ── SVG farm map (seed derived from p.cod) ────────
+function renderAccess(){
+  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
+  const isG=l.tipo==='grupo';
+  const isB=l.tipo==='banco';
+  let h='';
+  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
+  const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
+  const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ? 'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
+  const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
+  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
+  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
+
+  const hasFundamentals = tierOn;
+  const hasEsg = esgKeys.length > 0;
+  const hasAccess = hasFundamentals || hasEsg;
+
+  if(L.testValue==='yes'){
+    if(hasFundamentals){
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div></div></div>
+        <div class="sc-body"><div class="ig">
+          <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
+          <div class="ic"><div class="ic-l">Destino de los créditos</div><div class="ic-v">${l.destinos}</div></div>
+          <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
+          <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
+          <div class="ic"><div class="ic-l">Área productiva de café, total del grupo de productores</div><div class="ic-v">${l.areaProd} Manzanas</div></div>
+          <div class="ic"><div class="ic-l">Volumen anual comercializado, total del grupo de productores</div><div class="ic-v">${l.volumenTotal} quintales de café verde</div></div>
+        </div></div></div>`;
+      if(isB){
+        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador - ${l.name}</div></div></div>
+        <div class="sc-body"><div class="ig">
+        <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div></div>
+          <div class="ic"><div class="ic-l">Volumen histórico comercializado, promedio anual</div><div class="ic-v">${l.volExport} quintales de café verde</div></div>
+          <div class="ic"><div class="ic-l">Contrato de exportación</div><div class="ic-v">${l.contrato}</div></div>
+          <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+          <div class="ic"><div class="ic-l">Volumen contrato de exportación</div><div class="ic-v">${l.volContrato} quintales de café verde</div></div>
+          <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div></div>
+        </div></div></div>`;
+      } else {
+        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información de comercialización</div></div></div>
+        <div class="sc-body"><div class="ig">
+          <div class="ic"><div class="ic-l">Contrato de comercialización</div><div class="ic-v">${l.contrato || '-'}</div></div>
+          <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
+          <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
+        </div></div></div>`;}
+      }
+
+    const showProdTable = l.testValue==='yes' ? hasAccess : (hasFundamentals && hasAccess);
+    if(showProdTable && l.prod && l.prod.length>0){
+        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
+        <div class="sc-body" style="padding:0;overflow-x:auto">
+          <table class="ptable">
+            <thead><tr>
+              <th style="width:15%">Código</th><th style="width:25%">Productor</th>
+              <th style="width:29%">Destino</th><th style="width:12%">Monto</th>
+              <th style="width:10%">Plazo</th><th style="width:9%">Aval IC</th>
+            </tr>
+            <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
+            </thead>
+            <tbody>${l.prod.map(p=>`
+              <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
+                <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
+                <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
+                <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
+              </tr>
+              <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div></div>`;
+      }
+    } else {
+      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información general del crédito</div></div></div>
+        <div class="sc-body"><div class="ig">
+          <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
+          <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
+          <div class="ic"><div class="ic-l">Aval IC</div><div class="ic-v">${l.acopio ? 'Sí' : 'No'}</div></div>
+          <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
+        </div></div></div>`;
+    }
+
+  h += `<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button>
+  ${l.testValue === 'yes' ? `<button class="btn-offer" onclick="goMkt()">Explorar más créditos</button>` : ''}</div>`;
+  document.getElementById('access-inner').innerHTML=h;
+}
+
  function buildMap(p){
    const s=p.cod.split('').reduce((a,c)=>a+c.charCodeAt(0),0), W=240, H=188, cx=120, cy=90;
   const hx=i=>(s*(i+3))%256;
@@ -594,8 +734,58 @@ function prodEsgMetrics(p){
   </svg>`;
 }
 
-// ── Row expand logic ──────────────────────────────────────────────────────
+function exportPdf(){
+  const l = confirmed && confirmed.loan;
+  if(!l || !l.prod || l.prod.length===0){
+    window.print();
+    return;
+  }
+  const prevState = {};
+  l.prod.forEach(p=>{
+    const exp = document.getElementById('pexp-'+p.cod);
+    const prow = document.getElementById('prow-'+p.cod);
+    prevState[p.cod] = {expOpen: !!(exp && exp.classList.contains('open')), prowOpen: !!(prow && prow.classList.contains('open'))};
+  });
+  const prevOpenProd = _openProd;
+  // Expand all rows and ensure content is rendered
+  l.prod.forEach(p=>{
+    const exp = document.getElementById('pexp-'+p.cod);
+    const prow = document.getElementById('prow-'+p.cod);
+    if(prow) prow.classList.add('open');
+    if(exp) exp.classList.add('open');
+    fillProd(p.cod, true);
+  });
+  _openProd = null;
+  // Give the browser a moment to reflow before printing
+  setTimeout(()=>{
+    window.print();
+    // Restore previous open/closed state
+    l.prod.forEach(p=>{
+      const exp = document.getElementById('pexp-'+p.cod);
+      const prow = document.getElementById('prow-'+p.cod);
+      const prev = prevState[p.cod];
+      if(exp){
+        if(prev.expOpen) exp.classList.add('open'); else exp.classList.remove('open');
+      }
+      if(prow){
+        if(prev.prowOpen) prow.classList.add('open'); else prow.classList.remove('open');
+      }
+    });
+    _openProd = prevOpenProd;
+  }, 150);
+}
+
 let _openProd=null;
+
+function findProd(cod){
+  for(const l of LOANS_BANCO_TEST.concat(LOANS_BANCO).concat(LOANS_COOP_TEST).concat(LOANS_COOP).concat(LOANS_GRUPO_TEST).concat(LOANS_GRUPO)){
+    if(!l.prod)continue;
+    const p=l.prod.find(x=>x.cod===cod);
+    if(p)return p;
+  }
+  return null;
+}
+
 function toggleProd(cod){
   const eRow=document.getElementById('pexp-'+cod);
   const dRow=document.getElementById('prow-'+cod);
@@ -610,15 +800,6 @@ function toggleProd(cod){
   dRow.classList.toggle('open',opening);
   _openProd=opening?cod:null;
   if(opening)fillProd(cod);
-}
-
-function findProd(cod){
-  for(const l of LOANS_BANCO_TEST.concat(LOANS_BANCO).concat(LOANS_COOP_TEST).concat(LOANS_COOP).concat(LOANS_GRUPO_TEST).concat(LOANS_GRUPO)){
-    if(!l.prod)continue;
-    const p=l.prod.find(x=>x.cod===cod);
-    if(p)return p;
-  }
-  return null;
 }
 
 function fillProd(cod, includeEsg=true){
@@ -710,171 +891,75 @@ function fillProd(cod, includeEsg=true){
     ? `<span class="tag eu">✓ Verificado</span>`
     : `<span class="tag pend">⏳ Pendiente</span>`;
 
-const profileHtml = `
-  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información general</span></div>
-  <div class="px-grid2">
-  <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '-'}</div>
-  <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '-'}</div>
-  <div class="px-grid2-label">Evaluación en central crediticia</div><div class="px-grid2-value">${p.riesgo || '-'}</div>
-  <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza || '-'}</div>
-  <div class="px-grid2-label">Aval IC Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
-  <div class="px-grid2-label">Tiempo de comercialización con el intermediario</div><div class="px-grid2-value">${p.tiempoic || '-'}</div>
-  <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '-'}</div>
-  <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '-'}</div>
-  <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '-'}</div>
-  </div></div>`;
+  const profileHtml = `
+    <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información general</span></div>
+    <div class="px-grid2">
+    <div class="px-grid2-label">Nombre del productor</div><div class="px-grid2-value">${p.nombre || '-'}</div>
+    <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '-'}</div>
+    <div class="px-grid2-label">Evaluación en central crediticia</div><div class="px-grid2-value">${p.riesgo || '-'}</div>
+    <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza || '-'}</div>
+    <div class="px-grid2-label">Aval IC Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
+    <div class="px-grid2-label">Tiempo de comercialización con el intermediario</div><div class="px-grid2-value">${p.tiempoic || '-'}</div>
+    <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '-'}</div>
+    <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '-'}</div>
+    <div class="px-grid2-label">Plazo estimado</div><div class="px-grid2-value">${p.plazo || '-'}</div>
+    </div></div>`;
 
-const profileHtmlFinca = `
-  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información de la finca</span></div>
-  <div class="px-grid2">
-  <div class="px-grid2-label">Departamento</div><div class="px-grid2-value">${p.department || '—'}</div>
-  <div class="px-grid2-label">Municipio</div><div class="px-grid2-value">${p.municipality || '—'}</div>
-  <div class="px-grid2-label">Aldea</div><div class="px-grid2-value">${p.aldea || '—'}</div>
-  <div class="px-grid2-label">Geolocalización</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</div>
-  <div class="px-grid2-label">Área total de la finca</div><div class="px-grid2-value">${p.areaTot || '—'}</div>
-  <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
-  <div class="px-grid2-label">Número de empleados</div><div class="px-grid2-value">${p.numEmpleados || '—'}</div>
-  <div class="px-grid2-label">Cuenta con documentos de propiedad</div><div class="px-grid2-value">${p.propertyDocument || '—'}</div>
-  </div>
-  <div class="px-farm-map">${buildMap(p)}</div>
-  </div>`;
+  const profileHtmlFinca = `
+    <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información de la finca</span></div>
+    <div class="px-grid2">
+    <div class="px-grid2-label">Departamento</div><div class="px-grid2-value">${p.department || '—'}</div>
+    <div class="px-grid2-label">Municipio</div><div class="px-grid2-value">${p.municipality || '—'}</div>
+    <div class="px-grid2-label">Aldea</div><div class="px-grid2-value">${p.aldea || '—'}</div>
+    <div class="px-grid2-label">Geolocalización</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.geo || '—'}</div>
+    <div class="px-grid2-label">Área total de la finca</div><div class="px-grid2-value">${p.areaTot || '—'}</div>
+    <div class="px-grid2-label">Área productiva</div><div class="px-grid2-value">${p.areaProd || '—'}</div>
+    <div class="px-grid2-label">Número de empleados</div><div class="px-grid2-value">${p.numEmpleados || '—'}</div>
+    <div class="px-grid2-label">Cuenta con documentos de propiedad</div><div class="px-grid2-value">${p.propertyDocument || '—'}</div>
+    </div>
+    <div class="px-farm-map">${buildMap(p)}</div>
+    </div>`;
 
-const profileHtmlProductiva = `
-  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información productiva y comercial</span></div>
-  <div class="px-grid2">
-  <div class="px-grid2-label">Promedio histórico de acopio</div><div class="px-grid2-value">${p.histAcopio || '—'}</div>
-  <div class="px-grid2-label">Promedio histórico de ingresos</div><div class="px-grid2-value">${p.histIngresos || '—'}</div>
-  <div class="px-grid2-label">Cantidad comercializada 2025</div><div class="px-grid2-value">${p.acopio2025 || '—'}</div>
-  <div class="px-grid2-label">Ingresos por ventas 2025</div><div class="px-grid2-value">${p.ingresos2025 || '—'}</div>
-  <div class="px-grid2-label">Cantidad comercializada 2024</div><div class="px-grid2-value">${p.acopio2024 || '—'}</div>
-  <div class="px-grid2-label">Ingresos por ventas 2024</div><div class="px-grid2-value">${p.ingresos2024 || '—'}</div>
-  <div class="px-grid2-label">Cantidad comercializada 2023</div><div class="px-grid2-value">${p.acopio2023 || '—'}</div>
-  <div class="px-grid2-label">Ingresos por ventas 2023</div><div class="px-grid2-value">${p.ingresos2023 || '—'}</div>
-  <div class="px-grid2-label">Otros ingresos</div><div class="px-grid2-value">${p.otherIncome || '—'}</div>
-  </div></div>`;
+  const profileHtmlProductiva = `
+    <div class="px-card"><div class="px-card-top"><span class="px-card-name">Información productiva y comercial</span></div>
+    <div class="px-grid2">
+    <div class="px-grid2-label">Promedio histórico de acopio</div><div class="px-grid2-value">${p.histAcopio || '—'}</div>
+    <div class="px-grid2-label">Promedio histórico de ingresos</div><div class="px-grid2-value">${p.histIngresos || '—'}</div>
+    <div class="px-grid2-label">Cantidad comercializada 2025</div><div class="px-grid2-value">${p.acopio2025 || '—'}</div>
+    <div class="px-grid2-label">Ingresos por ventas 2025</div><div class="px-grid2-value">${p.ingresos2025 || '—'}</div>
+    <div class="px-grid2-label">Cantidad comercializada 2024</div><div class="px-grid2-value">${p.acopio2024 || '—'}</div>
+    <div class="px-grid2-label">Ingresos por ventas 2024</div><div class="px-grid2-value">${p.ingresos2024 || '—'}</div>
+    <div class="px-grid2-label">Cantidad comercializada 2023</div><div class="px-grid2-value">${p.acopio2023 || '—'}</div>
+    <div class="px-grid2-label">Ingresos por ventas 2023</div><div class="px-grid2-value">${p.ingresos2023 || '—'}</div>
+    <div class="px-grid2-label">Otros ingresos</div><div class="px-grid2-value">${p.otherIncome || '—'}</div>
+    </div></div>`;
 
-const profileHtmlCartera = `
-  <div class="px-card"><div class="px-card-top"><span class="px-card-name">Histórico de carteras con el Intermediario comercial</span></div>
-  <div class="px-grid2">
-  <div class="px-grid2-label">Monto de crédito desembolsado 2025</div><div class="px-grid2-value">${p.montoCredito2025 || '—'}</div>
-  <div class="px-grid2-label">Plazo crédito desembolsado 2025</div><div class="px-grid2-value">${p.plazoCredito2025 || '—'}</div>
-  <div class="px-grid2-label">¿Pagó crédito desembolsado 2025?</div><div class="px-grid2-value">${p.pagoCredito2025 || '—'}</div></div>
-  <div class="px-grid2">
-  <div class="px-grid2-label">Monto de crédito desembolsado 2024</div><div class="px-grid2-value">${p.montoCredito2024 || '—'}</div>
-  <div class="px-grid2-label">Plazo crédito desembolsado 2024</div><div class="px-grid2-value">${p.plazoCredito2024 || '—'}</div>
-  <div class="px-grid2-label">¿Pagó crédito desembolsado 2024?</div><div class="px-grid2-value">${p.pagoCredito2024 || '—'}</div></div>
-  <div class="px-grid2">
-  <div class="px-grid2-label">Monto de crédito desembolsado 2023</div><div class="px-grid2-value">${p.montoCredito2023 || '—'}</div>
-  <div class="px-grid2-label">Plazo crédito desembolsado 2023</div><div class="px-grid2-value">${p.plazoCredito2023 || '—'}</div>
-  <div class="px-grid2-label">¿Pagó crédito desembolsado 2023?</div><div class="px-grid2-value">${p.pagoCredito2023 || '—'}</div>
-  </div></div>`;
+  const profileHtmlCartera = `
+    <div class="px-card"><div class="px-card-top"><span class="px-card-name">Histórico de carteras con el Intermediario comercial</span></div>
+    <div class="px-grid2">
+    <div class="px-grid2-label">Monto de crédito desembolsado 2025</div><div class="px-grid2-value">${p.montoCredito2025 || '—'}</div>
+    <div class="px-grid2-label">Plazo crédito desembolsado 2025</div><div class="px-grid2-value">${p.plazoCredito2025 || '—'}</div>
+    <div class="px-grid2-label">¿Pagó crédito desembolsado 2025?</div><div class="px-grid2-value">${p.pagoCredito2025 || '—'}</div></div>
+    <div class="px-grid2">
+    <div class="px-grid2-label">Monto de crédito desembolsado 2024</div><div class="px-grid2-value">${p.montoCredito2024 || '—'}</div>
+    <div class="px-grid2-label">Plazo crédito desembolsado 2024</div><div class="px-grid2-value">${p.plazoCredito2024 || '—'}</div>
+    <div class="px-grid2-label">¿Pagó crédito desembolsado 2024?</div><div class="px-grid2-value">${p.pagoCredito2024 || '—'}</div></div>
+    <div class="px-grid2">
+    <div class="px-grid2-label">Monto de crédito desembolsado 2023</div><div class="px-grid2-value">${p.montoCredito2023 || '—'}</div>
+    <div class="px-grid2-label">Plazo crédito desembolsado 2023</div><div class="px-grid2-value">${p.plazoCredito2023 || '—'}</div>
+    <div class="px-grid2-label">¿Pagó crédito desembolsado 2023?</div><div class="px-grid2-value">${p.pagoCredito2023 || '—'}</div>
+    </div></div>`;
 
-cell.innerHTML = confirmed.tierOn
-  ? `<div class="px-wrap">
-  <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor - ${p.nombre}</div></div>
-    ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${profileHtmlCartera}${esgHtml}</div></div>`
-  : `<div class="px-wrap">
-  <div class="px-right">${esgHtml}</div></div>`;
+  cell.innerHTML = confirmed.tierOn
+    ? `<div class="px-wrap">
+    <div class="px-right"><div class="px-esg"><div class="px-esg-hdr">Perfil del productor - ${p.nombre}</div></div>
+      ${profileHtml}${profileHtmlFinca}${profileHtmlProductiva}${profileHtmlCartera}${esgHtml}</div></div>`
+    : `<div class="px-wrap">
+    <div class="px-right">${esgHtml}</div></div>`;
 }
 
-function renderAccess(){
-  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
-  const isG=l.tipo==='grupo';
-  const isB=l.tipo==='banco';
-  let h='';
-  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
-  const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-  const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ? 'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
-  const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
-  h+=`<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button></div>`;
 
-  const hasFundamentals = tierOn;
-  const hasEsg = esgKeys.length > 0;
-  const hasAccess = hasFundamentals || hasEsg;
-
-  if(L.testValue==='yes'){
-    if(hasFundamentals){
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información del grupo de productores</div></div></div>
-        <div class="sc-body"><div class="ig">
-          <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
-          <div class="ic"><div class="ic-l">Destino de los créditos</div><div class="ic-v">${l.destinos}</div></div>
-          <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
-          <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
-          <div class="ic"><div class="ic-l">Área productiva de café, total del grupo de productores</div><div class="ic-v">${l.areaProd} Manzanas</div></div>
-          <div class="ic"><div class="ic-l">Volumen anual comercializado, total del grupo de productores</div><div class="ic-v">${l.volumenTotal} quintales de café verde</div></div>
-        </div></div></div>`;
-      if(isB){
-        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información del intermediario comercializador - ${l.name}</div></div></div>
-        <div class="sc-body"><div class="ig">
-        <div class="ic"><div class="ic-l">Años de operación</div><div class="ic-v">${l.anios} años</div></div>
-          <div class="ic"><div class="ic-l">Volumen histórico comercializado, promedio anual</div><div class="ic-v">${l.volExport} quintales de café verde</div></div>
-          <div class="ic"><div class="ic-l">Contrato de exportación</div><div class="ic-v">${l.contrato}</div></div>
-          <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
-          <div class="ic"><div class="ic-l">Volumen contrato de exportación</div><div class="ic-v">${l.volContrato} quintales de café verde</div></div>
-          <div class="ic"><div class="ic-l">Mercados de destino</div><div class="ic-v">${l.mercados}</div></div>
-        </div></div></div>`;
-      } else {
-        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-g">◈</div><div><div class="sc-title">Información de comercialización</div></div></div>
-        <div class="sc-body"><div class="ig">
-          <div class="ic"><div class="ic-l">Contrato de comercialización</div><div class="ic-v">${l.contrato || '-'}</div></div>
-          <div class="ic"><div class="ic-l">Contrato inteligente</div><div class="ic-v"><span class="tag ok">${l.smartContract ? 'Sí' : 'No'}</span></div></div>
-          <div class="ic"><div class="ic-l">Volumen contrato de comercialización</div><div class="ic-v">${l.volContrato || '-'} quintales de café verde</div></div>
-        </div></div></div>`;}
-      }
-
-    const showProdTable = l.testValue==='yes' ? hasAccess : (hasFundamentals && hasAccess);
-    if(showProdTable && l.prod && l.prod.length>0){
-        h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">⊞</div><div><div class="sc-title">Productores vinculados</div><div class="sc-sub">${l.prod.length} productor${l.prod.length>1?'es':''}</div></div></div>
-        <div class="sc-body" style="padding:0;overflow-x:auto">
-          <table class="ptable">
-            <thead><tr>
-              <th style="width:15%">Código</th><th style="width:25%">Productor</th>
-              <th style="width:29%">Destino</th><th style="width:12%">Monto</th>
-              <th style="width:10%">Plazo</th><th style="width:9%">Aval IC</th>
-            </tr>
-            <tr><td colspan="9" style="font-size:10px;color:var(--accent);font-family:var(--mono);padding:5px 10px;background:var(--accent-lt);border-bottom:1px solid var(--accent-bd)">↓ Haga clic en una fila para ver la información específica de cada productor</td></tr>
-            </thead>
-            <tbody>${l.prod.map(p=>`
-              <tr class="prow" id="prow-${p.cod}" onclick="toggleProd('${p.cod}')">
-                <td style="font-family:var(--mono);font-size:11px">${p.cod}</td>
-                <td>${p.nombre}</td><td>${p.destino}</td><td>${p.monto}</td>
-                <td>${p.plazo}</td><td class="${p.aval==='A'?'av-a':'av-b'}">${p.aval}</td>
-              </tr>
-              <tr class="prow-exp" id="pexp-${p.cod}"><td colspan="9" id="pxc-${p.cod}"></td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div></div>`;
-      }
-    } else {
-      h+=`<div class="sc"><div class="sc-hdr"><div class="sc-icon si-b">◈</div><div><div class="sc-title">Información general del crédito</div></div></div>
-        <div class="sc-body"><div class="ig">
-          <div class="ic"><div class="ic-l">Monto solicitado, total del grupo de productores</div><div class="ic-v mv-g">L. ${l.productores}</div></div>
-          <div class="ic"><div class="ic-l">Número de productores</div><div class="ic-v mv-g">${l.nProd}</div></div>
-          <div class="ic"><div class="ic-l">Aval IC</div><div class="ic-v">${l.acopio ? 'Sí' : 'No'}</div></div>
-          <div class="ic"><div class="ic-l">Paquete flexible</div><div class="ic-v">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>
-        </div></div></div>`;
-    }
-
-  h += `<div class="access-actions"><button class="btn-ol" onclick="exportPdf()">⬇ Exportar PDF</button><button class="btn-p" onclick="goOffer()">Estructurar oferta de crédito →</button>
-  ${l.testValue === 'yes' ? `<button class="btn-offer" onclick="goMkt()">Explorar más créditos</button>` : ''}</div>`;
-  document.getElementById('access-inner').innerHTML=h;
-}
-
-function topInfoAccess(){
-  const {loan:l,esgKeys,tierOn,loanType}=confirmed;
-  const isG=l.tipo==='grupo';
-  const isB=loanType==='banco';
-  let h='';
-  const mX=`<div class="mi"><div class="mi-lbl">Productores</div><div class="mi-val mv-g">${l.nProd}</div></div>`
-  const mP=`<div class="mi"><div class="mi-lbl">Monto productores</div><div class="mi-val mv-g">${l.productores}</div></div>`
-  const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ? 'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
-  const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
-  h+=`<div class="ahdr"><div class="ahdr-top"><div><div class="aname">${l.name}</div></div></div><div class="ameta">${mX}${mP}${mA}${mF}</div></div>`;
-  
-  document.getElementById('top-info').innerHTML = h;
-}
-
+// ─── Render offer ───────────────────────────────────────────────
 function goOffer(){
   const l=confirmed.loan;
   document.getElementById('o-sub');
@@ -893,45 +978,9 @@ function goOffer(){
   show('s-offer');
 }
 
-function exportPdf(){
-  const l = confirmed && confirmed.loan;
-  if(!l || !l.prod || l.prod.length===0){
-    window.print();
-    return;
-  }
-  const prevState = {};
-  l.prod.forEach(p=>{
-    const exp = document.getElementById('pexp-'+p.cod);
-    const prow = document.getElementById('prow-'+p.cod);
-    prevState[p.cod] = {expOpen: !!(exp && exp.classList.contains('open')), prowOpen: !!(prow && prow.classList.contains('open'))};
-  });
-  const prevOpenProd = _openProd;
-  // Expand all rows and ensure content is rendered
-  l.prod.forEach(p=>{
-    const exp = document.getElementById('pexp-'+p.cod);
-    const prow = document.getElementById('prow-'+p.cod);
-    if(prow) prow.classList.add('open');
-    if(exp) exp.classList.add('open');
-    fillProd(p.cod, true);
-  });
-  _openProd = null;
-  // Give the browser a moment to reflow before printing
-  setTimeout(()=>{
-    window.print();
-    // Restore previous open/closed state
-    l.prod.forEach(p=>{
-      const exp = document.getElementById('pexp-'+p.cod);
-      const prow = document.getElementById('prow-'+p.cod);
-      const prev = prevState[p.cod];
-      if(exp){
-        if(prev.expOpen) exp.classList.add('open'); else exp.classList.remove('open');
-      }
-      if(prow){
-        if(prev.prowOpen) prow.classList.add('open'); else prow.classList.remove('open');
-      }
-    });
-    _openProd = prevOpenProd;
-  }, 150);
+function renderFinancialSection(l){
+  const sec = document.getElementById('financial-flex-fields');
+  sec.style.display = l.paqueteFlexible ? 'none' : '';
 }
 
 function updatePreview(){
@@ -975,56 +1024,6 @@ function submitOffer(){
     };
     saveState();
   show('s-offer-sent');
-}
-
-function goMkt(){
-  tierOn=false;esgSel={};currentPage=1;renderLoans();renderBalanceDisplay();show('s-market');}
-
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
-  const el=document.getElementById(id);
-  const flex=['s-login'];
-  el.style.display=flex.includes(id)?'flex':'block';
-  el.classList.add('active');
-}
-
-function initPagination(){
-  const cards=document.querySelectorAll('.loan-list .lcard');
-  const totalCards=cards.length;
-  const totalPages=Math.ceil(totalCards/cardsPerPage);
-  if(currentPage > totalPages){currentPage = Math.max(1, totalPages);}
-  if(totalPages>1){document.getElementById('loan-pagination').style.display='flex';showPage(currentPage);}else{document.getElementById('loan-pagination').style.display='none';}
-}
-
-function showPage(page){
-  const cards=document.querySelectorAll('.loan-list .lcard');
-  const totalCards=cards.length;
-  const totalPages=Math.ceil(totalCards/cardsPerPage);
-  const start=(page-1)*cardsPerPage;
-  const end=start+cardsPerPage;
-  cards.forEach((card,idx)=>{
-    card.style.display=idx>=start&&idx<end?'grid':'none';
-  });
-  document.getElementById('loan-page-info').textContent=`Página ${page} de ${totalPages}`;
-  document.getElementById('loan-prev').disabled=page===1;
-  document.getElementById('loan-next').disabled=page===totalPages;
-}
-
-function nextPage(){
-  const cards=document.querySelectorAll('.loan-list .lcard');
-  const totalCards=cards.length;
-  const totalPages=Math.ceil(totalCards/cardsPerPage);
-  if(currentPage<totalPages){
-    currentPage++;
-    showPage(currentPage);
-  }
-}
-
-function prevPage(){
-  if(currentPage>1){
-    currentPage--;
-    showPage(currentPage);
-  }
 }
 
 JSON.stringify(state)
