@@ -142,9 +142,9 @@ function showContext(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').classList.add('active');
   const completed = state.generalQuestionsCompleted === true;
-  document.getElementById('general-tab').disabled     = true;
-  document.querySelector('[data-tab="yes"]').disabled = !completed;
-  document.querySelector('[data-tab="no"]').disabled  = !completed;
+  document.getElementById('general-tab').disabled     = false;
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-demo-info').style.display='none';
   document.getElementById('loan-subtabs').style.display='none';
   document.getElementById('loan-list').innerHTML = `
@@ -159,8 +159,8 @@ function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').disabled     = false;
   document.getElementById('general-tab').disabled     = false;
-  document.querySelector('[data-tab="yes"]').disabled = true;
-  document.querySelector('[data-tab="no"]').disabled  = true;
+  document.querySelector('[data-tab="yes"]').disabled = false;
+  document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -219,7 +219,7 @@ function finishGeneralQuestions(){
       };
     saveState();
     document.getElementById('context-tab').disabled       = false;
-    document.getElementById('general-tab').disabled       = true;
+    document.getElementById('general-tab').disabled       = false;
     document.querySelector('[data-tab="yes"]').disabled   = false;
     document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
@@ -472,22 +472,31 @@ function switchSession(session){
   updateSessionTabs();
 }
 
-function updateSessionTabs(){
-  document.querySelectorAll('.loan-subtab').forEach(btn => {
+
+function updateSessionTabs() {
+  const sessionButtons = [...document.querySelectorAll('.loan-subtab')];
+  const instructionsBtn = sessionButtons.find(btn => btn.dataset.type === 'instructions');
+  if (instructionsBtn) {instructionsBtn.disabled = false;}
+  const nextSession = sessionButtons.find(btn => {const session = btn.dataset.type;
+    if (session === 'instructions' || session === 'endSessions') {return false;}
+    return state.sessionQuestionsCompleted?.[session] !== true;});
+  sessionButtons.forEach(btn => {
     const session = btn.dataset.type;
-    if(session === 'instructions'){btn.disabled = false;return;}
-    if(session === 'endSessions'){return;}
-    // To do: update session tabs based on available sessions
-    btn.disabled = state.sessionQuestionsCompleted?.[session] === true;
-  });
+    if (session === 'instructions' || session === 'endSessions') {return;}btn.disabled = btn !== nextSession;});
   updateEndSessionsAvailability();
 }
 
-function nextSession(){
+function nextSession() {
   const tabs = [...document.querySelectorAll('.loan-subtab')];
   const currentIndex = tabs.findIndex(btn => btn.dataset.type === activeSession);
-  const nextTab = tabs.slice(currentIndex + 1).find(btn => !btn.disabled);
-  if(nextTab){switchSession(nextTab.dataset.type);}
+  const nextTab = tabs
+    .slice(currentIndex + 1)
+    .find(btn => {
+      const session = btn.dataset.type;
+      return (session !== 'instructions' && session !== 'endSessions' && state.sessionQuestionsCompleted?.[session] !== true);});
+  if (nextTab) {switchSession(nextTab.dataset.type);return;}
+  const endTab = tabs.find(btn => btn.dataset.type === 'endSessions');
+  if (endTab && !endTab.disabled) {switchSession('endSessions');}
 }
 
 
