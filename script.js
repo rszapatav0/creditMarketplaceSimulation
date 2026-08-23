@@ -18,6 +18,7 @@ function defaultState(){
     additionalQuestionsCompleted: false,
     additionalAnswers: {},
     sessionQuestionsCompleted: {},
+    completeSessionsDate: {},
   };
 }
 
@@ -114,6 +115,7 @@ function renderBalanceDisplay(){
   const balance=getBalance();
   wds.forEach(wd=>{wd.textContent=`Saldo disponible: ${balance.toLocaleString('es-HN')} HNL`;
   if(balance < 0){wd.classList.add('negative');}else{wd.classList.remove('negative');}});
+  document.querySelectorAll('.btn-confirm').forEach(btn => {btn.disabled = balance < 0;});
 }
 
 function updateBalance(amount){
@@ -348,6 +350,7 @@ function confirmAccess(id,event){
     const fp = (L.priceFundamentales != null)? Number(String(L.priceFundamentales).replace(/,/g,'')) * n : 0;
     const tp = (L.priceTools != null) ? Number(String(L.priceTools).replace(/,/g,'')) * n : 0;
     const total = (fundOn ? fp : 0) + (toolsOn ? tp : 0);
+    if(getBalance() - total < 0){alert('Saldo insuficiente para confirmar este acceso.');return;}
     const esgKeys = ['aclimatar','whisp','croppie'] .filter(k => L[k] === true);
     const tierOnFinal = fundOn;
     confirmed={loan:L,total,esgKeys,tierOn:tierOnFinal,loanType:L.tipo};

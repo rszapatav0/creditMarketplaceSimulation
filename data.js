@@ -8,7 +8,7 @@ const USERS=[
 ];
 
 // ── Metrics and tools ──────────────────────────────────────────────────────
-const walletInitial=1000000;
+const walletInitial=100;
 
 const precioFundamentales=100;
 
