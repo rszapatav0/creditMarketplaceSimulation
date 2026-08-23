@@ -141,22 +141,26 @@ function switchLoanTab(tab){
 function showContext(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
-    document.getElementById('loan-list').innerHTML = `
-      <div class="loan-info" id="context-info">
-        <strong>Contexto</strong><br>Contexto del proyecto</div>
-      <div class="btn-row"><button class="btn-p" id="continue-session" onclick="showGeneralQuestions()">Continuar →</button></div>`;
+  const completed = state.generalQuestionsCompleted === true;
+  document.getElementById('general-tab').disabled     = true;
+  document.querySelector('[data-tab="yes"]').disabled = !completed;
+  document.querySelector('[data-tab="no"]').disabled  = !completed;
+  document.getElementById('loan-demo-info').style.display='none';
+  document.getElementById('loan-subtabs').style.display='none';
+  document.getElementById('loan-list').innerHTML = `
+    <div class="loan-info" id="context-info"><strong>Contexto</strong><br>Contexto del proyecto</div>
+    <div class="btn-row">${completed? 
+      '<button class="btn-p" id="continue-session" onclick="switchLoanTab(\'yes\')">Continuar →</button>' : 
+      '<button class="btn-p" id="continue-session" onclick="showGeneralQuestions()">Continuar →</button>'}</div>`;
 }
 
 /* Second tab: General questions */
 function showGeneralQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
-  document.getElementById('general-tab').classList.add('active');
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
-  document.getElementById('loan-demo-info').style.display = 'none';
-  document.getElementById('loan-subtabs').style.display = 'none';
+  document.getElementById('context-tab').disabled     = false;
+  document.getElementById('general-tab').disabled     = false;
+  document.querySelector('[data-tab="yes"]').disabled = true;
+  document.querySelector('[data-tab="no"]').disabled  = true;
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -183,7 +187,6 @@ function showGeneralQuestions(){
     <div class="btn-row">
       <button class="btn-p" onclick="finishGeneralQuestions()">Continuar →</button>
     </div>`;
-  document.getElementById('loan-pagination').style.display='none';
 }
 
 function toggleOther(select){
@@ -215,7 +218,8 @@ function finishGeneralQuestions(){
         sex:                 document.getElementById('sex').value,
       };
     saveState();
-    document.getElementById('general-tab').disabled       = false;
+    document.getElementById('context-tab').disabled       = false;
+    document.getElementById('general-tab').disabled       = true;
     document.querySelector('[data-tab="yes"]').disabled   = false;
     document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
