@@ -3,6 +3,7 @@ let U=null,L=null,tierOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage
 // ─── SESSION STATES ─────────────────────────────────────────────────────────
 function defaultState(){
   return {
+    user: null,
     sessionGroup: null,
     generalQuestionsCompleted: false,
     generalAnswers: {},
@@ -37,6 +38,56 @@ function saveState(){
 let state = loadState();
 let tempDismissedLoans = new Set();
 let activeLoanTab = 'yes';
+
+// ─── Session waiting period ─────────────────────────────────────────────
+// Time (in milliseconds) the user must wait before continuing into a session
+// after completing the previous one. Change this single value to adjust the
+// wait everywhere (e.g. 24*60*60*1000 for 1 day).
+const SESSION_WAIT_MS = 2 * 60 * 1000; // 2 minutes
+// Order of numbered sessions. Add future session ids here (in order) and the
+// waiting period will automatically apply between them.
+const SESSION_ORDER = ['1', '2', '3'];
+let sessionWaitTimer = null;
+
+function stopSessionWaitTimer(){
+  if(sessionWaitTimer){ clearInterval(sessionWaitTimer); sessionWaitTimer = null; }
+}
+
+function getSessionUnlockTime(session){
+  const idx = SESSION_ORDER.indexOf(session);
+  if(idx <= 0) return 0;
+  const prevSession = SESSION_ORDER[idx - 1];
+  const completedAt = state.completeSessionsDate && state.completeSessionsDate[prevSession];
+  if(!completedAt) return 0;
+  return completedAt + SESSION_WAIT_MS;
+}
+
+function renderSessionWaiting(session, unlockTime){
+  stopSessionWaitTimer();
+  document.getElementById('loan-pagination').style.display = 'none';
+  const list = document.getElementById('loan-list');
+  const tick = () => {
+    const remainingMs = unlockTime - Date.now();
+    if(remainingMs <= 0){
+      stopSessionWaitTimer();
+      switchSession(session);
+      return;
+    }
+    const totalSec = Math.ceil(remainingMs / 1000);
+    const min = Math.floor(totalSec / 60);
+    const sec = totalSec % 60;
+    const countdown = `${min}:${String(sec).padStart(2, '0')}`;
+    const unlockLabel = new Date(unlockTime).toLocaleTimeString('es-HN', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    list.innerHTML = `
+      <div class="loan-info" id="session-wait-message">
+        <strong>Espera antes de continuar</strong><br>
+        Esta sección se habilitará en <strong>${countdown}</strong> (a las ${unlockLabel}).<br>
+        Puede continuar navegando por el resto de pestañas disponibles mientras espera.
+      </div>`;
+  };
+  tick();
+  sessionWaitTimer = setInterval(tick, 1000);
+}
 
 
 // ─── Group ID ───────────────────────────────────────────────
@@ -79,6 +130,7 @@ function doLogin(){
 }
 
 function doLogout(){
+  stopSessionWaitTimer();
   U=null;
   purchases={};
   yesSelections={};
@@ -126,6 +178,7 @@ function updateBalance(amount){
 
 // ─── Tabs: Main tabs ───────────────────────────────────────────────
 function switchLoanTab(tab){
+ stopSessionWaitTimer();
  if(activeLoanTab === 'yes' && tab !== 'yes'){tempDismissedLoans.clear();}
   activeLoanTab=tab;
   currentPage=1;
@@ -141,6 +194,7 @@ function switchLoanTab(tab){
 
 /* First tab: Context */
 function showContext(){
+  stopSessionWaitTimer();
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').classList.add('active');
   const completed = state.generalQuestionsCompleted === true;
@@ -158,6 +212,7 @@ function showContext(){
 
 /* Second tab: General questions */
 function showGeneralQuestions(){
+  stopSessionWaitTimer();
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').disabled     = false;
   document.getElementById('general-tab').disabled     = false;
@@ -445,9 +500,18 @@ function toggleYesEsg(id, esgId, event){
 
 // ─── Tabs: WTP tabs ───────────────────────────────────────────────
 function switchSession(session){
+  stopSessionWaitTimer();
   activeSession = session;
   currentPage = 1;
   document.querySelectorAll('.loan-subtab').forEach(b => b.classList.toggle('active', b.dataset.type === session));
+  if(SESSION_ORDER.includes(session)){
+    const unlockTime = getSessionUnlockTime(session);
+    if(unlockTime && Date.now() < unlockTime){
+      renderSessionWaiting(session, unlockTime);
+      updateSessionTabs();
+      return;
+    }
+  }
   if(session === 'instructions'){
     document.getElementById('loan-list').innerHTML = `
       <div class="loan-info" id="loan-instructions">
@@ -533,6 +597,8 @@ function finishSessionQuestions(sessionNum){
   if(!state.sessionQuestionsCompleted) state.sessionQuestionsCompleted = {};
   state.sessionQuestionsCompleted[sessionNum] = true;
   state.additionalQuestionsCompleted = ['1','2','3'].every(s => state.sessionQuestionsCompleted[s]);
+  if(!state.completeSessionsDate) state.completeSessionsDate = {};
+  state.completeSessionsDate[sessionNum] = Date.now();
   saveState();
   updateSessionTabs();
   nextSession();
