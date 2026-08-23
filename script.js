@@ -1,6 +1,6 @@
 let U=null,L=null,tierOn=false,esgSel={},confirmed={},currentPage=1,cardsPerPage=10,purchases={},yesSelections={};
 
-// ─── SINGLE SESSION STATE OBJECT ───────────────────────────────────────────────
+// ─── SESSION STATES ─────────────────────────────────────────────────────────
 function defaultState(){
   return {
     sessionGroup: null,
@@ -191,15 +191,16 @@ function switchSession(session){
     document.getElementById('loan-pagination').style.display='none';
     return;
   } else {renderLoans();}
+  updateSessionTabs();
 }
 
 function updateSessionTabs(){
   document.querySelectorAll('.loan-subtab').forEach(btn => {
     const session = btn.dataset.type;
     if(session === 'instructions'){btn.disabled = false;return;}
-    if(session === 'endSessions'){return;} // gating handled by updateEndSessionsAvailability()
+    if(session === 'endSessions'){return;}
     // To do: update session tabs based on available sessions
-    btn.disabled = false;
+    btn.disabled = state.sessionQuestionsCompleted?.[session] === true;
   });
   updateEndSessionsAvailability();
 }
