@@ -223,6 +223,7 @@ function showSociodemographicQuestions(){
   document.getElementById('general-tab').disabled     = false;
   document.querySelector('[data-tab="yes"]').disabled = false;
   document.querySelector('[data-tab="no"]').disabled  = false;
+  document.getElementById('loan-demo-info').style.display='none';
   document.getElementById('loan-list')
   .innerHTML = `
   <div class="o-form"><div>
@@ -247,7 +248,7 @@ function showSociodemographicQuestions(){
         <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
     </div></div></div>
     <div class="btn-row">
-      <button class="btn-p" onclick="finishSociodemographicQuestions()">Continuar →</button>
+      <button class="btn-p" onclick="finishSociodemographicQuestions()">Guardar →</button>
     </div>`;
 }
 
@@ -378,7 +379,7 @@ function renderLoans(){
       const esgPric = `<div class="mi"><div class="mi-lbl">Precio total</div><div class="mi-val mv-g">${l.priceTotal} Lempiras por productor</div></div>`;
       extraMetrics = esgFund+esgAcli+esgCrop+esgWhis+esgPric;
     } else if(isYes){
-      extraHelp = 'Seleccione la información a la que desea acceder para este crédito: ';
+      extraHelp = 'Seleccione la información que desea visualizar de este crédito: ';
       extraMetrics = buildYesMetrics(l);
     }
 
@@ -525,7 +526,7 @@ function switchSession(session){
     document.getElementById('loan-list').innerHTML = `
       <div class="loan-info" id="loan-instructions">
         <strong>Instrucciones</strong><br>
-        Imagine que está utilizando el <strong>Marketplace de créditos</strong> en un día normal de trabajo. Todas las oportunidades corresponden a productores de café ubicados dentro de la zona de interés de su institución financiera.<br><ol style="margin:0; padding-left:18px;">
+        Imagine que está utilizando el <strong>Marketplace de créditos</strong> en un día normal de trabajo. Todas las oportunidades corresponden a productores de café ubicados dentro de la zona de interés de su institución financiera y <strong>cuentan con una garantía preaprobada del 50%</strong>.<br><ol style="margin:0; padding-left:18px;">
           <li>Cada sesión tiene una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>3 sesiones</strong>.</li>
           <li>Para cada oportunidad, primero visualizará información general del crédito. Al desplegar la tarjeta podrá consultar la información adicional disponible para ese crédito. Evalúe si le interesa acceder a ella considerando los criterios de su institución y sus propias preferencias.</li>
           <li>En la esquina superior derecha encontrará el saldo disponible de su billetera. Este es el presupuesto total con el que contará para todas las sesiones y no podrá superar ese monto.</li>
@@ -629,7 +630,7 @@ function renderSessionQuestions(sessionNum){
         <option value="yes">Sí</option><option value="no">No</option></select></div>
     </div></div></div>
     <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('1')">Continuar →</button>
+      <button class="btn-p" onclick="finishSessionQuestions('1')">Guardar →</button>
     </div>`,
     '2': `
   <div class="o-form"><div>
@@ -639,7 +640,7 @@ function renderSessionQuestions(sessionNum){
       <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="conditionsToWtp" type="text"></div>
     </div></div></div>
     <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('2')">Continuar →</button>
+      <button class="btn-p" onclick="finishSessionQuestions('2')">Guardar →</button>
     </div>`,
     '3': `
   <div class="o-form"><div>
@@ -653,7 +654,7 @@ function renderSessionQuestions(sessionNum){
         <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
     </div></div></div>
     <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('3')">Continuar →</button>
+      <button class="btn-p" onclick="finishSessionQuestions('3')">Guardar →</button>
     </div>`
   };
   list.innerHTML = blocks[sessionNum] || '';
@@ -989,7 +990,7 @@ function fillProd(cod, includeEsg=true){
     <div class="px-grid2-label">Carnet IHCAFE</div><div class="px-grid2-value" style="font-family:var(--mono);font-size:11px">${p.carnet || '-'}</div>
     <div class="px-grid2-label">Evaluación en central crediticia</div><div class="px-grid2-value">${p.riesgo || '-'}</div>
     <div class="px-grid2-label">Garantía preaprobada Confianza SA-FGR</div><div class="px-grid2-value">${p.confianza || '-'}</div>
-    <div class="px-grid2-label">Aval IC Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
+    <div class="px-grid2-label">Aval Intermediario Comercial</div><div class="px-grid2-value">${p.aval || '-'}</div>
     <div class="px-grid2-label">Tiempo de comercialización con el intermediario</div><div class="px-grid2-value">${p.tiempoic || '-'}</div>
     <div class="px-grid2-label">Destino del crédito</div><div class="px-grid2-value">${p.destino || '-'}</div>
     <div class="px-grid2-label">Monto solicitado</div><div class="px-grid2-value">${p.monto || '-'}</div>
