@@ -15,7 +15,7 @@ function defaultState(){
 
     testViewed: [],
     testConfirmedAccess: [],
-    offers: {},
+    testOffers: {},
 
     WTPviewed: [],
     WTPdismissedLoans: [],
@@ -81,11 +81,12 @@ function renderSessionWaiting(session, unlockTime){
     const sec = totalSec % 60;
     const countdown = `${min}:${String(sec).padStart(2, '0')}`;
     const unlockLabel = new Date(unlockTime).toLocaleTimeString('es-HN', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    document.getElementById('loan-instructions').style.display = 'none';
     list.innerHTML = `
       <div class="loan-info" id="session-wait-message">
-        <strong>Espera antes de continuar</strong><br>
+        <strong>Espere antes de continuar</strong><br>
         Esta sección se habilitará en <strong>${countdown}</strong> (a las ${unlockLabel}).<br>
-        Puede continuar navegando por el resto de pestañas disponibles mientras espera.
+        Puede continuar navegando por las demás pestañas disponibles o cerrar la sesión y regresar cuando el tiempo se haya cumplido.
       </div>`;
   };
   tick();
@@ -206,9 +207,9 @@ function showContext(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').classList.add('active');
   const completed = state.sociodemographicQuestionsCompleted === true;
-  document.getElementById('general-tab').disabled     = false;
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.getElementById('general-tab').disabled     = completed;
+  document.querySelector('[data-tab="yes"]').disabled = !completed;
+  document.querySelector('[data-tab="no"]').disabled  = !completed;
   document.getElementById('loan-demo-info').style.display='none';
   document.getElementById('loan-subtabs').style.display='none';
   document.getElementById('loan-instructions').style.display='none';
@@ -226,8 +227,8 @@ function showSociodemographicQuestions(){
   document.querySelectorAll('.loan-tab').forEach(b=>{b.classList.remove('active');});
   document.getElementById('context-tab').disabled     = false;
   document.getElementById('general-tab').disabled     = false;
-  document.querySelector('[data-tab="yes"]').disabled = false;
-  document.querySelector('[data-tab="no"]').disabled  = false;
+  document.querySelector('[data-tab="yes"]').disabled = true;
+  document.querySelector('[data-tab="no"]').disabled  = true;
   document.getElementById('loan-subtabs').style.display='none';
   document.getElementById('loan-demo-info').style.display='none';
   document.getElementById('context-info').style.display='none';
@@ -267,7 +268,7 @@ function finishSociodemographicQuestions(){
       };
     saveState();
     document.getElementById('context-tab').disabled       = false;
-    document.getElementById('general-tab').disabled       = false;
+    document.getElementById('general-tab').disabled       = true;
     document.querySelector('[data-tab="yes"]').disabled   = false;
     document.querySelector('[data-tab="no"]').disabled    = false;
     switchLoanTab('yes');
@@ -620,7 +621,7 @@ function renderSessionQuestions(sessionNum){
   <div class="o-form"><div>
     <div class="fs-title">Bloque de valor percibido</div>
     <div class="frow">
-      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos más personalizados, ¿cuánto estaría dispuesto(a) a pagar mensualmente?<span class="required">*</span></label><input class="finp-s" id="monthlyWtp" type="number" placeholder="Número de Lempiras"></div>
+      <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos de esta manera, ¿cuánto estaría dispuesto(a) a pagar mensualmente por ella?<span class="required">*</span></label><input class="finp-s" id="monthlyWtp" type="number" placeholder="Número de Lempiras"></div>
       <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="conditionsToWtp" type="text"></div>
     </div></div></div>
     <div class="btn-row">
@@ -666,7 +667,7 @@ function renderProducersSection(l){
   if(l.prod&&l.prod.length>0){
     l.prod.forEach(p=>{
       const row=document.createElement('tr');
-      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td><td><input class="finp-s" id="pmonto-${p.cod}" type="number" placeholder="ej. 20,000"></td><td><input class="finp-s" id="ptasa-${p.cod}" type="number" step="0.1" placeholder="ej. 14.5"></td><td><input class="finp-s" id="pplazo-${p.cod}" type="number" placeholder="ej. 6"></td>`;
+      row.innerHTML=`<td>${p.cod}</td><td>${p.nombre}</td><td>${p.monto}</td><td>${p.plazo}</td><td><input class="finp-s" id="pmonto-${p.cod}" type="number"></td><td><input class="finp-s" id="ptasa-${p.cod}" type="number" step="0.1"></td><td><input class="finp-s" id="pplazo-${p.cod}" type="number"></td>`;
       tbody.appendChild(row);
     });
   }
@@ -1091,7 +1092,7 @@ function submitOffer(){
           tasa:  tasa  ? parseFloat(tasa.value)  || null : null,
           plazo: plazo ? parseFloat(plazo.value) || null : null,
         };});}
-    state.offers[l.id] = {
+    state.testOffers[l.id] = {
       monto: parseFloat(v('of-monto')) || null,
       tasa: v('of-tasa') || null,
       plazo: v('of-plazo') || null,

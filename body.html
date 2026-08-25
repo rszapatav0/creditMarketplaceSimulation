@@ -16,7 +16,7 @@
   <div class="brand-h1-sub"><b>Convirtiendo la Información en <b>Garantía</b></b></div>
   <div class="brand-sub">Infraestructura Digital de Inclusión Financiera · Sector Café</div>
   <div class="login-card">
-    <div><label class="flabel">Usuario</label><input class="finput" id="inp-u" type="text" placeholder="usuario@institucion.hn" autocomplete="off"></div>
+    <div><label class="flabel">Usuario</label><input class="finput" id="inp-u" type="text" placeholder="Usuario" autocomplete="off"></div>
     <div><label class="flabel">Contraseña</label><input class="finput" id="inp-p" type="password" placeholder="••••••••"></div>
     <div class="login-err" id="lerr">Credenciales incorrectas. Intente de nuevo.</div>
     <button class="btn-p" style="width:100%" onclick="doLogin()">Ingresar →</button>
@@ -181,9 +181,9 @@
       <div id="financial-flex-fields">
       <div class="fs-title">Condiciones financieras principales</div>
       <div class="frow">
-          <div class="fg"><label class="flabel">Monto ofertado</label><input class="finp-s" id="of-monto" type="number" placeholder="ej. 2,400,000"></div>
-          <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1" placeholder="ej. 14.5"></div>
-          <div class="fg"><label class="flabel">Plazo (meses)</label><input class="finp-s" id="of-plazo" type="number" step="1" placeholder="ej. 5"></div>
+          <div class="fg"><label class="flabel">Monto ofertado</label><input class="finp-s" id="of-monto" type="number"></div>
+          <div class="fg"><label class="flabel">Tasa de interés anual (%)</label><input class="finp-s" id="of-tasa" type="number" step="0.1"></div>
+          <div class="fg"><label class="flabel">Plazo (meses)</label><input class="finp-s" id="of-plazo" type="number" step="1"></div>
         </div></div>
       <div id="producers-section" style="display:none">
         <div class="fs-title">Asignación por productor (paquete flexible)</div>
@@ -204,10 +204,10 @@
         </table>
       </div>
       <div class="financial-spacer"></div>
-      <div class="fs-title">Información adicional para el intermediario</div>
+      <div class="fs-title">Información adicional</div>
       <div class="frow">
         <div class="fg full"><label class="flabel">Notas</label>
-          <textarea class="fta" id="of-notas" placeholder="ej. El desembolso estará condicionado a la presentación del contrato de compra-venta con la importadora..."></textarea></div>
+          <textarea class="fta" id="of-notas"></textarea></div>
       </div></div>
       <div class="o-actions">
         <button class="btn-s" onclick="show('s-access')">Cancelar</button>
