@@ -188,6 +188,9 @@ function switchLoanTab(tab){
   activeLoanTab=tab;
   currentPage=1;
   document.querySelectorAll('.loan-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.getElementById('loan-instructions').style.display='none';
+  document.getElementById('context-info').style.display='none';
+  document.getElementById('sociodemographic-questions').style.display='none';
   document.getElementById('loan-demo-info').style.display =tab === 'yes' ? 'block' : 'none';
   document.getElementById('loan-subtabs').style.display = tab === 'no' ? 'flex' : 'none';
   if(tab === 'no'){
@@ -208,8 +211,10 @@ function showContext(){
   document.querySelector('[data-tab="no"]').disabled  = false;
   document.getElementById('loan-demo-info').style.display='none';
   document.getElementById('loan-subtabs').style.display='none';
+  document.getElementById('loan-instructions').style.display='none';
+  document.getElementById('context-info').style.display='block';
+  document.getElementById('sociodemographic-questions').style.display='none';
   document.getElementById('loan-list').innerHTML = `
-    <div class="loan-info" id="context-info"><strong>Contexto</strong><br>Contexto del proyecto</div>
     <div class="btn-row">${completed? 
       '<button class="btn-p" id="continue-session" onclick="switchLoanTab(\'yes\')">Continuar →</button>' : 
       '<button class="btn-p" id="continue-session" onclick="showSociodemographicQuestions()">Continuar →</button>'}</div>`;
@@ -223,33 +228,13 @@ function showSociodemographicQuestions(){
   document.getElementById('general-tab').disabled     = false;
   document.querySelector('[data-tab="yes"]').disabled = false;
   document.querySelector('[data-tab="no"]').disabled  = false;
+  document.getElementById('loan-subtabs').style.display='none';
   document.getElementById('loan-demo-info').style.display='none';
-  document.getElementById('loan-list')
-  .innerHTML = `
-  <div class="o-form"><div>
-    <div class="fs-title">Información general</div>
-    <div class="frow">
-      <div class="fg"><label class="flabel">Tipo de institución<span class="required">*</span></label>
-        <select class="fsel" id="institution-type" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="banco">Institución bancaria</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
-      <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other" data-other-for="institution-type" type="text" disabled></div>
-      <div class="fg"><label class="flabel">Rol en la institución<span class="required">*</span></label>
-        <select class="fsel" id="institution-role" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
-        <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
-      <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" data-other-for="institution-role" type="text" disabled></div>
-      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito<span class="required">*</span></label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
-        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola<span class="required">*</span></label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
-        <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Rango de edad<span class="required">*</span></label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
-        <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
-        <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
-      <div class="fg"><label class="flabel">Sexo<span class="required">*</span></label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
-        <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishSociodemographicQuestions()">Guardar →</button>
-    </div>`;
+  document.getElementById('context-info').style.display='none';
+  document.getElementById('loan-instructions').style.display='none';
+  document.getElementById('sociodemographic-questions').style.display='block';
+  document.getElementById('loan-list').innerHTML = `
+    <div class="btn-row"><button class="btn-p" onclick="finishSociodemographicQuestions()">Guardar →</button></div>`;
 }
 
 function toggleOther(select){
@@ -376,7 +361,7 @@ function renderLoans(){
       const esgAcli = metricToggle('aCLIMAtar', l.aclimatar===true, false);
       const esgCrop = metricToggle('Croppie', l.croppie===true, false);
       const esgWhis = metricToggle('Whisp', l.whisp===true, false);
-      const esgPric = `<div class="mi"><div class="mi-lbl">Precio total</div><div class="mi-val mv-g">${l.priceTotal} Lempiras por productor</div></div>`;
+      const esgPric = `<div class="mi"><div class="mi-lbl">Precio</div><div class="mi-val mv-g">${l.priceTotal} Lempiras por productor</div></div>`;
       extraMetrics = esgFund+esgAcli+esgCrop+esgWhis+esgPric;
     } else if(isYes){
       extraHelp = 'Seleccione la información que desea visualizar de este crédito: ';
@@ -391,7 +376,7 @@ function renderLoans(){
       <div class="loan-extra-title">Información incluida</div>
       <div class="loan-extra-help">${extraHelp}</div>
       <div class="loan-meta">${extraMetrics}</div>
-      <div class="loan-actions"><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button><button class="btn-confirm" onclick="${isNo?`confirmAccess('${l.id}',event)`:`confirmYesAccess('${l.id}',event)`}">Confirmar acceso →</button></div>` : ''}</div>
+      <div class="loan-actions"><button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)">No me interesa</button><button class="btn-confirm" onclick="${isNo?`confirmAccess('${l.id}',event)`:`confirmYesAccess('${l.id}',event)`}">Me interesa →</button></div>` : ''}</div>
     ${!isExpandable? `<button class="btn-dismiss" onclick="dismissLoan('${l.id}',event)" title="No me interesa">No me interesa</button>` : ''}</div>`;
 
   });
@@ -523,21 +508,16 @@ function switchSession(session){
     }
   }
   if(session === 'instructions'){
+    document.getElementById('context-info').style.display='none';
+    document.getElementById('sociodemographic-questions').style.display='none';
+    document.getElementById('loan-instructions').style.display='block';
     document.getElementById('loan-list').innerHTML = `
-      <div class="loan-info" id="loan-instructions">
-        <strong>Instrucciones</strong><br>
-        Imagine que está utilizando el <strong>Marketplace de créditos</strong> en un día normal de trabajo. Todas las oportunidades corresponden a productores de café ubicados dentro de la zona de interés de su institución financiera y <strong>cuentan con una garantía preaprobada del 50%</strong>.<br><ol style="margin:0; padding-left:18px;">
-          <li>Cada sesión tiene una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>3 sesiones</strong>.</li>
-          <li>Para cada oportunidad, primero visualizará información general del crédito. Al desplegar la tarjeta podrá consultar la información adicional disponible para ese crédito. Evalúe si le interesa acceder a ella considerando los criterios de su institución y sus propias preferencias.</li>
-          <li>En la esquina superior derecha encontrará el saldo disponible de su billetera. Este es el presupuesto total con el que contará para todas las sesiones y no podrá superar ese monto.</li>
-          <li>El precio mostrado corresponde a los posibles costos de acceso a la información <strong>por productor</strong>, no por crédito. El valor a descontar del saldo disponible se ponderará por el número de productores asociados a la oportunidad de crédito. Estos costos cambiarán de acuerdo a la institución????</li>
-        </ol>No existe un número mínimo o máximo de oportunidades que deba seleccionar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.
-        </ol><strong>PONER LA DESCRIPCIÓN DE VARIABLES</strong>
-        </div>
       <div class="btn-row"><button class="btn-p" id="continue-session" onclick="nextSession()">Continuar →</button></div>`;
-    document.getElementById('loan-pagination').style.display='none';
-    return;
-  } else if(session === 'endSessions'){
+
+    } else if(session === 'endSessions'){
+    document.getElementById('context-info').style.display='none';
+    document.getElementById('sociodemographic-questions').style.display='none';
+    document.getElementById('loan-instructions').style.display='none';
     document.getElementById('loan-list').innerHTML = `
       <div class="loan-info" id="loan-end-sessions">
         <strong>Finalizar sesiones</strong><br>
@@ -545,7 +525,11 @@ function switchSession(session){
       <div class="btn-row" id="end-session-button" style="margin-top:2rem"><button class="btn-p" onclick="endSession()">Enviar →</button></div>`;
     document.getElementById('loan-pagination').style.display='none';
     return;
-  } else {renderLoans();}
+  } else {
+    document.getElementById('context-info').style.display='none';
+    document.getElementById('sociodemographic-questions').style.display='none';
+    document.getElementById('loan-instructions').style.display='none';
+    renderLoans();}
   updateSessionTabs();
 }
 

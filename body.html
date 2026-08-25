@@ -33,53 +33,128 @@
 <div id="s-market" class="screen">
   <div class="topbar"><div class="tb-logo">Confianza SA-FGR</div><div class="tb-right"><div class="wallet-display" id="wallet-display"></div><button class="tb-logout" onclick="doLogout()">Cerrar sesión</button></div></div>
   <div class="pi"><div class="pg-title" id="mkt-title"></div>
-  <div class="loan-tabs" id="loan-tabs">
-    <button class="loan-tab active" id="context-tab" onclick="showContext()">Contexto</button>
-    <button class="loan-tab" id="general-tab" onclick="showSociodemographicQuestions()">Información general</button>
-    <button class="loan-tab" data-tab="yes" onclick="switchLoanTab('yes')">Créditos de demostración</button>
-    <button class="loan-tab" data-tab="no" onclick="switchLoanTab('no')">Oportunidades de crédito disponibles</button>
-  </div>
-  <div class="loan-subtabs" id="loan-subtabs" style="display:none">
-    <button class="loan-subtab active" data-type="instructions" onclick="switchSession('instructions')">Instrucciones</button>
-    <button class="loan-subtab" data-type="1" onclick="switchSession('1')">Sesión 1</button>
-    <button class="loan-subtab" data-type="2" onclick="switchSession('2')">Sesión 2</button>
-    <button class="loan-subtab" data-type="3" onclick="switchSession('3')">Sesión 3</button>
-    <button class="loan-subtab" data-type="endSessions" onclick="switchSession('endSessions')">Finalizar</button>
-  </div>
-  <div class="loan-info" id="loan-demo-info" style="display:none">
-    <p style="margin-bottom:10px">Los siguientes créditos tienen como objetivo ilustrar el flujo de interacción del Marketplace. Puede interactuar libremente con ellos durante toda la sesión: visualizarlos, explorar su información, estructurar ofertas y descartarlos, sin que estas acciones afecten el saldo, la disponibilidad de los créditos o representen una oferta real. 
-    Para explorarlos, puede interactuar con las tarjetas dando clic en:</p><ul style="padding-left:20px;margin-bottom:10px">
-      <li><span class="btn-confirm-text">Confirmar acceso →</span> - Permite ingresar al crédito y consultar el detalle según las información seleccionadas.</li>
-      <li><span class="btn-dismiss-text">No me interesa</span> - Retira temporalmente la tarjeta de la visualización.</li></ul>
-    A continuación, encontrará una tabla con la descripción de las variables que se previsualizan en las tarjetas.  Al finalizar la exploración, continúe con la pestaña <strong>"Oportunidades de crédito disponibles"</strong>.<br><br>
-    <table class="ptable"><thead><tr><th style="width:25%">
-      <div class="mi-lbl2" style="font-size:11px;color:var(--text);text-align:center"><strong>Variable</strong></div></th>
-      <th><div class="mi-lbl2" style="font-size:11px;color:var(--text);text-align:center"><strong>Valores y descripción</strong></div></th></tr></thead>
-      <tbody>
-        <tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Etiqueta de crédito</div></td><td style="white-space:normal">
-          <p style="margin-bottom:8px"><span class="badge coop"  style="font-size:10px;border-radius:3px;border:0.2px solid">Productor</span> - Crédito para un productor.</p>
-          <p style="margin-bottom:8px"><span class="badge grupo" style="font-size:10px;border-radius:3px;border:0.2px solid">Grupo de productores</span> - Crédito que contiene entre 3 y 5 productores.</p>
-          <p style="margin-bottom:8px"><span class="badge banco" style="font-size:10px;border-radius:3px;border:0.2px solid">Acopio + Grupo de productores</span> - Crédito que contiene entre 6 y 12 productores.</p>
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Productores</div></td><td>Número de productores asociados.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Monto productores</div></td><td>Suma de los créditos solicitados por los productores asociados.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Garantía de Confianza</div></td><td>Todos los créditos cuentan con una garantía preaprobada del 50%.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Aval IC</div></td><td>
-          <div class="mi-val mv-g" style="font-size:12px;display:inline;margin:0">Sí</div> - Cuenta con aval del intermediario comercial (garantía adicional del 50%).<br>
-          <div class="mi-val mv-m" style="font-size:12px;display:inline;margin:0">No</div> - No cuenta con garantía del intermediario comercial.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Paquete flexible</div></td><td >
-          <div class="mi-val mv-g" style="font-size:12px;display:inline;margin:0">Sí</div> - Permite realizar ofertas de crédito individuales por productor (monto, tasa, plazo).<br>
-          <div class="mi-val mv-m" style="font-size:12px;display:inline;margin:0">No</div> - Solo permite una única oferta para todo el grupo.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Fundamentales</div></td><td><input class="mini-toggle" type="checkbox" checked> Permite visualizar información general de cada productor y del crédito.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Aclimatar</div></td><td><input class="mini-toggle" type="checkbox" checked> Permite visualizar información sobre sequía, riesgo hídrico y otros riesgos climáticos a nivel de productor.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Whisp</div></td><td><input class="mini-toggle" type="checkbox" checked> Permite visualizar información sobre riesgo de deforestación a nivel de productor.
-        </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Croppie</div></td><td><input class="mini-toggle" type="checkbox" checked> Permite visualizar la estimación de cosecha a nivel de productor.
-        </td></tr>
-      </tbody>
-    </table><br>
-  </div>
+    <div class="loan-tabs" id="loan-tabs">
+      <button class="loan-tab active" id="context-tab" onclick="showContext()">Contexto</button>
+      <button class="loan-tab" id="general-tab" onclick="showSociodemographicQuestions()">Información general</button>
+      <button class="loan-tab" data-tab="yes" onclick="switchLoanTab('yes')">Créditos de demostración</button>
+      <button class="loan-tab" data-tab="no" onclick="switchLoanTab('no')">Oportunidades de crédito disponibles</button>
+    </div>
+    <div class="loan-subtabs" id="loan-subtabs" style="display:none">
+      <button class="loan-subtab active" data-type="instructions" onclick="switchSession('instructions')">Instrucciones</button>
+      <button class="loan-subtab" data-type="1" onclick="switchSession('1')">Sesión 1</button>
+      <button class="loan-subtab" data-type="2" onclick="switchSession('2')">Sesión 2</button>
+      <button class="loan-subtab" data-type="3" onclick="switchSession('3')">Sesión 3</button>
+      <button class="loan-subtab" data-type="endSessions" onclick="switchSession('endSessions')">Finalizar</button>
+    </div>
+
+    <!-- S2.1: Contexto -->
+    <div class="loan-info" id="context-info">
+      <strong>Contexto</strong><br>
+      El presente estudio, realizado por la Alianza Bioversity-CIAT y Confianza S.A.–FGR, se desarrolla en el marco de iniciativas orientadas a la generación y uso de información de trazabilidad productiva y cumplimiento regulatorio en el sector cafetalero. El objetivo es comprender cómo las instituciones financieras incorporan distintos tipos de información en sus procesos de decisión crediticia.
+      La encuesta está dirigida a agentes y responsables de la evaluación y asignación de crédito agrícola en distintas instituciones financieras formales en Honduras, incluyendo bancos, cooperativas y microfinancieras. El cuestionario se implementará en X sesiones (por lo menos diarias), con una duración aproximada de X minutos cada una. A lo largo de cada sesión, se presentarán situaciones hipotéticas relacionadas con la toma de decisiones crediticias. Las situaciones no corresponden a casos reales y no buscan evaluar decisiones individuales, sino analizar criterios y valoraciones utilizados en la práctica institucional.
+      La participación en este estudio es voluntaria.
+    </div>
+
+    <!-- S2.2: Información general -->
+    <div class="o-form" id="sociodemographic-questions" style="display:none">
+      <div class="fs-title">Información general</div>
+      <div class="frow">
+        <div class="fg"><label class="flabel">Tipo de institución<span class="required">*</span></label>
+          <select class="fsel" id="institution-type" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+          <option value="banco">Institución bancaria</option><option value="microfinanciera">Microfinanciera</option><option value="cooperativa">Cooperativa</option><option value="otro">Otro</option></select></div>
+        <div class="fg"><label class="flabel">Otro tipo de institución</label><input class="finp-s" id="institution-other" data-other-for="institution-type" type="text" disabled></div>
+        <div class="fg"><label class="flabel">Rol en la institución<span class="required">*</span></label>
+          <select class="fsel" id="institution-role" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
+          <option value="analista">Analista de crédito</option><option value="oficial">Oficial / asesor de crédito</option><option value="coordinador">Coordinador(a) o jefe(a) de crédito</option><option value="gerencia">Gerencia o dirección</option><option value="otro">Otro</option></select></div>
+        <div class="fg"><label class="flabel">Otro rol en la institución</label><input class="finp-s" id="role-other" data-other-for="institution-role" type="text" disabled></div>
+        <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito<span class="required">*</span></label><select class="fsel" id="experience-years"><option value="">Seleccionar...</option>
+          <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+        <div class="fg"><label class="flabel">Experiencia en evaluación y asignación de crédito agrícola<span class="required">*</span></label><select class="fsel" id="agr-experience-years"><option value="">Seleccionar...</option>
+          <option value="lt1">Menos de 1 año</option><option value="1to4">Entre 1 y menos de 4 años</option><option value="4to7">Entre 4 y menos de 7 años</option><option value="7plus">7 años o más</option></select></div>
+        <div class="fg"><label class="flabel">Rango de edad<span class="required">*</span></label><select class="fsel" id="age-range"><option value="">Seleccionar...</option>
+          <option value="lt30">Menos de 30 años</option><option value="30to40">Entre 30 y menos de 40 años</option>
+          <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
+        <div class="fg"><label class="flabel">Sexo<span class="required">*</span></label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
+          <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
+      </div></div>
+
+    <!-- S2.3: Créditos de demostración -->
+    <div class="loan-info" id="loan-demo-info" style="display:none">
+      <p style="margin-bottom:10px">Los siguientes créditos tienen como objetivo ilustrar el flujo de operación del Marketplace. Puede interactuar con ellos libremente durante todo el ejercicio: visualizarlos, explorar su información, estructurar ofertas y descartarlos, sin que estas acciones afecten el saldo, la disponibilidad de créditos o representen una oferta real. 
+      Para explorarlos, puede interactuar con las tarjetas dando clic en:</p><ul style="padding-left:20px;margin-bottom:10px">
+        <li><span class="btn-confirm-text">Me interesa →</span> - Permite ingresar al crédito y consultar el detalle según la información seleccionadas.</li>
+        <li><span class="btn-dismiss-text">No me interesa</span> - Retira temporalmente la tarjeta de la visualización.</li></ul>
+      La siguiente tabla describe las variables disponibles en la previsualización de los créditos. Al finalizar la exploración, continúe con la pestaña <strong>"Oportunidades de crédito disponibles"</strong>.<br><br>
+      <table class="ptable"><thead><tr><th style="width:25%">
+        <div class="mi-lbl2" style="font-size:11px;color:var(--text);text-align:center"><strong>Variable</strong></div></th>
+        <th><div class="mi-lbl2" style="font-size:11px;color:var(--text);text-align:center"><strong>Valores y descripción</strong></div></th></tr></thead>
+        <tbody>
+          <tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Etiqueta de crédito</div></td><td style="white-space:normal">
+            <p style="margin-bottom:8px"><span class="badge coop"  style="font-size:10px;border-radius:3px;border:0.2px solid">Productor</span> - Crédito para un productor.</p>
+            <p style="margin-bottom:8px"><span class="badge grupo" style="font-size:10px;border-radius:3px;border:0.2px solid">Grupo de productores</span> - Crédito que contiene entre 3 y 5 productores.</p>
+            <p"><span class="badge banco" style="font-size:10px;border-radius:3px;border:0.2px solid">Acopio + Grupo de productores</span> - Crédito que contiene entre 6 y 12 productores.</p>
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Productores</div></td><td>Número de productores asociados.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Monto productores</div></td><td>Suma de los créditos solicitados por los productores asociados.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Garantía de Confianza</div></td><td>Todos los créditos cuentan con una garantía preaprobada del 50%.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Aval IC</div></td><td>
+            <div class="mi-val mv-g" style="font-size:12px;display:inline;margin:0">Sí</div> - Cada productor del paquete cuenta con aval del intermediario comercial (garantía adicional del 50%).<br>
+            <div class="mi-val mv-m" style="font-size:12px;display:inline;margin:0">No</div> - No cuenta con garantía del intermediario comercial.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Paquete flexible</div></td><td >
+            <div class="mi-val mv-g" style="font-size:12px;display:inline;margin:0">Sí</div> - Permite realizar ofertas de crédito individuales por productor (monto, tasa, plazo).<br>
+            <div class="mi-val mv-m" style="font-size:12px;display:inline;margin:0">No</div> - Solo permite una única oferta para todo el grupo.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Fundamentales</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de información general de cada productor y del paquete de crédito.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Aclimatar</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de información sobre sequía, riesgo hídrico y otros riesgos climáticos a nivel de productor.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Whisp</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de información sobre riesgo de deforestación a nivel de productor.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Croppie</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de estimación de cosecha a nivel de productor.
+          </td></tr>
+        </tbody>
+      </table><br>
+    </div>
+
+    <!-- S2.4.1: Instrucciones -->
+    <div class="loan-info" id="loan-instructions" style="display:none">
+      <p style="margin-bottom:10px">Imagine que está utilizando el Marketplace de créditos en un día normal de trabajo. Encontrará oportunidades de crédito de productores de café ubicados dentro de la zona de interés de su institución financiera, que además <strong></strong>cuentan con una garantía preaprobada del 50%</strong>.</p>
+      <p style="margin-bottom:10px"><strong>Para cada oportunidad, revise la información disponible en la previsualización del crédito y decida si acceder a información adicional podría ser de interés para usted y su institución, teniendo en cuenta sus criterios y experiencia profesional en la asignación de crédito</strong>.</p>
+      Tenga en cuenta lo siguiente:<ol style="padding-left:20px;margin-bottom:10px;margin-top:10px">
+        <li>Seleccione <span class="btn-confirm-text">Me interesa →</span> cuando la oportunidad sea atractiva según la previsualización disponible, y por lo tanto le interesaría acceder a información adicional. Si selecciona esta opción, no se mostrarán pantallas adicionales.</li>
+        <li>Si la oportunidad no es de interés, seleccione <span class="btn-dismiss-text">No me interesa</span> para descartarla.</li>
+        <li><strong>Cada crédito aparece una sola vez</strong>. Una vez que seleccione <span class="btn-confirm-text">Me interesa →</span> o <span class="btn-dismiss-text">No me interesa</span>, la oportunidad desaparecerá de las disponibles. Evalúe cada oportunidad de manera independiente, como lo haría ante una nueva solicitud de crédito.</li>
+        <li>En la esquina superior derecha encontrará el <span class="wallet-display">Saldo disponible</span> de su billetera. Este corresponde al presupuesto total para todas las sesiones y no podrá superar el monto disponible.</li>
+        <li>El precio mostrado en cada previsualización corresponde al costo de acceso a la información adicional <strong>por productor</strong>, no por crédito. <strong>El valor descontado de su saldo dependerá del número de productores asociados a cada oportunidad.</strong></li>
+      </ol><p style="margin-bottom:10px"><strong>No existe un número mínimo o máximo de oportunidades que le deban interesar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.</strong></p>
+      <p style="margin-bottom:10px">Cada sesión tendrá una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>3 sesiones</strong>, con un máximo de <strong>una sesión por día</strong>. El ejercicio finalizará una vez no hayan más oportunidades de crédito disponibles y se respondan las preguntas de percepción que se presentarán al final de cada sección.</p>
+      La siguiente tabla describe las variables disponibles en la previsualización de los créditos.<br><br>
+      <table class="ptable"><thead><tr><th style="width:25%">
+        <div class="mi-lbl2" style="font-size:11px;color:var(--text);text-align:center"><strong>Variable</strong></div></th>
+        <th><div class="mi-lbl2" style="font-size:11px;color:var(--text);text-align:center"><strong>Valores y descripción</strong></div></th></tr></thead>
+        <tbody>
+          <tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Etiqueta de crédito</div></td><td style="white-space:normal">
+            <p style="margin-bottom:8px"><span class="badge coop"  style="font-size:10px;border-radius:3px;border:0.2px solid">Productor</span> - Crédito para un productor.</p>
+            <p style="margin-bottom:8px"><span class="badge grupo" style="font-size:10px;border-radius:3px;border:0.2px solid">Grupo de productores</span> - Crédito que contiene entre 3 y 5 productores.</p>
+            <p><span class="badge banco" style="font-size:10px;border-radius:3px;border:0.2px solid">Acopio + Grupo de productores</span> - Crédito que contiene entre 6 y 12 productores.</p>
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Productores</div></td><td>Número de productores asociados.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Monto productores</div></td><td>Suma de los créditos solicitados por los productores asociados.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Garantía de Confianza</div></td><td>Todos los créditos cuentan con una garantía preaprobada del 50%.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Aval IC</div></td><td>
+            <div class="mi-val mv-g" style="font-size:12px;display:inline;margin:0">Sí</div> - Cada productor del paquete cuenta con aval del intermediario comercial (garantía adicional del 50%).<br>
+            <div class="mi-val mv-m" style="font-size:12px;display:inline;margin:0">No</div> - No cuenta con garantía del intermediario comercial.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Paquete flexible</div></td><td >
+            <div class="mi-val mv-g" style="font-size:12px;display:inline;margin:0">Sí</div> - Permite realizar ofertas de crédito individuales por productor (monto, tasa, plazo).<br>
+            <div class="mi-val mv-m" style="font-size:12px;display:inline;margin:0">No</div> - Solo permite una única oferta para todo el grupo.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Fundamentales</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de información general de cada productor y del paquete de crédito.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Aclimatar</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de información sobre sequía, riesgo hídrico y otros riesgos climáticos a nivel de productor.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Whisp</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de información sobre riesgo de deforestación a nivel de productor.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Croppie</div></td><td><input class="mini-toggle" type="checkbox" checked> Incluye la visualización de estimación de cosecha a nivel de productor.
+          </td></tr><tr><td><div class="mi-lbl2" style="font-size:10px;color:var(--text)">Precio</div></td><td>Representa el precio total <strong>por productor</strong> para la información que está marcada como disponible, es decir, las variables que contengan <input class="mini-toggle" type="checkbox" checked> .
+          </td></tr>
+        </tbody>
+      </table><br>
+    </div>
+
     <div class="loan-list" id="loan-list"></div>
     <div class="loan-pagination" id="loan-pagination" style="display:none"><button class="loan-nav-btn" id="loan-prev" onclick="prevPage()">← Anterior</button><span class="loan-page-info" id="loan-page-info"></span><button class="loan-nav-btn" id="loan-next" onclick="nextPage()">Siguiente →</button></div>
-  </div></div>
+  </div>
+</div>
 
 <!-- S5: ACCESS -->
 <div id="s-access" class="screen">
