@@ -384,7 +384,7 @@ const LOANS_COOP_TEST=[
       {id:'e4', yield:'22', production:'110', estimationDate:'2026-05-15'},
     ]}]},
   {id:'tc2',tipo:'coop',testValue:'yes',fechaDesembolso:'2026-06-01',name:'Hernández López, María',region:'Santa Bárbara, Honduras',
-    acopio:false,productores:'7,500',nProd:1,paqueteFlexible:false,
+    acopio:true,productores:'7,500',nProd:1,paqueteFlexible:false,
     destinos:'Insumos, Cosecha',areaProd:'2.7',volumenTotal:'52',
     contrato:'Supremo Hamburg GmbH',smartContract:true,volContrato:'52',
   prod:[

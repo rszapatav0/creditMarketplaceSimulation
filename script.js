@@ -348,7 +348,7 @@ function renderLoans(){
     const mA=`<div class="mi"><div class="mi-lbl">Aval IC</div><div class="mi-val ${l.acopio ?  'mv-g' : 'mv-m'}">${l.acopio ? 'Sí' : 'No'}</div></div>`;
     const mF=`<div class="mi"><div class="mi-lbl">Paquete flexible</div><div class="mi-val ${l.paqueteFlexible ? 'mv-g' : 'mv-m'}">${l.paqueteFlexible ? 'Sí' : 'No'}</div></div>`;
     const badgeClass=isG?'grupo':l.tipo;
-    const badgeLabel=isG?'Grupo de productores':isB?'Acopio + Grupo de productores':'Productor';
+    const badgeLabel=isG?'Grupo de productores':isB?'Grupo de productores':'Productor';
     const isNo = l.testValue === 'no';
     const isYes = l.testValue === 'yes';
     const isExpandable = isNo || isYes;
