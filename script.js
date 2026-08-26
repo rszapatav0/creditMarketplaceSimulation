@@ -46,10 +46,10 @@ let activeLoanTab = 'yes';
 // Time (in milliseconds) the user must wait before continuing into a session
 // after completing the previous one. Change this single value to adjust the
 // wait everywhere (e.g. 24*60*60*1000 for 1 day).
-const SESSION_WAIT_MS = 2 * 60 * 1000; // 2 minutes
+const SESSION_WAIT_MS = 60*1000; // 2 minutes: 2*60*1000; 1 day: 24*60*60*1000;
 // Order of numbered sessions. Add future session ids here (in order) and the
 // waiting period will automatically apply between them.
-const SESSION_ORDER = ['1', '2', '3'];
+const SESSION_ORDER = ['1','2','3','4','5'];
 let sessionWaitTimer = null;
 
 function stopSessionWaitTimer(){
@@ -331,7 +331,7 @@ function prevPage(){
 function renderLoans(){
   const list=document.getElementById('loan-list');list.innerHTML='';
 
-  if(activeLoanTab === 'no' && ['1','2','3'].includes(activeSession) && getSessionRemaining(activeSession) === 0){
+  if(activeLoanTab === 'no' && SESSION_ORDER.includes(activeSession) && getSessionRemaining(activeSession) === 0){
     renderSessionQuestions(activeSession);
     updateEndSessionsAvailability();
     document.getElementById('loan-pagination').style.display='none';
@@ -534,7 +534,6 @@ function switchSession(session){
   updateSessionTabs();
 }
 
-
 function updateSessionTabs() {
   const sessionButtons = [...document.querySelectorAll('.loan-subtab')];
   const instructionsBtn = sessionButtons.find(btn => btn.dataset.type === 'instructions');
@@ -568,7 +567,7 @@ function getSessionRemaining(sessionNum){
 }
 
 function allSessionQuestionsAnswered(){
-  return !!(state.WTPsessionQuestionsCompleted && ['1','2','3'].every(s => state.WTPsessionQuestionsCompleted[s]));
+  return !!(state.WTPsessionQuestionsCompleted && SESSION_ORDER.every(s => state.WTPsessionQuestionsCompleted[s]));
 }
 
 function updateEndSessionsAvailability(){
@@ -578,12 +577,12 @@ function updateEndSessionsAvailability(){
 }
 
 function finishSessionQuestions(sessionNum){
-  const requiredBySession = {'1':['interestingCredits','solvesNeed'],'2':['monthlyWtp','conditionsToWtp'], '3':['frecuency','alerts']};
+  const requiredBySession = {'1':['interestingCredits'],'2':['solvesNeed'],'3':['monthlyWtp','conditionsToWtp'],'4':['frecuency'],'5':['alerts']};
   const missing = (requiredBySession[sessionNum]||[]).find(id => !document.getElementById(id)?.value.trim());
   if(missing){
     alert('Por favor complete todas las preguntas antes de continuar.');
     document.getElementById(missing)?.focus();return;}
-  const fieldsBySession = {'1':['interestingCredits','solvesNeed'],'2':['monthlyWtp','conditionsToWtp'],'3':['frecuency','alerts']};
+  const fieldsBySession = {'1':['interestingCredits'],'2':['solvesNeed'],'3':['monthlyWtp','conditionsToWtp'],'4':['frecuency'],'5':['alerts']};
   if(!state.perceptionQuestions) state.perceptionQuestions = {};
   (fieldsBySession[sessionNum]||[]).forEach(id=>{
     const el = document.getElementById(id);
@@ -591,7 +590,7 @@ function finishSessionQuestions(sessionNum){
   });
   if(!state.WTPsessionQuestionsCompleted) state.WTPsessionQuestionsCompleted = {};
   state.WTPsessionQuestionsCompleted[sessionNum] = true;
-  state.perceptionQuestionsCompleted = ['1','2','3'].every(s => state.WTPsessionQuestionsCompleted[s]);
+  state.perceptionQuestionsCompleted = SESSION_ORDER.every(s => state.WTPsessionQuestionsCompleted[s]);
   if(!state.WTPsessionQuestionsCompletedDate) state.WTPsessionQuestionsCompletedDate = {};
   state.WTPsessionQuestionsCompletedDate[sessionNum] = Date.now();
   saveState();
@@ -610,40 +609,46 @@ function renderSessionQuestions(sessionNum){
         <div class="fhelp">Responda en una escala del 1 al 5, siendo 1 "muy poco interesante" y 5 "muy interesante".</div> 
         <select class="fsel" id="interestingCredits" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+    </div><br>
+    <div class="btn-row"><button class="btn-p" onclick="finishSessionQuestions('1')">Guardar →</button></div>`,
+    '2': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de interés</div>
+    <div class="frow">
       <div class="fg full"><label class="flabel">¿Cree que estos créditos podrían resolver una necesidad que su institución tiene hoy?<span class="required">*</span></label>
         <select class="fsel" id="solvesNeed" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="yes">Sí</option><option value="no">No</option></select></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('1')">Guardar →</button>
-    </div>`,
-    '2': `
+    </div><br>
+    <div class="btn-row"><button class="btn-p" onclick="finishSessionQuestions('2')">Guardar →</button></div>`,
+    '3': `
   <div class="o-form"><div>
     <div class="fs-title">Bloque de valor percibido</div>
     <div class="frow">
       <div class="fg full"><label class="flabel">Si tuviera acceso a una suscripción que le permitiera ver créditos de esta manera, ¿cuánto estaría dispuesto(a) a pagar mensualmente por ella?<span class="required">*</span></label><input class="finp-s" id="monthlyWtp" type="number" placeholder="Número de Lempiras"></div>
       <div class="fg full"><label class="flabel">¿Qué condiciones debería incluir la suscripción mensual para que ese monto sea justo para usted?<span class="required">*</span></label><input class="finp-s" id="conditionsToWtp" type="text"></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('2')">Guardar →</button>
-    </div>`,
-    '3': `
+    </div><br>
+    <div class="btn-row"><button class="btn-p" onclick="finishSessionQuestions('3')">Guardar →</button></div>`,
+    '4': `
   <div class="o-form"><div>
     <div class="fs-title">Bloque de uso</div>
     <div class="frow">
       <div class="fg full"><label class="flabel">¿Con qué frecuencia cree que utilizaría esta suscripción si estuviera disponible?<span class="required">*</span></label>
         <select class="fsel" id="frecuency" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="daily">Diario</option><option value="weekly">Semanal</option><option value="biweekly">Quincenal</option><option value="monthly">Mensual</option><option value="moreThanMonthly">Cada varios meses</option><option value="notUsing">No la utilizaría</option></select></div>
+    </div><br>
+    <div class="btn-row"><button class="btn-p" onclick="finishSessionQuestions('4')">Guardar →</button></div>`,
+    '5': `
+  <div class="o-form"><div>
+    <div class="fs-title">Bloque de uso</div>
+    <div class="frow">
       <div class="fg full"><label class="flabel">¿Prefiere recibir alertas sobre nuevos créditos disponibles o prefiere buscarlos solo cuando lo necesite?<span class="required">*</span></label>
         <select class="fsel" id="alerts" onchange="toggleOther(this)"><option value="">Seleccionar...</option>
         <option value="alertas">Recibir alertas</option><option value="buscar">Buscar cuando lo necesite</option></select></div>
-    </div></div></div>
-    <div class="btn-row">
-      <button class="btn-p" onclick="finishSessionQuestions('3')">Guardar →</button>
-    </div>`
+    </div><br>
+    <div class="btn-row"><button class="btn-p" onclick="finishSessionQuestions('5')">Guardar →</button></div>`
   };
   list.innerHTML = blocks[sessionNum] || '';
-  const fieldsBySession = {'1':['interestingCredits','solvesNeed'],'2':['monthlyWtp','conditionsToWtp'],'3':['frecuency','alerts']};
+  const fieldsBySession = {'1':['interestingCredits'],'2':['solvesNeed'],'3':['monthlyWtp','conditionsToWtp'],'4':['frecuency'],'5':['alerts']};
   (fieldsBySession[sessionNum]||[]).forEach(id=>{
     const el = document.getElementById(id);
     const val = state.perceptionQuestions && state.perceptionQuestions[id];

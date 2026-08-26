@@ -44,6 +44,8 @@
       <button class="loan-subtab" data-type="1" onclick="switchSession('1')">Sesión 1</button>
       <button class="loan-subtab" data-type="2" onclick="switchSession('2')">Sesión 2</button>
       <button class="loan-subtab" data-type="3" onclick="switchSession('3')">Sesión 3</button>
+      <button class="loan-subtab" data-type="4" onclick="switchSession('4')">Sesión 4</button>
+      <button class="loan-subtab" data-type="5" onclick="switchSession('5')">Sesión 5</button>
       <button class="loan-subtab" data-type="endSessions" onclick="switchSession('endSessions')">Finalizar</button>
     </div>
 
@@ -54,7 +56,7 @@
       <p style="margin-bottom:10px">El estudio consta de tres etapas:</p><ol style="padding-left:20px;margin-bottom:10px">
         <li>En la pestaña <strong>"1. Información general"</strong> se solicitará información sobre su institución y experiencia profesional en la evaluación y asignación de crédito. Esta etapa dura aproximadamente 5 minutos.</li>
         <li>En la pestaña <strong>"2. Créditos de demostración"</strong> se presentarán simulaciones de oportunidades de crédito para familiarizarlo con la interacción en el Marketplace. La duración de esta etapa dependerá del tiempo que desee dedicar a explorar las simulaciones. Le invitamos a revisar diferentes oportunidades de crédito para familiarizarse con la dinámica del Marketplace.</li>
-        <li>En la pestaña <strong>"3. Oportunidades de crédito"</strong> se realizará el ejercicio de valoración, en el que deberá decidir qué oportunidades de crédito le interesa conocer más a fondo. Esta etapa se desarrollará en <strong>X sesiones</strong>, con una duración aproximada de <strong>30 minutos cada una</strong> y un máximo de <strong>1 sesión por día</strong>. Al finalizar cada sección, responderá 1 o 2 preguntas de percepción sobre el ejercicio realizado.</li>
+        <li>En la pestaña <strong>"3. Oportunidades de crédito"</strong> se realizará el ejercicio de valoración, en el que deberá decidir qué oportunidades de crédito le interesa conocer más a fondo. Esta etapa se desarrollará en <strong>5 sesiones</strong>, con una duración aproximada de <strong>30 minutos cada una</strong> y un máximo de <strong>1 sesión por día</strong>. Al finalizar cada sección, responderá 1 o 2 preguntas de percepción sobre el ejercicio realizado.</li>
       </ol>
       <p style="margin-bottom:15px">El ejercicio terminará una vez completadas las tres etapas y se habilite la pestaña <strong>"Finalizar"</strong> en la tercera etapa.</p>
       <p style="text-align:center"><strong>¡Gracias por su tiempo y disposición!</strong></p>
@@ -82,7 +84,7 @@
           <option value="40to50">Entre 40 y menos de 50 años</option><option value="50plus">50 años o más</option></select></div>
         <div class="fg"><label class="flabel">Sexo<span class="required">*</span></label><select class="fsel" id="sex"><option value="">Seleccionar...</option>
           <option value="femenino">Femenino</option><option value="masculino">Masculino</option><option value="otro">Otro</option></select></div>
-      </div></div>
+      </div></div><br>
 
     <!-- S2.3: Créditos de demostración -->
     <div class="loan-info" id="loan-demo-info" style="display:none">
@@ -128,7 +130,7 @@
         <li>En la esquina superior derecha encontrará el <span class="wallet-display">Saldo disponible</span> de su billetera. Este corresponde al presupuesto total para todas las sesiones y no podrá superar el monto disponible.</li>
         <li>El precio mostrado en cada previsualización corresponde al costo de acceso a la información adicional <strong>por productor</strong>, no por crédito. <strong>El valor descontado de su saldo dependerá del número de productores asociados a cada oportunidad.</strong></li>
       </ol><p style="margin-bottom:10px"><strong>No existe un número mínimo o máximo de oportunidades que le deban interesar. Tome sus decisiones como lo haría en una situación real de evaluación de oportunidades de crédito.</strong></p>
-      <p style="margin-bottom:10px">Cada sesión tendrá una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>3 sesiones</strong>, con un máximo de <strong>1 sesión por día</strong>. El ejercicio finalizará una vez no hayan más oportunidades de crédito disponibles y se respondan las preguntas de percepción que se presentarán al final de cada sección.</p>
+      <p style="margin-bottom:10px">Cada sesión tendrá una duración aproximada de <strong>30 minutos</strong> y deberá completar un total de <strong>5 sesiones</strong>, con un máximo de <strong>1 sesión por día</strong>. El ejercicio finalizará una vez no hayan más oportunidades de crédito disponibles y se respondan las preguntas de percepción que se presentarán al final de cada sección.</p>
       La siguiente tabla describe las variables disponibles en la previsualización de los créditos.<br><br>
       <table class="ptable"><thead><tr><th style="width:25%">
         <div class="mi-lbl2" style="font-size:11px;color:var(--text);text-align:center"><strong>Variable</strong></div></th>
