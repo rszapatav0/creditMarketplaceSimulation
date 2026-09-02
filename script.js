@@ -26,19 +26,16 @@ function defaultState(){
   };
 }
 
-function loadState(){
-  try {
-    const raw = sessionStorage.getItem('appState');
-    if(raw) return JSON.parse(raw);
-  } catch(e){}
-  return defaultState();
-}
-
+// Per-user state is loaded from/saved to the Persistence layer (see
+// persistence.js). Before login there's no user yet, so we just start with
+// a blank default state; doLogin() replaces it with the signed-in user's
+// saved state once it's loaded.
 function saveState(){
-  sessionStorage.setItem('appState', JSON.stringify(state));
+  if(!state.user) return; // nothing to persist until someone is logged in
+  Persistence.saveState(state.user, state);
 }
 
-let state = loadState();
+let state = defaultState();
 let tempDismissedLoans = new Set();
 let activeLoanTab = 'yes';
 
@@ -116,7 +113,7 @@ function getLoans(){
 
 
 // ─── Login and logout functions ───────────────────────────────────────────────
-function doLogin(){
+async function doLogin(){
   const u=document.getElementById('inp-u').value;
   const p=document.getElementById('inp-p').value;
   const err=document.getElementById('lerr');
@@ -124,10 +121,24 @@ function doLogin(){
   if(!found){err.classList.add('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.add('err'));return;}
   err.classList.remove('show');['inp-u','inp-p'].forEach(id=>document.getElementById(id).classList.remove('err'));
   U=found;
+
+  const loginBtn=document.querySelector('#s-login .btn-p');
+  if(loginBtn){loginBtn.disabled=true;loginBtn.textContent='Ingresando...';}
+
+  // Recover this user's previously saved progress, if any (works locally
+  // via a browser cache and, once the backend is connected, across
+  // devices/sessions too — see persistence.js).
+  let saved=null;
+  try{ saved = await Persistence.loadState(u); } catch(e){ console.warn('Could not load saved state', e); }
+
+  state = saved ? { ...defaultState(), ...saved } : defaultState();
   state.user = u;
   state.institutionName = U.institutionName;
-  state.sessionGroup = assignSessionGroup();
+  state.sessionGroup = state.sessionGroup ?? assignSessionGroup();
   saveState();
+
+  if(loginBtn){loginBtn.disabled=false;loginBtn.textContent='Ingresar →';}
+
   initBalance();renderBalanceDisplay();
   document.getElementById('mkt-title').innerHTML =
     `<div class="brand-h1"><b>Valoración de herramientas de trazabilidad agrícola</b></div>
@@ -137,17 +148,27 @@ function doLogin(){
 
 function doLogout(){
   stopSessionWaitTimer();
+  // Note: we intentionally do NOT delete the user's saved progress here —
+  // it needs to survive across logins/days. We only reset what's held in
+  // memory for the current browser session so the login screen is blank
+  // and a different user logging in on this device doesn't see it.
   U=null;
   purchases={};
   yesSelections={};
   state = defaultState();
-  sessionStorage.removeItem('appState');
   document.getElementById('inp-p').value='';
   show('s-login');
 }
 
+// Best-effort save if the tab/browser is closed mid-session, so the very
+// last interaction isn't lost before the next scheduled save.
+window.addEventListener('beforeunload', ()=>{
+  if(state && state.user){ Persistence.flushOnUnload(state.user, state); }
+});
+
 function endSession(){
-  // Future: await fetch('/api/sessions', { method:'POST', body: JSON.stringify(state) })
+  // State is already persisted continuously via saveState() throughout the
+  // app (see persistence.js) — nothing extra to send here.
   doLogout();
 }
 
