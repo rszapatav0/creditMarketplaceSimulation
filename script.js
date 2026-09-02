@@ -117,7 +117,7 @@ function getLoans(){
 
 // ─── Login and logout functions ───────────────────────────────────────────────
 function doLogin(){
-  const u=document.getElementById('inp-u').value.trim().toLowerCase();
+  const u=document.getElementById('inp-u').value;
   const p=document.getElementById('inp-p').value;
   const err=document.getElementById('lerr');
   const found=USERS.find(x=>x.username===u&&x.pass===p);
@@ -1067,8 +1067,7 @@ function submitOffer(){
   document.getElementById('offer-sent-card').innerHTML=`
     <div class="srow"><span class="sr-l">Destinatario</span><span class="sr-v">${l.name}</span></div>
     <div class="srow"><span class="sr-l">Institución oferente</span><span class="sr-v">${U.institutionName}</span></div>
-  ${!l.paqueteFlexible ? `
-    <div class="srow"><span class="sr-l">Estado</span><span class="sr-v" style="color:var(--blue)">Enviada · Pendiente respuesta</span></div>` : ''}
+    <div class="srow"><span class="sr-l">Estado</span><span class="sr-v" style="color:var(--blue)">Enviada · Pendiente respuesta</span></div>
   `;
   if(l.testValue === 'yes'){tempDismissedLoans.add(l.id);tempDismissedLoans.delete(l.id);} else {
     if(!state.WTPdismissedLoans.includes(l.id)){state.WTPdismissedLoans.push(l.id);}}

@@ -2,10 +2,43 @@ const USERS=[
   {username:'1',pass:'1',role:'banco',institutionName:'Banco LAFISE - Analista de Crédito',grupoId:1},
   {username:'2',pass:'2',role:'coop',institutionName:'Coop. Cafetalera Marcala',grupoId:2},
   {username:'3',pass:'3',role:'imf',institutionName:'ODEF Financiera - Oficial de Cartera',grupoId:3},
-  {username:'banco@lafise.hn',pass:'banco2024',role:'banco',institutionName:'Banco LAFISE - Analista de Crédito',grupoId:4},
-  {username:'gestor@cofemarcala.hn',pass:'coop2024',role:'coop',institutionName:'Coop. Cafetalera Marcala',grupoId:5},
-  {username:'oficial@odef.hn',pass:'imf2024',role:'imf',institutionName:'ODEF Financiera - Oficial de Cartera',grupoId:6},
+  {username:'banco@lafise.hn',pass:'banco2026',role:'banco',institutionName:'Banco LAFISE - Analista de Crédito',grupoId:4},
+  {username:'gestor@cofemarcala.hn',pass:'coop2026',role:'coop',institutionName:'Coop. Cafetalera Marcala',grupoId:5},
+  {username:'oficial@odef.hn',pass:'imf2026',role:'imf',institutionName:'ODEF Financiera - Oficial de Cartera',grupoId:6},
+  /*ODEF*/
+  {username:'ODEF_user1',pass:'A7k2M9',role:'imf',institutionName:'ODEF Microfinanciera',grupoId:1},
+  {username:'ODEF_user2',pass:'B4n8Q2',role:'imf',institutionName:'ODEF Microfinanciera',grupoId:2},
+  {username:'ODEF_user3',pass:'C9x3L6',role:'imf',institutionName:'ODEF Microfinanciera',grupoId:3},
+  {username:'ODEF_user4',pass:'D5m7R1',role:'imf',institutionName:'ODEF Microfinanciera',grupoId:4},
+  {username:'ODEF_user5',pass:'E2p8K4',role:'imf',institutionName:'ODEF Microfinanciera',grupoId:5},
+  {username:'ODEF_user6',pass:'F6t1N9',role:'imf',institutionName:'ODEF Microfinanciera',grupoId:6},
+  {username:'ODEF_user7',pass:'G3v5W8',role:'imf',institutionName:'ODEF Microfinanciera',grupoId:7},
+  /*FINSOL*/
+  {username:'FINSOL_user1',pass:'H8r2P5',role:'imf',institutionName:'FINSOL Microfinanciera',grupoId:7},
+  {username:'FINSOL_user2',pass:'J4m9T1',role:'imf',institutionName:'FINSOL Microfinanciera',grupoId:6},
+  {username:'FINSOL_user3',pass:'K7q3V6',role:'imf',institutionName:'FINSOL Microfinanciera',grupoId:5},
+  {username:'FINSOL_user4',pass:'L2x8N4',role:'imf',institutionName:'FINSOL Microfinanciera',grupoId:4},
+  {username:'FINSOL_user5',pass:'M5p1R9',role:'imf',institutionName:'FINSOL Microfinanciera',grupoId:3},
+  {username:'FINSOL_user6',pass:'N9k6S2',role:'imf',institutionName:'FINSOL Microfinanciera',grupoId:2},
+  {username:'FINSOL_user7',pass:'P3w7C8',role:'imf',institutionName:'FINSOL Microfinanciera',grupoId:1},
+  /*BANCO LAFISE*/
+  {username:'LAFISE_user1',pass:'Q7m2K9',role:'banco',institutionName:'Banco LAFISE',grupoId:2},
+  {username:'LAFISE_user2',pass:'R4x8P2',role:'banco',institutionName:'Banco LAFISE',grupoId:3},
+  {username:'LAFISE_user3',pass:'S9n3V6',role:'banco',institutionName:'Banco LAFISE',grupoId:4},
+  {username:'LAFISE_user4',pass:'T5k7M1',role:'banco',institutionName:'Banco LAFISE',grupoId:5},
+  {username:'LAFISE_user5',pass:'U2p8L4',role:'banco',institutionName:'Banco LAFISE',grupoId:6},
+  {username:'LAFISE_user6',pass:'V6r1N9',role:'banco',institutionName:'Banco LAFISE',grupoId:7},
+  {username:'LAFISE_user7',pass:'W3q5C8',role:'banco',institutionName:'Banco LAFISE',grupoId:1},
+  /*COOPERATIVA GUADALUPE*/
+  {username:'GUADALUPE_user1',pass:'X8d2H5',role:'coop',institutionName:'Cooperativa Guadalupe',grupoId:6},
+  {username:'GUADALUPE_user2',pass:'Y4f9J1',role:'coop',institutionName:'Cooperativa Guadalupe',grupoId:5},
+  {username:'GUADALUPE_user3',pass:'Z7g3K6',role:'coop',institutionName:'Cooperativa Guadalupe',grupoId:4},
+  {username:'GUADALUPE_user4',pass:'A2h8M4',role:'coop',institutionName:'Cooperativa Guadalupe',grupoId:3},
+  {username:'GUADALUPE_user5',pass:'B5j1N9',role:'coop',institutionName:'Cooperativa Guadalupe',grupoId:2},
+  {username:'GUADALUPE_user6',pass:'C9k6P2',role:'coop',institutionName:'Cooperativa Guadalupe',grupoId:1},
+  {username:'GUADALUPE_user7',pass:'D3m7Q8',role:'coop',institutionName:'Cooperativa Guadalupe',grupoId:7},
 ];
+
 
 // ── Metrics and tools ──────────────────────────────────────────────────────
 const walletInitial=100000;
