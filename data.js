@@ -421,7 +421,7 @@ const LOANS_GRUPO_TEST=[
       {id:'e1', aptitudClimActual:'low', aptitudClimFutura:'medium', gradienteClim:'high', calor:'low', sequia:'medium', estimationDate:'2026-05-15',
         practicasMuyRecomendadas:'Renovación de cafetales, Aumentar la cobertura de sombra, Cosecha de agua',
         practicasRecomendadas:'Injerto, Fertilización orgánica, Conservación de suelos, Uso de biochar en vivero'},
-      {id:'e2', risk:'medium', estimationDate:'2026-05-15'},
+      {id:'e2', risk:'high', estimationDate:'2026-05-15'},
     ]},
     {cod:'HN-tg1-002',nombre:'Castro López, M.',monto:'L. 19,000',plazo:'5 meses',destino:'Cosecha',aval:'A',
     department:'Santa Bárbara', municipality:'La Arada', aldea:'El Cedral', areaProd:'2.5 mz', geo:'14.49°N 89.17°W',carnet:'IHCAFE-2020-0099',variedad:'Parainema',riesgo:'Sin reporte negativo',confianza:'Aval otorgado',
