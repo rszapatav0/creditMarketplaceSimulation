@@ -43,7 +43,7 @@ let activeLoanTab = 'yes';
 // Time (in milliseconds) the user must wait before continuing into a session
 // after completing the previous one. Change this single value to adjust the
 // wait everywhere (e.g. 24*60*60*1000 for 1 day).
-const SESSION_WAIT_MS = 60*1000; // 2 minutes: 2*60*1000; 1 day: 24*60*60*1000;
+const SESSION_WAIT_MS = 15*60*1000; // 2 minutes: 2*60*1000; 1 day: 24*60*60*1000;
 // Order of numbered sessions. Add future session ids here (in order) and the
 // waiting period will automatically apply between them.
 const SESSION_ORDER = ['1','2','3','4','5'];
